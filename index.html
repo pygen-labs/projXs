@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProjXs App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        input {
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #000;
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #333;
+        }
+        .toggle-form {
+            margin-top: 1rem;
+            color: #666;
+            cursor: pointer;
+        }
+        #signupForm {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="loginForm">
+            <h2>Login</h2>
+            <form method="POST" action="/login">
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+            <p class="toggle-form" onclick="toggleForm()">Don't have an account? Sign up</p>
+        </div>
+
+        <div id="signupForm">
+            <h2>Signup</h2>
+            <form method="POST" action="/signup">
+                <input type="text" name="username" placeholder="Username" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <button type="submit">Signup</button>
+            </form>
+            <p class="toggle-form" onclick="toggleForm()">Already have an account? Log in</p>
+        </div>
+    </div>
+
+    <script>
+        function toggleForm() {
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
+            
+            if (loginForm.style.display === 'none') {
+                signupForm.style.opacity = '0';
+                setTimeout(() => {
+                    signupForm.style.display = 'none';
+                    loginForm.style.display = 'block';
+                    setTimeout(() => {
+                        loginForm.style.opacity = '1';
+                    }, 50);
+                }, 300);
+            } else {
+                loginForm.style.opacity = '0';
+                setTimeout(() => {
+                    loginForm.style.display = 'none';
+                    signupForm.style.display = 'block';
+                    setTimeout(() => {
+                        signupForm.style.opacity = '1';
+                    }, 50);
+                }, 300);
+            }
+        }
+    </script>
+</body>
+</html>

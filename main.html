@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ProjXs</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      height: 100vh;
+      background-color: #f5f5f5;
+    }
+
+    .sidebar {
+      width: 250px;
+      background-color: #ffffff;
+      border-right: 1px solid #e0e0e0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar.closed {
+      transform: translateX(-100%);
+    }
+
+    .back-button {
+      display: none;
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    .back-button.visible {
+      display: block;
+    }
+
+    .sidebar .menu {
+      list-style: none;
+      padding: 0;
+    }
+
+    .sidebar .menu li {
+      margin-bottom: 15px;
+      background-color: #f0f0f0;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    .sidebar .menu li a {
+      text-decoration: none;
+      color: #333;
+      font-size: 16px;
+      display: block;
+    }
+
+    .sidebar .menu li:hover {
+      background-color: #e5e5e5;
+    }
+
+    .sidebar .menu .recent {
+      font-weight: bold;
+      margin-bottom: 10px;
+      background-color: transparent;
+      padding: 0;
+    }
+
+    .project-item {
+      display: flex;
+      align-items: center;
+      padding: 8px;
+      margin-bottom: 8px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .project-item:hover {
+      background-color: #f0f0f0;
+    }
+
+    .project-item i {
+      color: black;
+      margin-right: 12px;
+      font-size: 16px;
+    }
+
+    .sidebar .footer {
+      display: flex;
+      align-items: center;
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+    }
+
+    .sidebar .footer .profile-placeholder {
+      background-color: #000;
+      color: #fff;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 20px;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+    .sidebar .footer .user-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar .footer .user-info .name {
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .sidebar .footer .user-info .status {
+      font-size: 12px;
+      color: #888;
+    }
+
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      transition: margin-left 0.3s ease;
+    }
+
+    .main-content.shifted {
+      margin-left: -250px;
+    }
+
+    .welcome-message {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      text-align: center;
+    }
+
+    .welcome-message h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+
+    .welcome-message p {
+      font-size: 1.2em;
+      color: #666;
+      max-width: 600px;
+    }
+
+    .chat-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      max-width: 800px;
+      width: 100%;
+      margin: 0 auto;
+      padding-bottom: 20px;
+      overflow-y: auto;
+    }
+
+    .message {
+      background-color: #e0e0e0;
+      padding: 12px 16px;
+      margin: 5px 0;
+      border-radius: 8px;
+      max-width: 80%;
+      align-self: flex-end;
+      word-wrap: break-word;
+      white-space: pre-wrap;
+    }
+
+    .input-container {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: #f0f0f0;
+      border-radius: 20px;
+      padding: 10px 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+
+    .input-container input {
+      flex: 1;
+      border: none;
+      background: none;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 20px;
+    }
+
+    .input-container input:focus {
+      outline: none;
+    }
+
+    .input-container .send-button {
+      background-color: #000;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .input-container .send-button:hover {
+      transform: scale(1.05);
+    }
+
+    .toggle-sidebar {
+      position: absolute;
+      top: 20px;
+      right: -40px;
+      background-color: #000;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+    }
+
+    .modal.open {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 500px;
+    }
+
+    .modal-header {
+      margin-bottom: 20px;
+    }
+
+    .modal-header h2 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      border: none;
+    }
+
+    .btn-primary {
+      background-color: #000;
+      color: white;
+    }
+
+    .btn-secondary {
+      background-color: #e0e0e0;
+      color: #333;
+    }
+
+    .project-view {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: white;
+      z-index: 900;
+      padding: 20px;
+    }
+
+    .project-view.open {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .project-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .project-header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .project-header .folder-icon {
+      margin-right: 12px;
+      font-size: 24px;
+      color: black;
+    }
+
+    .project-description {
+      margin-bottom: 20px;
+      color: #666;
+    }
+
+    .app-footer {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      font-size: 12px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <button class="back-button" id="back-button" onclick="goBack()">
+    <i class="fas fa-arrow-left"></i>
+  </button>
+
+  <div class="sidebar" id="sidebar">
+    <button class="toggle-sidebar" onclick="toggleSidebar()">
+      <i class="fas fa-bars"></i>
+    </button>
+    <ul class="menu">
+      <li class="recent">Projects</li>
+      <div id="projects-list">
+        <!-- Projects will be dynamically inserted here -->
+      </div>
+      <li><a href="#" onclick="openNewProjectModal()">New Project</a></li>
+    </ul>
+    <div class="footer">
+      <div class="profile-placeholder" id="profile-initial"></div>
+      <div class="user-info">
+        <div class="name" id="user-name">{{ username }}</div>
+        <div class="status">Upgrade plan</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-content" id="main-content">
+    <div class="welcome-message" id="welcome-message">
+      <h1>Welcome to ProjXs</h1>
+      <p>Projects keep chats, files, and custom instructions in one place.</p>
+    </div>
+    <div class="chat-container" id="chat-container" style="display: none;">
+      <!-- Chat messages will be appended here -->
+    </div>
+    <div class="input-container" id="input-container" style="display: none;">
+      <input id="user-input" placeholder="Type your message..." type="text"/>
+      <button class="send-button" onclick="sendMessage()">
+        <i class="fas fa-arrow-up"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- New Project Modal -->
+  <div class="modal" id="new-project-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Create new project</h2>
+        <p>Projects keep chats, files, and custom instructions in one place.</p>
+      </div>
+      <form id="new-project-form" method="POST" action="{{ url_for('main_page') }}">
+        <div class="form-group">
+          <label for="project-name">Title</label>
+          <input type="text" id="project-name" name="title" placeholder="E.g. Birthday Party Planning" required>
+        </div>
+        <div class="form-group">
+          <label>Folder</label>
+          <div class="folder-icon">
+            <i class="far fa-folder"></i>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="project-description">Note</label>
+          <textarea id="project-description" name="note" rows="3"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeNewProjectModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Create project</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Project View -->
+  <div class="project-view" id="project-view">
+    <div class="project-header">
+      <i class="far fa-folder folder-icon" id="project-view-icon"></i>
+      <h1 id="project-view-title"></h1>
+    </div>
+    <div class="project-description" id="project-view-description"></div>
+    <div class="chat-container" id="project-chat-container"></div>
+    <div class="input-container">
+      <input type="text" placeholder="Type your message..." id="project-input"/>
+      <button class="send-button" onclick="sendProjectMessage()">
+        <i class="fas fa-arrow-up"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="app-footer">
+    PyGen & Co. Ameer Hamza Khan
+  </div>
+
+  <script>
+    let projects = JSON.parse('{{ projects | tojson | safe }}');
+    let currentProject = null;
+
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.getElementById('main-content');
+      sidebar.classList.toggle('closed');
+      mainContent.classList.toggle('shifted');
+    }
+
+    function openNewProjectModal() {
+      document.getElementById('new-project-modal').classList.add('open');
+    }
+
+    function closeNewProjectModal() {
+      document.getElementById('new-project-modal').classList.remove('open');
+      resetNewProjectForm();
+    }
+
+    function resetNewProjectForm() {
+      document.getElementById('project-name').value = '';
+      document.getElementById('project-description').value = '';
+    }
+
+    function renderProjects() {
+      const projectsList = document.getElementById('projects-list');
+      projectsList.innerHTML = projects.map(project => 
+        `<div class="project-item" onclick="openProject('${project.title}')">
+          <i class="far fa-folder"></i>
+          <span>${project.title}</span>
+        </div>`
+      ).join('');
+    }
+
+    function goBack() {
+      document.getElementById('project-view').classList.remove('open');
+      document.getElementById('back-button').classList.remove('visible');
+      document.getElementById('welcome-message').style.display = 'flex';
+      document.getElementById('chat-container').style.display = 'none';
+      document.getElementById('input-container').style.display = 'none';
+      currentProject = null;
+    }
+
+    function openProject(projectTitle) {
+      const project = projects.find(p => p.title === projectTitle);
+      if (project) {
+        currentProject = project;
+        document.getElementById('project-view-title').textContent = project.title;
+        document.getElementById('project-view-icon').className = 'far fa-folder folder-icon';
+        document.getElementById('project-view-description').textContent = project.note || 'No note provided.';
+        document.getElementById('project-chat-container').innerHTML = ''; // Clear previous messages
+        document.getElementById('project-view').classList.add('open');
+        document.getElementById('back-button').classList.add('visible');
+        document.getElementById('welcome-message').style.display = 'none';
+        document.getElementById('chat-container').style.display = 'flex';
+        document.getElementById('input-container').style.display = 'flex';
+      }
+    }
+
+    function sendProjectMessage() {
+      const input = document.getElementById('project-input');
+      const message = input.value.trim();
+      
+      if (message && currentProject) {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message');
+        messageDiv.textContent = message;
+        document.getElementById('project-chat-container').appendChild(messageDiv);
+        input.value = '';
+      }
+    }
+
+    function sendMessage() {
+      const inputElement = document.getElementById('user-input');
+      const message = inputElement.value.trim();
+      
+      if (message) {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message');
+        messageDiv.textContent = message;
+        document.getElementById('chat-container').appendChild(messageDiv);
+        inputElement.value = '';
+        document.getElementById('chat-container').scrollTop = document.getElementById('chat-container').scrollHeight;
+      }
+    }
+
+    // Initialize projects
+    window.onload = function() {
+      renderProjects();
+      document.getElementById('user-name').textContent = '{{ username }}';
+      document.getElementById('profile-initial').textContent = '{{ username[0].upper() }}';
+    }
+  </script>
+</body>
+</html>
