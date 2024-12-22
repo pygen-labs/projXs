@@ -4,10 +4,10 @@ import requests
 app = Flask(__name__)
 
 # Secret key for session management
-app.secret_key = 'your_secret_key'
+app.secret_key = 'pygen-and-co-8113261-2024-projXs'
 
 # Google Apps Script URL
-GSHEET_URL = "https://script.google.com/macros/s/AKfycbx6u6n8NuxFE4hylm5LAWDr35qGm_Txe0qK-XApv8PXwA_eMlOm6wiq22yJxuNa5oE/exec"
+GSHEET_URL = "https://script.google.com/macros/s/AKfycbykSer38aeWUFsyOfVkEv4ul7kJrz2DZhk85WX-GpkIuncRs53kaoiF1jpLuBYU2g/exec"
 
 # Function to send POST requests to the Google Apps Script API
 def send_post_request(action, params):
@@ -67,20 +67,24 @@ def main_page():
         'username': username
     }
     projects = send_post_request('get_projects', params).get('projects', [])
-    
+
     if request.method == 'POST':
         title = request.form['title']
         note = request.form['note']
-        # color = request.form.get('color', 'blue')  # Default to blue if not provided
         params = {
             'username': username,
             'title': title,
             'note': note,
         }
         result = send_post_request('addProject', params)
-        return redirect(url_for('main_page'))
+        # Return a JSON response with success status
+        return jsonify({"success": True})
 
     return render_template('main.html', username=username, projects=projects)
+
+@app.route('/terms.html')
+def terms():
+    return render_template('terms.html')
 
 @app.route('/logout')
 def logout():
@@ -89,4 +93,3 @@ def logout():
 
 if __name__ == "__main__":
     app.run()
-
