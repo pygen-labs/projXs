@@ -11,9 +11,9 @@
       padding: 0;
       display: flex;
       height: 100vh;
-      background-color: #f5f5f5;
+      background-color: #ffffff;
     }
-
+    
     .sidebar {
       width: 250px;
       background-color: #ffffff;
@@ -344,28 +344,76 @@
     }
 
     .project-header {
-      display: flex;
-      align-items: center;
-      margin-bottom: 20px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid #e0e0e0;
-    }
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #e0e0e0;
+  background: white;
+  position: sticky; /* Keeps the header fixed while scrolling */
+  top: 0;
+  z-index: 10;
+}
 
-    .project-header h1 {
-      margin: 0;
-      font-size: 24px;
-    }
+.project-header h1 {
+  margin: 0;
+  font-size: 20px;
+  text-align: center;
+  flex: 1; /* Ensures the title is centered */
+}
+
+.project-header .back-button {
+  position: static; /* Let the button align naturally with the title */
+  font-size: 18px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.project-header .back-button i {
+  margin-right: 5px;
+}
 
     .project-header .folder-icon {
       margin-right: 12px;
       font-size: 24px;
       color: black;
     }
+    #profile-menu {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    padding: 15px;
+}
+#profile-menu .item {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-top: 1px solid #e0e0e0;
+    cursor: pointer;
+}
+#profile-menu .item:first-child {
+    border-top: none;
+}
+#profile-menu .item i {
+    margin-right: 10px;
+    color: #333;
+}
+#profile-menu .item span {
+    font-size: 14px;
+    color: #333;
+}
 
     .project-description {
-      margin-bottom: 20px;
-      color: #666;
-    }
+  margin-bottom: 20px;
+  color: #2f2e2e;
+  max-height: 300px; /* Adjust height as needed */
+  overflow-y: auto; /* Enables scrolling */
+  padding: 10px;
+  border: 1px solid #ddd; /* Optional: Add a border for clarity */
+  border-radius: 5px; /* Optional: For rounded corners */
+  background: #f9f9f9; /* Optional: Light background color */
+}
 
     .app-footer {
       position: fixed;
@@ -377,10 +425,19 @@
   </style>
 </head>
 <body>
-  <button class="back-button" id="back-button" onclick="goBack()">
+    <div id="profile-menu" class="menu" style="display: none; position: absolute; bottom: 80px; right: 20px; z-index: 1000;">
+        <div class="item">
+            <i class="fas fa-info-circle"></i>
+            <span>Current Version: 1.2024.345</span>
+        </div>
+        <div class="item">
+            <i class="fas fa-history"></i>
+            <span>Updates History</span>
+        </div>
+    </div>
+   <button class="back-button" id="back-button" onclick="goBack()">
     <i class="fas fa-arrow-left"></i>
   </button>
-
   <div class="sidebar" id="sidebar">
     <button class="toggle-sidebar" onclick="toggleSidebar()">
       <i class="fas fa-bars"></i>
@@ -390,41 +447,44 @@
       <div id="projects-list">
         <!-- Projects will be dynamically inserted here -->
       </div>
-      <li><a href="#" onclick="openNewProjectModal()">New Project</a></li>
     </ul>
-    <div class="footer">
-      <div class="profile-placeholder" id="profile-initial"></div>
-      <div class="user-info">
-        <div class="name" id="user-name">{{ username }}</div>
-        <div class="status">Upgrade plan</div>
-      </div>
+    <div class="footer" onclick="toggleProfileMenu()">
+        <div class="profile-placeholder" id="profile-initial"></div>
+        <div class="user-info">
+            <div class="name" id="user-name">{{ username }}</div>
+            <div class="status">Your Status: Legendary! 🌟😊</div>
+        </div>
     </div>
+    
   </div>
-
   <div class="main-content" id="main-content">
     <div class="welcome-message" id="welcome-message">
       <h1>Welcome to ProjXs</h1>
-      <p>Projects keep chats, files, and custom instructions in one place.</p>
+      <p>ProjXs securely organizes and stores chats, ideas, thoughts, and emotions all in one safe place.</p>
+      <button class="btn btn-primary" onclick="openNewProjectModal()">Create New Project</button>
     </div>
-    <div class="chat-container" id="chat-container" style="display: none;">
-      <!-- Chat messages will be appended here -->
-    </div>
-    <div class="input-container" id="input-container" style="display: none;">
-      <input id="user-input" placeholder="Type your message..." type="text"/>
-      <button class="send-button" onclick="sendMessage()">
-        <i class="fas fa-arrow-up"></i>
-      </button>
+    <div class="project-view" id="project-view">
+      <div class="project-header">
+        <h1 id="project-view-title"></h1>
+      </div>
+      <div class="project-description" id="project-view-description"></div>
+      <div class="chat-container" id="project-chat-container"></div>
+      <div class="input-container">
+        <input type="text" placeholder="✨ Exciting things are coming! Chat launching soon... ✨" id="project-input" disabled/> <!--disabled -->
+        <button class="send-button" onclick="sendProjectMessage()">
+          <i class="fas fa-arrow-up"></i>
+        </button>
+      </div>
     </div>
   </div>
-
   <!-- New Project Modal -->
   <div class="modal" id="new-project-modal">
     <div class="modal-content">
       <div class="modal-header">
         <h2>Create new project</h2>
-        <p>Projects keep chats, files, and custom instructions in one place.</p>
+        <p>ProjXs securely organizes and stores chats, ideas, thoughts, and emotions all in one safe place.</p>
       </div>
-      <form id="new-project-form" method="POST" action="{{ url_for('main_page') }}">
+      <form id="new-project-form">
         <div class="form-group">
           <label for="project-name">Title</label>
           <input type="text" id="project-name" name="title" placeholder="E.g. Birthday Party Planning" required>
@@ -446,120 +506,155 @@
       </form>
     </div>
   </div>
-
-  <!-- Project View -->
-  <div class="project-view" id="project-view">
-    <div class="project-header">
-      <i class="far fa-folder folder-icon" id="project-view-icon"></i>
-      <h1 id="project-view-title"></h1>
-    </div>
-    <div class="project-description" id="project-view-description"></div>
-    <div class="chat-container" id="project-chat-container"></div>
-    <div class="input-container">
-      <input type="text" placeholder="Type your message..." id="project-input"/>
-      <button class="send-button" onclick="sendProjectMessage()">
-        <i class="fas fa-arrow-up"></i>
-      </button>
-    </div>
-  </div>
-
   <div class="app-footer">
     PyGen & Co. Ameer Hamza Khan
   </div>
-
   <script>
-    let projects = JSON.parse('{{ projects | tojson | safe }}');
     let currentProject = null;
+let currentUser = "{{ username }}"; // Replace with the actual method to fetch logged-in user's username/email.
 
-    function toggleSidebar() {
-      const sidebar = document.getElementById('sidebar');
-      const mainContent = document.getElementById('main-content');
-      sidebar.classList.toggle('closed');
-      mainContent.classList.toggle('shifted');
+window.onload = function() {
+  fetchProjects();
+  document.getElementById('new-project-form').addEventListener('submit', handleNewProjectSubmit);
+
+  // Dynamically set the initial in the profile placeholder
+  if (currentUser) {
+    const initial = currentUser.charAt(0).toUpperCase(); // Get the first character and make it uppercase
+    document.getElementById('profile-initial').textContent = initial;
+  }
+};
+function toggleProfileMenu() {
+        const profileMenu = document.getElementById('profile-menu');
+        if (profileMenu.style.display === 'none' || profileMenu.style.display === '') {
+            profileMenu.style.display = 'block';
+        } else {
+            profileMenu.style.display = 'none';
+        }
     }
 
-    function openNewProjectModal() {
-      document.getElementById('new-project-modal').classList.add('open');
-    }
+    // Close the profile menu when clicking outside
+    document.addEventListener('click', (event) => {
+        const profileMenu = document.getElementById('profile-menu');
+        const footer = document.querySelector('.footer');
+        if (profileMenu && !profileMenu.contains(event.target) && !footer.contains(event.target)) {
+            profileMenu.style.display = 'none';
+        }
+    });
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const mainContent = document.getElementById('main-content');
+  sidebar.classList.toggle('closed');
+  mainContent.classList.toggle('shifted');
+}
 
-    function closeNewProjectModal() {
-      document.getElementById('new-project-modal').classList.remove('open');
-      resetNewProjectForm();
-    }
+function openNewProjectModal() {
+  document.getElementById('new-project-modal').classList.add('open');
+}
 
-    function resetNewProjectForm() {
-      document.getElementById('project-name').value = '';
-      document.getElementById('project-description').value = '';
-    }
+function closeNewProjectModal() {
+  document.getElementById('new-project-modal').classList.remove('open');
+  resetNewProjectForm();
+}
 
-    function renderProjects() {
+function resetNewProjectForm() {
+  document.getElementById('project-name').value = '';
+  document.getElementById('project-description').value = '';
+}
+
+function fetchProjects() {
+  fetch('https://script.google.com/macros/s/AKfycbykSer38aeWUFsyOfVkEv4ul7kJrz2DZhk85WX-GpkIuncRs53kaoiF1jpLuBYU2g/exec')
+    .then(response => response.json())
+    .then(data => {
       const projectsList = document.getElementById('projects-list');
-      projectsList.innerHTML = projects.map(project => 
-        `<div class="project-item" onclick="openProject('${project.title}')">
-          <i class="far fa-folder"></i>
-          <span>${project.title}</span>
-        </div>`
-      ).join('');
-    }
-
-    function goBack() {
-      document.getElementById('project-view').classList.remove('open');
-      document.getElementById('back-button').classList.remove('visible');
-      document.getElementById('welcome-message').style.display = 'flex';
-      document.getElementById('chat-container').style.display = 'none';
-      document.getElementById('input-container').style.display = 'none';
-      currentProject = null;
-    }
-
-    function openProject(projectTitle) {
-      const project = projects.find(p => p.title === projectTitle);
-      if (project) {
-        currentProject = project;
-        document.getElementById('project-view-title').textContent = project.title;
-        document.getElementById('project-view-icon').className = 'far fa-folder folder-icon';
-        document.getElementById('project-view-description').textContent = project.note || 'No note provided.';
-        document.getElementById('project-chat-container').innerHTML = ''; // Clear previous messages
-        document.getElementById('project-view').classList.add('open');
-        document.getElementById('back-button').classList.add('visible');
-        document.getElementById('welcome-message').style.display = 'none';
-        document.getElementById('chat-container').style.display = 'flex';
-        document.getElementById('input-container').style.display = 'flex';
-      }
-    }
-
-    function sendProjectMessage() {
-      const input = document.getElementById('project-input');
-      const message = input.value.trim();
+      projectsList.innerHTML = ''; // Clear existing projects
       
-      if (message && currentProject) {
-        const messageDiv = document.createElement('div');
-        messageDiv.classList.add('message');
-        messageDiv.textContent = message;
-        document.getElementById('project-chat-container').appendChild(messageDiv);
-        input.value = '';
-      }
-    }
+      // Filter projects for the current user
+      const userProjects = data.data.filter(project => project.Username === currentUser);
 
-    function sendMessage() {
-      const inputElement = document.getElementById('user-input');
-      const message = inputElement.value.trim();
-      
-      if (message) {
-        const messageDiv = document.createElement('div');
-        messageDiv.classList.add('message');
-        messageDiv.textContent = message;
-        document.getElementById('chat-container').appendChild(messageDiv);
-        inputElement.value = '';
-        document.getElementById('chat-container').scrollTop = document.getElementById('chat-container').scrollHeight;
-      }
-    }
+      // Only show the projects related to the logged-in user
+      userProjects.forEach(project => {
+        if (project.Title) {
+          const projectItem = document.createElement('li');
+          projectItem.classList.add('project-item');
+          projectItem.innerHTML = `
+            <i class="fas fa-folder"></i>
+            ${project.Title}
+          `;
+          projectItem.onclick = () => openProjectView(project);
+          projectsList.appendChild(projectItem);
+        }
+      });
 
-    // Initialize projects
-    window.onload = function() {
-      renderProjects();
-      document.getElementById('user-name').textContent = '{{ username }}';
-      document.getElementById('profile-initial').textContent = '{{ username[0].upper() }}';
+      // If no projects found, you could show a message like "No projects found."
+      if (userProjects.length === 0) {
+        const noProjectsMessage = document.createElement('li');
+        noProjectsMessage.textContent = "No projects found.";
+        projectsList.appendChild(noProjectsMessage);
+      }
+    });
+}
+
+function goBack() {
+  document.getElementById('project-view').classList.remove('open');
+  document.getElementById('back-button').classList.remove('visible');
+  document.getElementById('welcome-message').style.display = 'flex';
+  document.getElementById('project-chat-container').innerHTML = '';
+  currentProject = null;
+}
+
+function openProjectView(project) {
+  currentProject = project;
+  const projectView = document.getElementById('project-view');
+  const title = document.getElementById('project-view-title');
+  const description = document.getElementById('project-view-description');
+  title.textContent = project.Title;
+  description.textContent = project.Note;
+  projectView.classList.add('open');
+  document.getElementById('welcome-message').style.display = 'none';
+  document.getElementById('back-button').classList.add('visible');
+}
+
+function sendProjectMessage() {
+  const input = document.getElementById('project-input');
+  const message = input.value.trim();
+  if (message && currentProject) {
+    const messageDiv = document.createElement('div');
+    messageDiv.classList.add('message');
+    messageDiv.textContent = message;
+    document.getElementById('project-chat-container').appendChild(messageDiv);
+    input.value = '';
+  }
+}
+
+function handleNewProjectSubmit(event) {
+  event.preventDefault();
+  const title = document.getElementById('project-name').value;
+  const note = document.getElementById('project-description').value;
+
+  // Prepare form data to send to Flask or the backend for project addition
+  const formData = new FormData();
+  formData.append('title', title);
+  formData.append('note', note);
+
+  fetch('/main', {
+    method: 'POST',
+    body: formData,
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      closeNewProjectModal();
+      fetchProjects();  // Refetch projects after creating a new one
+    } else {
+      alert('Failed to create project. Please try again.');
     }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('An error occurred. Please try again.');
+  });
+}
+
   </script>
 </body>
 </html>
