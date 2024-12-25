@@ -91,10 +91,17 @@
     }
 
     .project-item i {
-      color: black;
-      margin-right: 12px;
-      font-size: 16px;
-    }
+  color: #333; /* Use a darker color for better visibility */
+  margin-right: 12px;
+  font-size: 16px;
+}
+.file-icon {
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  color: #333;
+}
+
 
     .sidebar .footer {
       display: flex;
@@ -267,45 +274,71 @@
 
     .modal-content {
       background: white;
-      padding: 24px;
+      padding: 48px;
       border-radius: 12px;
       width: 90%;
-      max-width: 500px;
+      max-width: 800px; /* Increased for more space */
+      min-height: 400px;
+      display: flex;
+      flex-direction: column;
     }
 
     .modal-header {
-      margin-bottom: 20px;
+      margin-bottom: 32px;
     }
 
     .modal-header h2 {
-      margin: 0;
-      font-size: 20px;
+      display: none; /* Hide the original header */
+    }
+
+    .modal-header p {
+      display: none; /* Hide the original description */
     }
 
     .form-group {
-      margin-bottom: 16px;
+      margin-bottom: 24px;
     }
 
     .form-group label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: bold;
+      display: none; /* Hide labels for cleaner look */
     }
 
-    .form-group input,
+    .form-group input[type="text"] {
+      width: 100%;
+      padding: 8px 0;
+      border: none;
+      font-size: 40px;
+      font-weight: 600;
+      color: #333;
+      outline: none;
+      margin-bottom: 16px;
+      font-family: Arial;
+    }
+
+    .form-group input[type="text"]::placeholder {
+      color: #999;
+    }
+
     .form-group textarea {
       width: 100%;
-      padding: 8px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 14px;
+      padding: 8px 0;
+      border: none;
+      font-size: 16px;
+      line-height: 1.6;
+      color: #4d4d4d;
+      outline: none;
+      resize: none;
+      min-height: 200px;
+    }
+
+    .form-group textarea::placeholder {
+      color: #999;
     }
 
     .modal-footer {
-      display: flex;
-      justify-content: flex-end;
-      gap: 12px;
-      margin-top: 24px;
+      margin-top: auto; /* Push to bottom */
+      padding-top: 24px;
+      border-top: 1px solid #eee;
     }
 
     .btn {
@@ -327,39 +360,33 @@
     }
 
     .project-view {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: white;
-      z-index: 900;
-      padding: 20px;
-    }
-
-    .project-view.open {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .project-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px;
-  border-bottom: 1px solid #e0e0e0;
-  background: white;
-  position: sticky; /* Keeps the header fixed while scrolling */
+  display: none;
+  position: fixed;
   top: 0;
-  z-index: 10;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: white;
+  z-index: 900;
+  padding: 40px 60px;
+  overflow-y: auto;
+}
+
+.project-view.open {
+  display: block;
+}
+
+.project-header {
+  margin-bottom: 20px;
 }
 
 .project-header h1 {
+  font-size: 40px;
+  font-weight: 700;
+  color: #333;
   margin: 0;
-  font-size: 20px;
-  text-align: center;
-  flex: 1; /* Ensures the title is centered */
+  padding: 0;
+  line-height: 1.2;
 }
 
 .project-header .back-button {
@@ -373,11 +400,11 @@
   margin-right: 5px;
 }
 
-    .project-header .folder-icon {
-      margin-right: 12px;
-      font-size: 24px;
-      color: black;
-    }
+.project-header .file-icon {
+  margin-right: 12px;
+  font-size: 24px;
+  color: #333;
+}
     #profile-menu {
     background-color: white;
     border-radius: 8px;
@@ -404,17 +431,12 @@
     color: #333;
 }
 
-    .project-description {
-  margin-bottom: 20px;
-  color: #2f2e2e;
-  max-height: 300px; /* Adjust height as needed */
-  overflow-y: auto; /* Enables scrolling */
-  padding: 10px;
-  border: 1px solid #ddd; /* Optional: Add a border for clarity */
-  border-radius: 5px; /* Optional: For rounded corners */
-  background: #f9f9f9; /* Optional: Light background color */
+.project-description {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #4d4d4d;
+  white-space: pre-wrap;
 }
-
     .app-footer {
       position: fixed;
       bottom: 10px;
@@ -432,7 +454,7 @@
         </div>
         <div class="item">
             <i class="fas fa-history"></i>
-            <span>Updates History</span>
+            <span>Updates History- 1</span>
         </div>
     </div>
    <button class="back-button" id="back-button" onclick="goBack()">
@@ -480,28 +502,27 @@
   <!-- New Project Modal -->
   <div class="modal" id="new-project-modal">
     <div class="modal-content">
-      <div class="modal-header">
-        <h2>Create new project</h2>
-        <p>ProjXs securely organizes and stores chats, ideas, thoughts, and emotions all in one safe place.</p>
-      </div>
       <form id="new-project-form">
         <div class="form-group">
-          <label for="project-name">Title</label>
-          <input type="text" id="project-name" name="title" placeholder="E.g. Birthday Party Planning" required>
+          <input 
+            type="text" 
+            id="project-name" 
+            name="title" 
+            placeholder="Untitled" 
+            required
+            autocomplete="off"
+          >
         </div>
         <div class="form-group">
-          <label>Folder</label>
-          <div class="folder-icon">
-            <i class="far fa-folder"></i>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="project-description">Note</label>
-          <textarea id="project-description" name="note" rows="3"></textarea>
+          <textarea 
+            id="project-description" 
+            name="note" 
+            placeholder="Ready to create? Just hit 'Go' and let the ideas flow!"
+          ></textarea>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" onclick="closeNewProjectModal()">Cancel</button>
-          <button type="submit" class="btn btn-primary">Create project</button>
+          <button type="submit" class="btn btn-primary">Create</button>
         </div>
       </form>
     </div>
@@ -577,7 +598,7 @@ function fetchProjects() {
           const projectItem = document.createElement('li');
           projectItem.classList.add('project-item');
           projectItem.innerHTML = `
-            <i class="fas fa-folder"></i>
+            <i class="far fa-file"></i>
             ${project.Title}
           `;
           projectItem.onclick = () => openProjectView(project);
