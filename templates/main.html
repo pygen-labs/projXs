@@ -448,6 +448,10 @@
       font-size: 12px;
       color: #888;
     }
+    .mock-project {
+    opacity: 0.7;
+    border-left: 2px solid #4CAF50;
+  }
   </style>
 </head>
 <body>
@@ -535,6 +539,7 @@
     PyGen & Co. Ameer Hamza Khan
   </div>
   <script>
+    let mockProjectElement = null;
     let currentProject = null;
 let currentUser = "{{ username }}"; // Replace with the actual method to fetch logged-in user's username/email.
 
@@ -574,18 +579,49 @@ function toggleSidebar() {
 
 function openNewProjectModal() {
   document.getElementById('new-project-modal').classList.add('open');
+  addMockProject();
+  setupRealtimeTitle();
 }
-
 function closeNewProjectModal() {
   document.getElementById('new-project-modal').classList.remove('open');
+  if (mockProjectElement) {
+    mockProjectElement.remove();
+    mockProjectElement = null;
+  }
   resetNewProjectForm();
 }
+function addMockProject() {
+  const projectsList = document.getElementById('projects-list');
+  mockProjectElement = document.createElement('li');
+  mockProjectElement.classList.add('project-item', 'mock-project');
+  mockProjectElement.innerHTML = `
+    <i class="far fa-file"></i>
+    <span class="mock-title">Untitled</span>
+  `;
+  projectsList.insertBefore(mockProjectElement, projectsList.firstChild);
+}
 
+function setupRealtimeTitle() {
+  const titleInput = document.getElementById('project-name');
+  titleInput.addEventListener('input', (e) => {
+    if (mockProjectElement) {
+      const titleSpan = mockProjectElement.querySelector('.mock-title');
+      titleSpan.textContent = e.target.value || 'Untitled';
+    }
+  });
+}
 function resetNewProjectForm() {
   document.getElementById('project-name').value = '';
   document.getElementById('project-description').value = '';
 }
-
+const style = document.createElement('style');
+style.textContent = `
+  .mock-project {
+    opacity: 0.7;
+    border-left: 2px solid #4CAF50;
+  }
+`;
+document.head.appendChild(style);
 function fetchProjects() {
   fetch('https://script.google.com/macros/s/AKfycbykSer38aeWUFsyOfVkEv4ul7kJrz2DZhk85WX-GpkIuncRs53kaoiF1jpLuBYU2g/exec')
     .then(response => response.json())
@@ -653,25 +689,26 @@ function sendProjectMessage() {
 
 function handleNewProjectSubmit(event) {
   event.preventDefault();
-  const title = document.getElementById('project-name').value;
+  const title = document.getElementById('project-name').value || 'Untitled';
   const note = document.getElementById('project-description').value;
 
-  // Prepare form data to send to Flask or the backend for project addition
   const formData = new FormData();
   formData.append('title', title);
   formData.append('note', note);
 
   fetch('/main', {
     method: 'POST',
-    body: formData,
+    body: formData
   })
   .then(response => response.json())
   .then(data => {
     if (data.success) {
+      if (mockProjectElement) {
+        mockProjectElement.remove();
+        mockProjectElement = null;
+      }
       closeNewProjectModal();
-      fetchProjects();  // Refetch projects after creating a new one
-    } else {
-      alert('Failed to create project. Please try again.');
+      fetchProjects(); // Refresh with actual data
     }
   })
   .catch(error => {
