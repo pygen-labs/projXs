@@ -403,7 +403,23 @@
 .project-header .back-button i {
   margin-right: 5px;
 }
+.project-item i {
+  color: #000000;
+  margin-right: 12px;
+  font-size: 16px;
+  font-weight: normal;
+}
 
+.project-item i.far.fa-file {
+  font-weight: 300;
+}
+
+.file-icon {
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  color: #0c0c0c;
+}
 .project-header .file-icon {
   margin-right: 12px;
   font-size: 24px;
@@ -452,17 +468,58 @@
     opacity: 0.7;
     border-left: 2px solid #4CAF50;
   }
+  .tag-small {
+  font-size: 0.7em;
+  margin-left: 5px;
+  font-weight: normal;
+}
+#project-tag {
+  width: 100%;
+  padding: 8px 12px;
+  margin: 8px 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: white;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+#project-tag:hover {
+  border-color: #999;
+}
+
+#project-tag:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
+}
+
+#project-tag option {
+  padding: 8px;
+  background-color: white;
+  color: #333;
+}
+
+#project-tag option:hover {
+  background-color: #f5f5f5;
+}
+
+#project-tag::-ms-expand {
+  display: none;
+}
   </style>
 </head>
 <body>
     <div id="profile-menu" class="menu" style="display: none; position: absolute; bottom: 80px; right: 20px; z-index: 1000;">
         <div class="item">
             <i class="fas fa-info-circle"></i>
-            <span>Current Version: 1.2024.007</span>
+            <span>Current Version: 1.2024.117</span>
         </div>
         <div class="item">
             <i class="fas fa-history"></i>
-            <span>Total Updates: 1</span>
+            <span>Total Updates: 3</span>
         </div>
     </div>
    <button class="back-button" id="back-button" onclick="goBack()">
@@ -490,6 +547,7 @@
   <div class="main-content" id="main-content">
     <div class="welcome-message" id="welcome-message">
       <h1>Welcome to ProjXs</h1>
+      <!-- <h2>Organize better, think smarter</h2> -->
       <p>ProjXs securely organizes and stores chats, ideas, thoughts, and emotions all in one safe place.</p>
       <button class="btn btn-primary" onclick="openNewProjectModal()">Create New Project</button>
     </div>
@@ -500,8 +558,8 @@
       <div class="project-description" id="project-view-description"></div>
       <div class="chat-container" id="project-chat-container"></div>
       <div class="input-container">
-        <input type="text" placeholder="✨ Exciting things are coming! Chat launching soon... ✨" id="project-input" disabled/> <!--disabled -->
-        <button class="send-button" onclick="sendProjectMessage()">
+        <input type="text" placeholder="✨ Click this to chat with your notes Powered by ChatGPT ➡️" id="project-input" disabled/> <!--disabled -->
+        <button class="send-button" onclick="openChatGPT()">
           <i class="fas fa-arrow-up"></i>
         </button>
       </div>
@@ -527,6 +585,17 @@
             name="note" 
             placeholder="Ready to create? Just hit 'Go' and let the ideas flow!"
           ></textarea>
+          <select id="project-tag" class="form-control">
+            <option value="">Tag it!</option>
+            <option value="Work">Work</option>
+            <option value="Personal">Personal</option>
+            <option value="Idea">Idea</option>
+            <option value="Todo">To-do</option>
+            <option value="Urgent">Urgent</option>
+            <option value="RandomThought">Random Thought</option>
+            <option value="AhaMoment">Aha Moment</option>
+          </select>
+          
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" onclick="closeNewProjectModal()">Cancel</button>
@@ -561,6 +630,14 @@ function toggleProfileMenu() {
             profileMenu.style.display = 'none';
         }
     }
+    function openChatGPT() {
+  const screenWidth = window.screen.width / 2; // Half screen width
+  const screenHeight = window.screen.height;  // Full screen height
+  const leftPosition = window.screen.width / 2; // Position to start at the right half
+
+  window.open('https://chatgpt.com', '_blank', `width=${screenWidth},height=${screenHeight},left=${leftPosition},top=0`);
+}
+
 
     // Close the profile menu when clicking outside
     document.addEventListener('click', (event) => {
@@ -627,26 +704,41 @@ function fetchProjects() {
     .then(response => response.json())
     .then(data => {
       const projectsList = document.getElementById('projects-list');
-      projectsList.innerHTML = ''; // Clear existing projects
+      projectsList.innerHTML = ''; 
       
-      // Filter projects for the current user
       const userProjects = data.data.filter(project => project.Username === currentUser);
 
-      // Only show the projects related to the logged-in user
       userProjects.forEach(project => {
         if (project.Title) {
+          let tag = '';
+          const noteContent = project.Note;
+          const tagMatch = noteContent.match(/\nTag: (.+)$/);
+          if (tagMatch) {
+            tag = tagMatch[1];
+          }
+
+          const tagColor = {
+            'Work': '#2196F3',           // Blue
+            'Personal': '#4CAF50',       // Green
+            'Idea': '#FF9800',           // Orange
+            'Todo': '#f44336',           // Red
+            'Urgent': '#E91E63',         // Pink
+            'RandomThought': '#9C27B0',  // Purple
+            'AhaMoment': '#FFC107'       // Amber
+          }[tag] || '#2196F3';           // Default Blue
+
           const projectItem = document.createElement('li');
           projectItem.classList.add('project-item');
           projectItem.innerHTML = `
             <i class="far fa-file"></i>
             ${project.Title}
+            ${tag ? `<span class="tag-small" style="color: ${tagColor}">(${tag})</span>` : ''}
           `;
           projectItem.onclick = () => openProjectView(project);
           projectsList.appendChild(projectItem);
         }
       });
 
-      // If no projects found, you could show a message like "No projects found."
       if (userProjects.length === 0) {
         const noProjectsMessage = document.createElement('li');
         noProjectsMessage.textContent = "No projects found.";
@@ -654,7 +746,6 @@ function fetchProjects() {
       }
     });
 }
-
 function goBack() {
   document.getElementById('project-view').classList.remove('open');
   document.getElementById('back-button').classList.remove('visible');
@@ -691,10 +782,14 @@ function handleNewProjectSubmit(event) {
   event.preventDefault();
   const title = document.getElementById('project-name').value || 'Untitled';
   const note = document.getElementById('project-description').value;
+  const tag = document.getElementById('project-tag').value;  // Add tag select in HTML
+
+  // Combine note and tag
+  const noteWithTag = tag ? `${note}\nTag: ${tag}` : note;
 
   const formData = new FormData();
   formData.append('title', title);
-  formData.append('note', note);
+  formData.append('note', noteWithTag);
 
   fetch('/main', {
     method: 'POST',
@@ -713,7 +808,7 @@ function handleNewProjectSubmit(event) {
   })
   .catch(error => {
     console.error('Error:', error);
-    alert('An error occurred. Please try again.');
+    alert('Failed to create project');
   });
 }
 
