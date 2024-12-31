@@ -509,6 +509,16 @@
 #project-tag::-ms-expand {
   display: none;
 }
+.send-button .logo-icon {
+  width: 40px;   /* Increase the size of the image */
+  height: 40px;  /* Increase the size of the image */
+  border-radius: 50%;  /* Make the image circular */
+  object-fit: cover;   /* Ensure image fits well in the circle */
+  border: 2px solid black;  /* Thin black border */
+  outline: none;   /* Remove any outline */
+}
+
+
   </style>
 </head>
 <body>
@@ -558,10 +568,11 @@
       <div class="project-description" id="project-view-description"></div>
       <div class="chat-container" id="project-chat-container"></div>
       <div class="input-container">
-        <input type="text" placeholder="✨ Click this to chat with your notes Powered by ChatGPT ➡️" id="project-input" disabled/> <!--disabled -->
-        <button class="send-button" onclick="openChatGPT()">
-          <i class="fas fa-arrow-up"></i>
-        </button>
+        <input type="text" placeholder="✨ Click the ChatGPT icon ➡️ to chat with your notes. Powered by ChatGPT." id="project-input" disabled/> <!-- disabled -->
+<button class="send-button" onclick="openChatGPT()">
+  <img src="static/logo_gpt.png" alt="ChatGPT Logo" class="logo-icon"/>
+</button>
+
       </div>
     </div>
   </div>
