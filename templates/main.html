@@ -517,7 +517,90 @@
   border: 2px solid black;  /* Thin black border */
   outline: none;   /* Remove any outline */
 }
+.user-achievement {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      z-index: 1000;
+    }
 
+    .achievement-box {
+      background-color: #f0f0f0;
+      border-radius: 10px;
+      padding: 10px 15px;
+      margin-bottom: 10px;
+      text-align: right;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .achievement-box.closing {
+      transform: translateX(120%);
+      opacity: 0;
+    }
+
+    .achievement-box strong {
+      display: block;
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+
+    .achievement-box p {
+      font-size: 14px;
+      margin: 0;
+    }
+
+    .close-achievement {
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      width: 24px;
+      height: 24px;
+      background-color: #ffffff;
+      border: 2px solid #f0f0f0;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      font-size:12px;
+      color: #333;
+      transition: background-color 0.2s;
+    }
+
+    .close-achievement:hover {
+      background-color: #f0f0f0;
+    }
+
+    .specific-achievement {
+      background-color: #f0f0f0;
+      border-radius: 10px;
+      padding: 10px 15px;
+      margin-top: 10px;
+      text-align: right;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      position: relative;
+    }
+
+    .specific-achievement.closing {
+      transform: translateX(120%);
+      opacity: 0;
+    }
+
+    .specific-achievement strong {
+      display: block;
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+
+    .specific-achievement p {
+      font-size: 14px;
+      margin: 0;
+    }
 
   </style>
 </head>
@@ -572,7 +655,18 @@
 <button class="send-button" onclick="openChatGPT()">
   <img src="static/logo_gpt.png" alt="ChatGPT Logo" class="logo-icon"/>
 </button>
-
+      </div>
+    </div>
+    <div class="user-achievement">
+      <div class="achievement-box" id="general-achievement">
+        <button class="close-achievement" onclick="closeAchievement('general-achievement')">×</button>
+        <strong>Productivity Champion 🏆 -- Ameer Hamza Khan</strong>
+        <p>Our Most Active User of January on ProjXs</p>
+      </div>
+      <div class="specific-achievement" id="specific-achievement">
+        <button class="close-achievement" onclick="closeAchievement('specific-achievement')">×</button>
+        <strong>Congratulations, hamzakhan7 🏆</strong>
+        <p>You are the Most Active User of ProjXs. Keep up the amazing work!</p>
       </div>
     </div>
   </div>
@@ -624,15 +718,16 @@
 let currentUser = "{{ username }}"; // Replace with the actual method to fetch logged-in user's username/email.
 
 window.onload = function() {
-  fetchProjects();
-  document.getElementById('new-project-form').addEventListener('submit', handleNewProjectSubmit);
+      fetchProjects();
+      document.getElementById('new-project-form').addEventListener('submit', handleNewProjectSubmit);
 
-  // Dynamically set the initial in the profile placeholder
-  if (currentUser) {
-    const initial = currentUser.charAt(0).toUpperCase(); // Get the first character and make it uppercase
-    document.getElementById('profile-initial').textContent = initial;
-  }
-};
+      if (currentUser) {
+        const initial = currentUser.charAt(0).toUpperCase();
+        document.getElementById('profile-initial').textContent = initial;
+      }
+
+      updateUserAchievement();
+    };
 function toggleProfileMenu() {
         const profileMenu = document.getElementById('profile-menu');
         if (profileMenu.style.display === 'none' || profileMenu.style.display === '') {
@@ -822,7 +917,28 @@ function handleNewProjectSubmit(event) {
     alert('Failed to create project');
   });
 }
+function updateUserAchievement() {
+      const userEmail = currentUser;
+      const generalAchievement = document.getElementById('general-achievement');
+      const specificAchievement = document.getElementById('specific-achievement');
+      
+      generalAchievement.style.display = 'block';
+      
+      if (userEmail === 'ameerhamza.khan@pygen.co') {
+        specificAchievement.style.display = 'block';
+      } else {
+        specificAchievement.style.display = 'none';
+      }
+    }
 
+    function closeAchievement(id) {
+      const achievement = document.getElementById(id);
+      achievement.classList.add('closing');
+      setTimeout(() => {
+        achievement.style.display = 'none';
+        achievement.classList.remove('closing');
+      }, 300);
+    }
   </script>
 </body>
 </html>
