@@ -1,11 +1,10 @@
 const CACHE_NAME = "projxs-cache-v1";
 const urlsToCache = [
   "/",
-  "/index.html",
-  "/main.html",
+  "/main",
   "/terms.html",
-  "/static/css/styles.css", // Add your CSS files
-  "/static/js/scripts.js",  // Add your JS files
+  "/static/icons/icon-512x512.png",
+  "/static/manifest.json"
 ];
 
 self.addEventListener("install", event => {
