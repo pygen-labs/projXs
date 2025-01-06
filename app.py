@@ -19,7 +19,10 @@ def send_post_request(action, params):
     if action == 'get_projects':
         return response.json()
     return response.json()
-
+@app.route('/static/<path:filename>')
+def static_files(filename):
+    return send_from_directory('static', filename)
+    
 @app.route('/')
 def index():
     # Redirect to login/signup page if not logged in
