@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="manifest" href="/static/manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ProjXs App</title>
@@ -26,6 +25,11 @@
         h2 {
             color: #333;
             margin-bottom: 1rem;
+        }
+        h3 {
+            color: #ff2e2e;
+            margin-bottom: 1rem;
+            font-weight: normal;
         }
         form {
             display: flex;
@@ -86,7 +90,7 @@
 
         <div id="signupForm">
             <h2>Signup</h2>
-            <form method="POST" action="/signup">
+            <h3>Get started with ProjXs! For your security, we recommend creating a unique and strong password. A weak or commonly used password may prevent you from being able to log in.</h3>            <form method="POST" action="/signup">
                 <input type="text" name="username" placeholder="Username" required>
                 <input type="email" name="email" placeholder="Email" required>
                 <input type="password" name="password" placeholder="Password" required>
@@ -96,20 +100,13 @@
         </div>
 
         <footer>
-            <a href="terms.html" target="_blank">Terms & Privacy Policy</a>
+            <a href="{{ terms_url }}" target="_blank">Terms & Privacy Policy</a> |
+            <a href="{{ doc_url }}" target="_blank">Documentation</a>
         </footer>
+        
     </div>
 
     <script>
-         if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/static/service-worker.js')
-      .then(registration => {
-        console.log('Service Worker registered with scope:', registration.scope);
-      })
-      .catch(error => {
-        console.error('Service Worker registration failed:', error);
-      });
-  }
         function toggleForm() {
             const loginForm = document.getElementById('loginForm');
             const signupForm = document.getElementById('signupForm');
