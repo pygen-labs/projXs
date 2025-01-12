@@ -50,8 +50,12 @@
     .sidebar .menu {
       list-style: none;
       padding: 0;
+      flex: 1;
+      overflow-y: auto;
     }
-
+    .sidebar .menu::-webkit-scrollbar {
+      display: none;
+    }
     .sidebar .menu li {
       margin-bottom: 15px;
       background-color: #ffffff;
@@ -101,19 +105,21 @@
       font-weight: 300;
     }
 
-.file-icon {
-  display: flex;
-  align-items: center;
-  font-size: 24px;
-  color: #0c0c0c;
-}
+    .file-icon {
+      display: flex;
+      align-items: center;
+      font-size: 24px;
+      color: #0c0c0c;
+    }
 
     .sidebar .footer {
       display: flex;
       align-items: center;
-      position: absolute;
-      bottom: 20px;
-      left: 20px;
+      position: sticky;
+      bottom: 0;
+      background: #fff;
+      padding: 10px 0;
+      border-top: 1px solid #e0e0e0;
     }
 
     .sidebar .footer .profile-placeholder {
@@ -282,7 +288,7 @@
       padding: 48px;
       border-radius: 12px;
       width: 90%;
-      max-width: 800px; /* Increased for more space */
+      max-width: 800px;
       min-height: 400px;
       display: flex;
       flex-direction: column;
@@ -293,11 +299,11 @@
     }
 
     .modal-header h2 {
-      display: none; /* Hide the original header */
+      display: none;
     }
 
     .modal-header p {
-      display: none; /* Hide the original description */
+      display: none;
     }
 
     .form-group {
@@ -305,7 +311,7 @@
     }
 
     .form-group label {
-      display: none; /* Hide labels for cleaner look */
+      display: none;
     }
 
     .form-group input[type="text"] {
@@ -341,7 +347,7 @@
     }
 
     .modal-footer {
-      margin-top: auto; /* Push to bottom */
+      margin-top: auto;
       padding-top: 24px;
       border-top: 1px solid #eee;
     }
@@ -365,99 +371,99 @@
     }
 
     .project-view {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: white;
-  z-index: 900;
-  padding: 40px 60px;
-  overflow-y: auto;
-}
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: white;
+      z-index: 900;
+      padding: 40px 60px;
+      overflow-y: auto;
+    }
 
-.project-view.open {
-  display: block;
-}
+    .project-view.open {
+      display: block;
+    }
 
-.project-header {
-  margin-bottom: 20px;
-}
+    .project-header {
+      margin-bottom: 20px;
+    }
 
-.project-header h1 {
-  font-size: 40px;
-  font-weight: 700;
-  color: #333;
-  margin: 0;
-  padding: 0;
-  line-height: 1.2;
-}
+    .project-header h1 {
+      font-size: 40px;
+      font-weight: 700;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      line-height: 1.2;
+    }
 
-.project-header .back-button {
-  position: static; /* Let the button align naturally with the title */
-  font-size: 18px;
-  cursor: pointer;
-  margin-right: 10px;
-}
+    .project-header .back-button {
+      position: static;
+      font-size: 18px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
 
-.project-header .back-button i {
-  margin-right: 5px;
-}
-.project-item i {
-  color: #000000;
-  margin-right: 12px;
-  font-size: 16px;
-  font-weight: normal;
-}
+    .project-header .back-button i {
+      margin-right: 5px;
+    }
+    .project-item i {
+      color: #000000;
+      margin-right: 12px;
+      font-size: 16px;
+      font-weight: normal;
+    }
 
-.project-item i.far.fa-file {
-  font-weight: 300;
-}
+    .project-item i.far.fa-file {
+      font-weight: 300;
+    }
 
-.file-icon {
-  display: flex;
-  align-items: center;
-  font-size: 24px;
-  color: #0c0c0c;
-}
-.project-header .file-icon {
-  margin-right: 12px;
-  font-size: 24px;
-  color: #333;
-}
+    .file-icon {
+      display: flex;
+      align-items: center;
+      font-size: 24px;
+      color: #0c0c0c;
+    }
+    .project-header .file-icon {
+      margin-right: 12px;
+      font-size: 24px;
+      color: #333;
+    }
     #profile-menu {
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 250px;
-    padding: 15px;
-}
-#profile-menu .item {
-    display: flex;
-    align-items: center;
-    padding: 10px 0;
-    border-top: 1px solid #e0e0e0;
-    cursor: pointer;
-}
-#profile-menu .item:first-child {
-    border-top: none;
-}
-#profile-menu .item i {
-    margin-right: 10px;
-    color: #333;
-}
-#profile-menu .item span {
-    font-size: 14px;
-    color: #333;
-}
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      width: 250px;
+      padding: 15px;
+    }
+    #profile-menu .item {
+      display: flex;
+      align-items: center;
+      padding: 10px 0;
+      border-top: 1px solid #e0e0e0;
+      cursor: pointer;
+    }
+    #profile-menu .item:first-child {
+      border-top: none;
+    }
+    #profile-menu .item i {
+      margin-right: 10px;
+      color: #333;
+    }
+    #profile-menu .item span {
+      font-size: 14px;
+      color: #333;
+    }
 
-.project-description {
-  font-size: 16px;
-  line-height: 1.6;
-  color: #4d4d4d;
-  white-space: pre-wrap;
-}
+    .project-description {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #4d4d4d;
+      white-space: pre-wrap;
+    }
     .app-footer {
       position: fixed;
       bottom: 10px;
@@ -466,59 +472,59 @@
       color: #888;
     }
     .mock-project {
-    opacity: 0.7;
-    border-left: 2px solid #4CAF50;
-  }
-  .tag-small {
-  font-size: 0.7em;
-  margin-left: 5px;
-  font-weight: normal;
-}
-#project-tag {
-  width: 100%;
-  padding: 8px 12px;
-  margin: 8px 0;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background-color: white;
-  font-size: 14px;
-  color: #333;
-  cursor: pointer;
-  transition: border-color 0.3s, box-shadow 0.3s;
-}
+      opacity: 0.7;
+      border-left: 2px solid #4CAF50;
+    }
+    .tag-small {
+      font-size: 0.7em;
+      margin-left: 5px;
+      font-weight: normal;
+    }
+    #project-tag {
+      width: 100%;
+      padding: 8px 12px;
+      margin: 8px 0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background-color: white;
+      font-size: 14px;
+      color: #333;
+      cursor: pointer;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
 
-#project-tag:hover {
-  border-color: #999;
-}
+    #project-tag:hover {
+      border-color: #999;
+    }
 
-#project-tag:focus {
-  outline: none;
-  border-color: #4CAF50;
-  box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
-}
+    #project-tag:focus {
+      outline: none;
+      border-color: #4CAF50;
+      box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
+    }
 
-#project-tag option {
-  padding: 8px;
-  background-color: white;
-  color: #333;
-}
+    #project-tag option {
+      padding: 8px;
+      background-color: white;
+      color: #333;
+    }
 
-#project-tag option:hover {
-  background-color: #f5f5f5;
-}
+    #project-tag option:hover {
+      background-color: #f5f5f5;
+    }
 
-#project-tag::-ms-expand {
-  display: none;
-}
-.send-button .logo-icon {
-  width: 40px;   /* Increase the size of the image */
-  height: 40px;  /* Increase the size of the image */
-  border-radius: 50%;  /* Make the image circular */
-  object-fit: cover;   /* Ensure image fits well in the circle */
-  border: 2px solid black;  /* Thin black border */
-  outline: none;   /* Remove any outline */
-}
-.user-achievement {
+    #project-tag::-ms-expand {
+      display: none;
+    }
+    .send-button .logo-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid black;
+      outline: none;
+    }
+    .user-achievement {
       position: fixed;
       top: 20px;
       right: 20px;
@@ -554,7 +560,7 @@
       margin: 0;
     }
 
-    .close-achievement {
+    .achievement-box .close-achievement {
       position: absolute;
       top: -10px;
       left: -10px;
@@ -567,12 +573,12 @@
       justify-content: center;
       align-items: center;
       cursor: pointer;
-      font-size:12px;
+      font-size: 12px;
       color: #333;
       transition: background-color 0.2s;
     }
 
-    .close-achievement:hover {
+    .achievement-box .close-achievement:hover {
       background-color: #f0f0f0;
     }
 
@@ -603,26 +609,638 @@
       margin: 0;
     }
 
-  </style>
+    .notification-icon {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #000;
+      color: #fff;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    .notification-icon .fa-bell {
+      font-size: 20px;
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: #ff4081;
+      color: #fff;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      font-size: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .user-status {
+      display: flex;
+      align-items: center;
+      margin-top: 5px;
+    }
+
+    .status-indicator {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+
+    .notification-modal {
+      display: none;
+      position: fixed;
+      z-index: 1001;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.4);
+    }
+
+    .notification-modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 500px;
+      border-radius: 10px;
+    }
+
+    .notification-close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .notification-close:hover,
+    .notification-close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .status-most-active { background-color: #4CAF50; }
+    .status-moderately-active { background-color: #FFC107; }
+    .status-getting-started { background-color: #F44336; }
+
+    .skeleton {
+      animation: skeleton-loading 1s linear infinite alternate;
+    }
+
+    @keyframes skeleton-loading {
+      0% {
+        background-color: hsl(200, 20%, 80%);
+      }
+      100% {
+        background-color: hsl(200, 20%, 95%);
+      }
+    }
+
+    .skeleton-text {
+      width: 100%;
+      height: 0.7rem;
+      margin-bottom: 0.5rem;
+      border-radius: 0.25rem;
+    }
+
+    .skeleton-text:last-child {
+      width: 80%;
+    }
+
+    .btn-primary:disabled {
+      background-color: #cccccc;
+      color: #666666;
+      cursor: not-allowed;
+    }
+
+    .btn-loading {
+      position: relative;
+      color: transparent !important;
+    }
+
+    .btn-loading::after {
+      content: "";
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin: auto;
+      border: 4px solid transparent;
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: button-loading-spinner 1s ease infinite;
+    }
+
+    @keyframes button-loading-spinner {
+      from {
+        transform: rotate(0turn);
+      }
+      to {
+        transform: rotate(1turn);
+      }
+    }
+
+    /* Search styles */
+    .search-icon {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 50%;
+      transition: background-color 0.2s;
+    }
+
+    .search-icon:hover {
+      background-color: #f0f0f0;
+    }
+
+    .search-modal-content {
+      padding: 0 !important;
+      max-height: 80vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .search-header {
+      padding: 16px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .search-header input {
+      width: calc(100% - 40px); /* Subtract space for the close button */
+      padding: 10px; /* Reduced padding */
+      font-size: 14px; /* Slightly smaller font size */
+      border: none;
+      border-radius: 8px;
+      background-color: #f5f5f5;
+      margin-right: 8px; /* Add some space for the close button */
+    }
+
+    .search-header input:focus {
+      outline: none;
+      background-color: #eeeeee;
+    }
+
+    /* Add styles for the close button if it's not already styled */
+    .search-header button {
+      padding: 10px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .search-results {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+    }
+
+    .search-result-item {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .search-result-item:hover {
+      background-color: #f5f5f5;
+    }
+
+    .search-result-item i {
+      margin-right: 12px;
+      color: #666;
+    }
+
+    .search-skeleton {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      margin-bottom: 8px;
+    }
+
+    .search-skeleton-icon {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      margin-right: 12px;
+      background-color: #e0e0e0;
+      animation: skeleton-loading 1s infinite alternate;
+    }
+
+    .search-skeleton-text {
+      height: 16px;
+      width: 200px;
+      border-radius: 4px;
+      background-color: #e0e0e0;
+      animation: skeleton-loading 1s infinite alternate;
+    }
+    .calculation-result {
+      display: none;
+      margin-top: 10px;
+      padding: 5px 10px;
+      background-color: #f0f0f0;
+      border-radius: 4px;
+      font-size: 14px;
+      color: #333;
+      transition: opacity 0.3s ease;
+    }
+
+    .calculation-result.loading {
+      opacity: 0.7;
+    }
+
+    .calculation-result .expression {
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+    .calculation-result .result {
+      font-style: italic;
+    }
+
+    .ai-typing {
+      display: inline-block;
+      width: 50px;
+      text-align: left;
+    }
+
+    .ai-typing::after {
+      content: '...';
+      animation: ellipsis 1.5s infinite;
+    }
+
+    @keyframes ellipsis {
+      0% { content: '.'; }
+      33% { content: '..'; }
+      66% { content: '...'; }
+    }
+
+    .skeleton.calculation-result {
+      height: 24px;
+      width: 60px;
+      margin-top: 10px;
+    }
+
+    @keyframes skeleton-loading {
+      0% {
+        background-color: hsl(200, 20%, 80%);
+      }
+      100% {
+        background-color: hsl(200, 20%, 95%);
+      }
+    }
+
+    .skeleton {
+      animation: skeleton-loading 1s linear infinite alternate;
+    }
+    :root {
+            --modal-width: 440px;
+            --modal-height: auto;
+            --primary-color: #000;
+            --border-radius: 8px;
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        .projxs-ai-button {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 48px;
+            height: 48px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            font-size: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .projxs-ai-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: var(--modal-width);
+            background: #fff;
+            border-radius: var(--border-radius);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            z-index: 1001;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .projxs-ai-header {
+            display: flex;
+            justify-content: flex-end;
+            padding: 12px;
+        }
+
+        .projxs-ai-close {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: #666;
+            padding: 4px;
+            line-height: 1;
+        }
+
+        .projxs-ai-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 20px;
+            min-height: 200px;
+            max-height: 400px;
+        }
+
+        .projxs-ai-input-container {
+            padding: 16px 16px 20px;
+            background: #fff;
+        }
+
+        .projxs-ai-input-wrapper {
+          margin-bottom: 8px; /* Adds space above the bottom edge */
+            display: flex;
+            align-items: center;
+            padding: 8px 16px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 25px;
+            background: #fff;
+        }
+
+        .projxs-ai-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-family: var(--font-family);
+            font-size: 14px;
+            line-height: 1.5;
+            resize: none;
+            background: transparent;
+            padding: 4px 0;
+            min-height: 24px;
+        }
+
+        .projxs-ai-send {
+            width: 28px;
+            height: 28px;
+            background: var(--primary-color);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin-left: 8px;
+            padding: 0;
+        }
+
+        .projxs-ai-send:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .projxs-ai-selection-container {
+            position: fixed;
+            display: none;
+            z-index: 1002;
+            background: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 25px;
+            padding: 8px 16px;
+            min-width: 300px;
+        }
+
+        .projxs-ai-selection-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .projxs-ai-selection-input {
+            border: none;
+            outline: none;
+            font-family: var(--font-family);
+            font-size: 14px;
+            width: 100%;
+            padding: 4px 0;
+        }
+
+        .projxs-ai-selection-send {
+            width: 28px;
+            height: 28px;
+            background: var(--primary-color);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .projxs-ai-message {
+            margin-bottom: 16px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .projxs-ai-message-user {
+            background: #f0f0f0;
+            margin-left: auto;
+            max-width: 80%;
+        }
+
+        .projxs-ai-message-assistant {
+            background: #f9f9f9;
+            max-width: 80%;
+        }
+
+        .projxs-ai-typing {
+            padding: 12px 16px;
+            display: none;
+        }
+
+        .skeleton-text {
+            height: 16px;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            width: 60%;
+        }
+
+        .skeleton-text:last-child {
+            width: 40%;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .projxs-ai-error {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #fff;
+            border-radius: 8px;
+            padding: 16px 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+            color: #dc2626;
+            z-index: 1003;
+            display: none;
+        }
+
+        .arrow-up {
+            width: 12px;
+            height: 12px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(-135deg);
+            margin-top: 4px;
+        }
+
+        .projxs-ai-disclaimer {
+            padding: 12px 16px;
+            font-size: 12px;
+            color: #6B7280;
+            text-align: center;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .projxs-ai-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: #1a1a1a;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        /* Styles for structured API responses */
+    .projxs-ai-message-assistant strong {
+      font-weight: bold;
+    }
+
+    .projxs-ai-message-assistant h1, 
+    .projxs-ai-message-assistant h2, 
+    .projxs-ai-message-assistant h3 {
+      margin-top: 1em;
+      margin-bottom: 0.5em;
+    }
+
+    .projxs-ai-message-assistant ul, 
+    .projxs-ai-message-assistant ol {
+      padding-left: 1.5em;
+      margin-bottom: 1em;
+    }
+
+    .projxs-ai-message-assistant li {
+      margin-bottom: 0.5em;
+    }
+    </style>
 </head>
 <body>
-    <div id="profile-menu" class="menu" style="display: none; position: absolute; bottom: 80px; right: 20px; z-index: 1000;">
+  <div id="projxs-ai-button" class="projxs-ai-button">X</div>
+
+  <div id="projxs-ai-modal" class="projxs-ai-modal">
+      <div class="projxs-ai-header">
+          <span class="projxs-ai-title">ProjXs AI</span>
+          <button class="projxs-ai-close">&times;</button>
+      </div>
+      
+      <div class="projxs-ai-content">
+          <!-- Messages will be inserted here -->
+      </div>
+
+      <div class="projxs-ai-typing">
+          <div class="skeleton-text"></div>
+          <div class="skeleton-text"></div>
+      </div>
+
+      <div class="projxs-ai-input-container">
+          <div class="projxs-ai-input-wrapper">
+              <textarea 
+                  class="projxs-ai-input" 
+                  placeholder="Ask ProjXs AI anything..."
+                  rows="1"
+              ></textarea>
+              <button class="projxs-ai-send" disabled>
+                  <i class="fas fa-arrow-up"></i>
+              </button>
+          </div>
+          <div class="projxs-ai-disclaimer">
+              ProjXs AI can make mistakes. Check Sensitive Information
+          </div>
+      </div>
+  </div>
+
+  <div id="projxs-ai-selection-container" class="projxs-ai-selection-container">
+      <div class="projxs-ai-selection-wrapper">
+          <input 
+              type="text" 
+              class="projxs-ai-selection-input" 
+              placeholder="Ask ProjXs AI..."
+          />
+          <button class="projxs-ai-selection-send">
+              <i class="fas fa-arrow-up"></i>
+          </button>
+      </div>
+  </div>
+
+  <div class="projxs-ai-error">
+      Sorry, we're experiencing heavy loads on our server. Please try again later.
+  </div>
+    <div id="profile-menu" class="menu" style="display: none; position: absolute; bottom: 80px; left: 20px; z-index: 1000;">
         <div class="item">
             <i class="fas fa-info-circle"></i>
-            <span>Current Version: 1.2024.117</span>
+            <span>Current Version: 2.2025.007</span>
         </div>
         <div class="item">
             <i class="fas fa-history"></i>
-            <span>Total Updates: 3</span>
+            <span>Total Updates: 4</span>
         </div>
     </div>
    <button class="back-button" id="back-button" onclick="goBack()">
     <i class="fas fa-arrow-left"></i>
-  </button>
+   </button>
   <div class="sidebar" id="sidebar">
     <button class="toggle-sidebar" onclick="toggleSidebar()">
       <i class="fas fa-bars"></i>
     </button>
+    <div class="search-icon" onclick="openSearchModal()">
+      <i class="fas fa-search"></i>
+    </div>
     <ul class="menu">
       <li class="recent">Projects</li>
       <div id="projects-list">
@@ -633,15 +1251,27 @@
         <div class="profile-placeholder" id="profile-initial"></div>
         <div class="user-info">
             <div class="name" id="user-name">{{ username }}</div>
-            <div class="status">Your Status: Legendary! 🌟😊</div>
+            <div class="user-status">
+                <div class="status-indicator status-{{ user_status.lower().replace(' ', '-') }}"></div>
+                <div class="status">{{ user_status }}</div>
+            </div>
         </div>
     </div>
-    
+  </div>
+  <div id="notificationModal" class="notification-modal">
+    <div class="notification-modal-content">
+      <span class="notification-close">&times;</span>
+      <h2>Notification</h2>
+      <p id="notificationMessage"></p>
+    </div>
   </div>
   <div class="main-content" id="main-content">
+    <div class="notification-icon" onclick="showAINotification()">
+        <i class="fas fa-bell"></i>
+        <div class="notification-badge" id="notification-badge" style="display: none;">1</div>
+    </div>
     <div class="welcome-message" id="welcome-message">
       <h1>Welcome to ProjXs</h1>
-      <!-- <h2>Organize better, think smarter</h2> -->
       <p>ProjXs securely organizes and stores chats, ideas, thoughts, and emotions all in one safe place.</p>
       <button class="btn btn-primary" onclick="openNewProjectModal()">Create New Project</button>
     </div>
@@ -652,10 +1282,10 @@
       <div class="project-description" id="project-view-description"></div>
       <div class="chat-container" id="project-chat-container"></div>
       <div class="input-container">
-        <input type="text" placeholder="✨ Click the ChatGPT icon ➡️ to chat with your notes. Powered by ChatGPT." id="project-input" disabled/> <!-- disabled -->
-<button class="send-button" onclick="openChatGPT()">
-  <img src="static/logo_gpt.png" alt="ChatGPT Logo" class="logo-icon"/>
-</button>
+        <input type="text" placeholder="✨ Click the ChatGPT icon ➡️ to chat with your notes. Powered by ChatGPT." id="project-input" disabled/>
+        <button class="send-button" onclick="openChatGPT()">
+          <img src="static/logo_gpt.png" alt="ChatGPT Logo" class="logo-icon"/>
+        </button>
       </div>
     </div>
     <div class="user-achievement">
@@ -672,7 +1302,6 @@
       </div>
     </div>
   </div>
-  <!-- New Project Modal -->
   <div class="modal" id="new-project-modal">
     <div class="modal-content">
       <form id="new-project-form">
@@ -690,8 +1319,9 @@
           <textarea 
             id="project-description" 
             name="note" 
-            placeholder="Ready to create? Just hit 'Go' and let the ideas flow!"
+            placeholder="Ready to create? Just hit 'Go' and let the ideas flow! You can also enter calculations like 3 + 5 * 6 - 9 / 5 + 6 =. And don’t forget, you can ask anything to our AI X in the right bottom corner!"
           ></textarea>
+          <div id="calculation-result" class="calculation-result"></div>
           <select id="project-tag" class="form-control">
             <option value="">Tag it!</option>
             <option value="Work">Work</option>
@@ -700,15 +1330,29 @@
             <option value="Todo">To-do</option>
             <option value="Urgent">Urgent</option>
             <option value="RandomThought">Random Thought</option>
-            <option value="AhaMoment">Aha Moment</option>
           </select>
-          
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" onclick="closeNewProjectModal()">Cancel</button>
           <button type="submit" class="btn btn-primary">Create</button>
         </div>
       </form>
+    </div>
+  </div>
+  <div class="modal" id="search-modal">
+    <div class="modal-content search-modal-content">
+      <div class="search-header">
+        <input 
+          type="text" 
+          id="search-input" 
+          placeholder="Search notes..." 
+          autocomplete="off"
+          oninput="handleSearch()"
+        >
+      </div>
+      <div class="search-results" id="search-results">
+        <!-- Search results will be populated here -->
+      </div>
     </div>
   </div>
   <div class="app-footer">
@@ -726,9 +1370,11 @@
   }
     let mockProjectElement = null;
     let currentProject = null;
-    let currentUser = "{{ username }}"; // Replace with the actual method to fetch logged-in user's username/email.
+    let currentUser = "{{ username }}";
+    let isLoading = false;
+    let searchTimeout = null;
 
-window.onload = function() {
+    window.onload = function() {
       fetchProjects();
       document.getElementById('new-project-form').addEventListener('submit', handleNewProjectSubmit);
 
@@ -738,197 +1384,317 @@ window.onload = function() {
       }
 
       updateUserAchievement();
-    };
-function toggleProfileMenu() {
-        const profileMenu = document.getElementById('profile-menu');
-        if (profileMenu.style.display === 'none' || profileMenu.style.display === '') {
-            profileMenu.style.display = 'block';
-        } else {
-            profileMenu.style.display = 'none';
-        }
-    }
-    function openChatGPT() {
-  const screenWidth = window.screen.width / 2; // Half screen width
-  const screenHeight = window.screen.height;  // Full screen height
-  const leftPosition = window.screen.width / 2; // Position to start at the right half
-
-  window.open('https://chatgpt.com', '_blank', `width=${screenWidth},height=${screenHeight},left=${leftPosition},top=0`);
-}
-
-
-    // Close the profile menu when clicking outside
-    document.addEventListener('click', (event) => {
-        const profileMenu = document.getElementById('profile-menu');
-        const footer = document.querySelector('.footer');
-        if (profileMenu && !profileMenu.contains(event.target) && !footer.contains(event.target)) {
-            profileMenu.style.display = 'none';
-        }
-    });
-function toggleSidebar() {
-  const sidebar = document.getElementById('sidebar');
-  const mainContent = document.getElementById('main-content');
-  sidebar.classList.toggle('closed');
-  mainContent.classList.toggle('shifted');
-}
-
-function openNewProjectModal() {
-  document.getElementById('new-project-modal').classList.add('open');
-  addMockProject();
-  setupRealtimeTitle();
-}
-function closeNewProjectModal() {
-  document.getElementById('new-project-modal').classList.remove('open');
-  if (mockProjectElement) {
-    mockProjectElement.remove();
-    mockProjectElement = null;
-  }
-  resetNewProjectForm();
-}
-function addMockProject() {
-  const projectsList = document.getElementById('projects-list');
-  mockProjectElement = document.createElement('li');
-  mockProjectElement.classList.add('project-item', 'mock-project');
-  mockProjectElement.innerHTML = `
-    <i class="far fa-file"></i>
-    <span class="mock-title">Untitled</span>
-  `;
-  projectsList.insertBefore(mockProjectElement, projectsList.firstChild);
-}
-
-function setupRealtimeTitle() {
-  const titleInput = document.getElementById('project-name');
-  titleInput.addEventListener('input', (e) => {
-    if (mockProjectElement) {
-      const titleSpan = mockProjectElement.querySelector('.mock-title');
-      titleSpan.textContent = e.target.value || 'Untitled';
-    }
-  });
-}
-function resetNewProjectForm() {
-  document.getElementById('project-name').value = '';
-  document.getElementById('project-description').value = '';
-}
-const style = document.createElement('style');
-style.textContent = `
-  .mock-project {
-    opacity: 0.7;
-    border-left: 2px solid #4CAF50;
-  }
-`;
-document.head.appendChild(style);
-function fetchProjects() {
-  fetch('https://script.google.com/macros/s/AKfycbykSer38aeWUFsyOfVkEv4ul7kJrz2DZhk85WX-GpkIuncRs53kaoiF1jpLuBYU2g/exec')
-    .then(response => response.json())
-    .then(data => {
-      const projectsList = document.getElementById('projects-list');
-      projectsList.innerHTML = ''; 
+      document.getElementById('notification-badge').style.display = 'flex';
       
-      const userProjects = data.data.filter(project => project.Username === currentUser);
+      // Add event listener for mathematical expression detection
+      document.getElementById('project-description').addEventListener('input', updateCalculationResult);
+    };
+   
 
-      userProjects.forEach(project => {
-        if (project.Title) {
-          let tag = '';
-          const noteContent = project.Note;
-          const tagMatch = noteContent.match(/\nTag: (.+)$/);
-          if (tagMatch) {
-            tag = tagMatch[1];
-          }
+    function toggleProfileMenu() {
+      const profileMenu = document.getElementById('profile-menu');
+      profileMenu.style.display = profileMenu.style.display === 'none' ? 'block' : 'none';
+    }
 
-          const tagColor = {
-            'Work': '#2196F3',           // Blue
-            'Personal': '#4CAF50',       // Green
-            'Idea': '#FF9800',           // Orange
-            'Todo': '#f44336',           // Red
-            'Urgent': '#E91E63',         // Pink
-            'RandomThought': '#9C27B0',  // Purple
-            'AhaMoment': '#FFC107'       // Amber
-          }[tag] || '#2196F3';           // Default Blue
+    function openChatGPT() {
+      const screenWidth = window.screen.width / 2;
+      const screenHeight = window.screen.height;
+      const leftPosition = window.screen.width / 2;
 
-          const projectItem = document.createElement('li');
-          projectItem.classList.add('project-item');
-          projectItem.innerHTML = `
-            <i class="far fa-file"></i>
-            ${project.Title}
-            ${tag ? `<span class="tag-small" style="color: ${tagColor}">(${tag})</span>` : ''}
-          `;
-          projectItem.onclick = () => openProjectView(project);
-          projectsList.appendChild(projectItem);
-        }
-      });
+      window.open('https://chat.openai.com', '_blank', `width=${screenWidth},height=${screenHeight},left=${leftPosition},top=0`);
+    }
 
-      if (userProjects.length === 0) {
-        const noProjectsMessage = document.createElement('li');
-        noProjectsMessage.textContent = "No projects found.";
-        projectsList.appendChild(noProjectsMessage);
+    document.addEventListener('click', (event) => {
+      const profileMenu = document.getElementById('profile-menu');
+      const footer = document.querySelector('.footer');
+      if (profileMenu && !profileMenu.contains(event.target) && !footer.contains(event.target)) {
+        profileMenu.style.display = 'none';
       }
     });
-}
-function goBack() {
-  document.getElementById('project-view').classList.remove('open');
-  document.getElementById('back-button').classList.remove('visible');
-  document.getElementById('welcome-message').style.display = 'flex';
-  document.getElementById('project-chat-container').innerHTML = '';
-  currentProject = null;
-}
 
-function openProjectView(project) {
-  currentProject = project;
-  const projectView = document.getElementById('project-view');
-  const title = document.getElementById('project-view-title');
-  const description = document.getElementById('project-view-description');
-  title.textContent = project.Title;
-  description.textContent = project.Note;
-  projectView.classList.add('open');
-  document.getElementById('welcome-message').style.display = 'none';
-  document.getElementById('back-button').classList.add('visible');
-}
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.getElementById('main-content');
+      sidebar.classList.toggle('closed');
+      mainContent.classList.toggle('shifted');
+    }
 
-function sendProjectMessage() {
-  const input = document.getElementById('project-input');
-  const message = input.value.trim();
-  if (message && currentProject) {
-    const messageDiv = document.createElement('div');
-    messageDiv.classList.add('message');
-    messageDiv.textContent = message;
-    document.getElementById('project-chat-container').appendChild(messageDiv);
-    input.value = '';
-  }
-}
+    function showAINotification() {
+      const message = "{{ motivational_message }}";
+      const decodedMessage = decodeHTML(message);
+      document.getElementById('notificationMessage').textContent = decodedMessage;
+      document.getElementById('notificationModal').style.display = 'block';
+      document.getElementById('notification-badge').style.display = 'none';
+    }
 
-function handleNewProjectSubmit(event) {
-  event.preventDefault();
-  const title = document.getElementById('project-name').value || 'Untitled';
-  const note = document.getElementById('project-description').value;
-  const tag = document.getElementById('project-tag').value;  // Add tag select in HTML
+    function decodeHTML(html) {
+      const textArea = document.createElement('textarea');
+      textArea.innerHTML = html;
+      return textArea.value;
+    }
 
-  // Combine note and tag
-  const noteWithTag = tag ? `${note}\nTag: ${tag}` : note;
+    document.querySelector('.notification-close').onclick = function() {
+      document.getElementById('notificationModal').style.display = 'none';
+    }
 
-  const formData = new FormData();
-  formData.append('title', title);
-  formData.append('note', noteWithTag);
+    window.onclick = function(event) {
+      const modal = document.getElementById('notificationModal');
+      if (event.target == modal) {
+        modal.style.display = 'none';
+      }
+    }
 
-  fetch('/main', {
-    method: 'POST',
-    body: formData
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.success) {
+    function openNewProjectModal() {
+      document.getElementById('new-project-modal').classList.add('open');
+      addMockProject();
+      setupRealtimeTitle();
+        // Add loading animation for calculation result
+      const calculationResult = document.getElementById('calculation-result');
+      calculationResult.classList.add('skeleton');
+      calculationResult.style.display = 'block';
+      setTimeout(() => {
+        calculationResult.classList.remove('skeleton');
+        updateCalculationResult();
+      }, 1000);
+    }
+
+
+    // Add event listener for real-time calculation updates
+    document.getElementById('project-description').addEventListener('input', () => {
+      clearTimeout(window.calculationTimeout);
+      window.calculationTimeout = setTimeout(updateCalculationResult, 500);
+    });
+
+    function closeNewProjectModal() {
+      document.getElementById('new-project-modal').classList.remove('open');
       if (mockProjectElement) {
         mockProjectElement.remove();
         mockProjectElement = null;
       }
-      closeNewProjectModal();
-      fetchProjects(); // Refresh with actual data
+      resetNewProjectForm();
+      // Reset calculation result
+      document.getElementById('calculation-result').style.display = 'none';
     }
-  })
-  .catch(error => {
-    console.error('Error:', error);
-    alert('Failed to create project');
-  });
+    function detectAndCalculate(input) {
+  const mathRegex = /(\d+(?:\.\d+)?[\s+\-*/()]*)+(?:=|$)/g;
+  const matches = input.match(mathRegex);
+  
+  if (!matches) return [];
+  
+  return matches.map(match => {
+    const expression = match.trim().replace(/=$/, '');
+    try {
+      // Use Function constructor to safely evaluate the expression
+      const result = new Function('return ' + expression)();
+      return { expression, result: Number(result.toFixed(4)) };
+    } catch (error) {
+      return { expression, result: 'Error' };
+    }
+  }).filter(item => item.expression !== '' && !isNaN(item.result));
 }
-function updateUserAchievement() {
+
+function updateCalculationResult() {
+  const input = document.getElementById('project-description').value;
+  const resultElement = document.getElementById('calculation-result');
+  const results = detectAndCalculate(input);
+  
+  if (results.length > 0) {
+    let resultHTML = '';
+    results.forEach(({ expression, result }) => {
+      resultHTML += `
+        <div>
+          <span class="expression">${expression} =</span>
+          <span class="result">${result}</span>
+        </div>
+      `;
+    });
+    
+    resultElement.innerHTML = resultHTML;
+    resultElement.style.display = 'block';
+  } else {
+    resultElement.style.display = 'none';
+  }
+}
+    function updateCalculationResult() {
+      const input = document.getElementById('project-description').value;
+      const resultElement = document.getElementById('calculation-result');
+      const results = detectAndCalculate(input);
+      
+      if (results.length > 0) {
+        let resultHTML = '';
+        results.forEach(({ expression, result }) => {
+          resultHTML += `
+            <div>
+              <span class="expression">${expression} =</span>
+              <span class="result">${result}</span>
+            </div>
+          `;
+        });
+        
+        resultElement.innerHTML = resultHTML;
+        resultElement.style.display = 'block';
+      } else {
+        resultElement.style.display = 'none';
+      }
+    }
+    function addMockProject() {
+      const projectsList = document.getElementById('projects-list');
+      mockProjectElement = document.createElement('li');
+      mockProjectElement.classList.add('project-item', 'mock-project');
+      mockProjectElement.innerHTML = `
+        <i class="far fa-file"></i>
+        <span class="mock-title">Untitled</span>
+      `;
+      projectsList.insertBefore(mockProjectElement, projectsList.firstChild);
+    }
+
+    function setupRealtimeTitle() {
+      const titleInput = document.getElementById('project-name');
+      titleInput.addEventListener('input', (e) => {
+        if (mockProjectElement) {
+          const titleSpan = mockProjectElement.querySelector('.mock-title');
+          titleSpan.textContent = e.target.value || 'Untitled';
+        }
+      });
+    }
+
+    function resetNewProjectForm() {
+      document.getElementById('project-name').value = '';
+      document.getElementById('project-description').value = '';
+      document.getElementById('project-tag').value = '';
+    }
+
+    function fetchProjects() {
+      const projectsList = document.getElementById('projects-list');
+      projectsList.innerHTML = ''; 
+      
+      for (let i = 0; i < 5; i++) {
+        const skeletonItem = document.createElement('li');
+        skeletonItem.classList.add('project-item', 'skeleton');
+        skeletonItem.innerHTML = `
+          <div class="skeleton-text"></div>
+          <div class="skeleton-text"></div>
+        `;
+        projectsList.appendChild(skeletonItem);
+      }
+
+      fetch('https://script.google.com/macros/s/AKfycbykSer38aeWUFsyOfVkEv4ul7kJrz2DZhk85WX-GpkIuncRs53kaoiF1jpLuBYU2g/exec')
+        .then(response => response.json())
+        .then(data => {
+          projectsList.innerHTML = ''; 
+          
+          const userProjects = data.data.filter(project => project.Username === currentUser);
+
+          userProjects.forEach(project => {
+            if (project.Title) {
+              let tag = '';
+              const noteContent = project.Note;
+              const tagMatch = noteContent.match(/\nTag: (.+)$/);
+              if (tagMatch) {
+                tag = tagMatch[1];
+              }
+
+              const tagColor = {
+                'Work': '#2196F3',
+                'Personal': '#4CAF50',
+                'Idea': '#FF9800',
+                'Todo': '#f44336',
+                'Urgent': '#E91E63',
+                'RandomThought': '#9C27B0',
+              }[tag] || '#2196F3';
+
+              const projectItem = document.createElement('li');
+              projectItem.classList.add('project-item');
+              projectItem.innerHTML = `
+                <i class="far fa-file"></i>
+                ${project.Title}
+                ${tag ? `<span class="tag-small" style="color: ${tagColor}">(${tag})</span>` : ''}
+              `;
+              projectItem.onclick = () => openProjectView(project);
+              projectsList.appendChild(projectItem);
+            }
+          });
+
+          if (userProjects.length === 0) {
+            const noProjectsMessage = document.createElement('li');
+            noProjectsMessage.textContent = "No projects found.";
+            projectsList.appendChild(noProjectsMessage);
+          }
+        });
+    }
+
+    function goBack() {
+      document.getElementById('project-view').classList.remove('open');
+      document.getElementById('back-button').classList.remove('visible');
+      document.getElementById('welcome-message').style.display = 'flex';
+      document.getElementById('project-chat-container').innerHTML = '';
+      currentProject = null;
+    }
+
+    function openProjectView(project) {
+      currentProject = project;
+      const projectView = document.getElementById('project-view');
+      const title = document.getElementById('project-view-title');
+      const description = document.getElementById('project-view-description');
+      title.textContent = project.Title;
+      description.textContent = project.Note;
+      projectView.classList.add('open');
+      document.getElementById('welcome-message').style.display = 'none';
+      document.getElementById('back-button').classList.add('visible');
+      
+      // Clear any existing chat messages
+      document.getElementById('project-chat-container').innerHTML = '';
+      
+      // Enable the chat input
+      document.getElementById('project-input').disabled = false;
+    }
+
+    function handleNewProjectSubmit(event) {
+      event.preventDefault();
+      if (isLoading) return;
+
+      const submitButton = event.target.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+      submitButton.classList.add('btn-loading');
+      isLoading = true;
+
+      const title = document.getElementById('project-name').value || 'Untitled';
+      const note = document.getElementById('project-description').value;
+      const tag = document.getElementById('project-tag').value;
+
+      const noteWithTag = tag ? `${note}\nTag: ${tag}` : note;
+
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('note', noteWithTag);
+
+      fetch('/main', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          if (mockProjectElement) {
+            mockProjectElement.remove();
+            mockProjectElement = null;
+          }
+          closeNewProjectModal();
+          fetchProjects();
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to create project');
+      })
+      .finally(() => {
+        submitButton.disabled = false;
+        submitButton.classList.remove('btn-loading');
+        isLoading = false;
+      });
+    }
+
+    function updateUserAchievement() {
       const userEmail = currentUser;
       const generalAchievement = document.getElementById('general-achievement');
       const specificAchievement = document.getElementById('specific-achievement');
@@ -950,6 +1716,294 @@ function updateUserAchievement() {
         achievement.classList.remove('closing');
       }, 300);
     }
+
+    function openSearchModal() {
+      document.getElementById('search-modal').classList.add('open');
+      document.getElementById('search-input').focus();
+      showSearchSkeletons();
+    }
+
+    function showSearchSkeletons() {
+      const searchResults = document.getElementById('search-results');
+      searchResults.innerHTML = '';
+      
+      for (let i = 0; i < 5; i++) {
+        searchResults.innerHTML += `
+          <div class="search-skeleton">
+            <div class="search-skeleton-icon"></div>
+            <div class="search-skeleton-text"></div>
+          </div>
+        `;
+      }
+    }
+
+    function handleSearch() {
+      const searchInput = document.getElementById('search-input');
+      const searchTerm = searchInput.value.toLowerCase();
+      
+      if (searchTimeout) {
+        clearTimeout(searchTimeout);
+      }
+      
+      showSearchSkeletons();
+      
+      searchTimeout = setTimeout(() => {
+        fetch('https://script.google.com/macros/s/AKfycbykSer38aeWUFsyOfVkEv4ul7kJrz2DZhk85WX-GpkIuncRs53kaoiF1jpLuBYU2g/exec')
+          .then(response => response.json())
+          .then(data => {
+            const searchResults = document.getElementById('search-results');
+            searchResults.innerHTML = '';
+            
+            const userProjects = data.data.filter(project => project.Username === currentUser);
+            const filteredProjects = userProjects.filter(project => 
+              project.Title.toLowerCase().includes(searchTerm) || 
+              project.Note.toLowerCase().includes(searchTerm)
+            );
+            
+            if (filteredProjects.length === 0) {
+              searchResults.innerHTML = `
+                <div class="search-result-item">
+                  <i class="fas fa-info-circle"></i>
+                  No results found
+                </div>
+              `;
+              return;
+            }
+            
+            filteredProjects.forEach(project => {
+              const resultItem = document.createElement('div');
+              resultItem.className = 'search-result-item';
+              resultItem.innerHTML = `
+                <i class="far fa-file"></i>
+                <span>${project.Title}</span>
+              `;
+              resultItem.onclick = () => {
+                document.getElementById('search-modal').classList.remove('open');
+                openProjectView(project);
+              };
+              searchResults.appendChild(resultItem);
+            });
+          })
+          .catch(error => {
+            console.error('Error fetching projects:', error);
+            const searchResults = document.getElementById('search-results');
+            searchResults.innerHTML = `
+              <div class="search-result-item">
+                <i class="fas fa-exclamation-triangle"></i>
+                Error fetching projects
+              </div>
+            `;
+          });
+      }, 300);
+    }
+
+    document.addEventListener('click', (event) => {
+      const searchModal = document.getElementById('search-modal');
+      const searchIcon = document.querySelector('.search-icon');
+      
+      if (!event.target.closest('.search-modal-content') && 
+          !event.target.closest('.search-icon') && 
+          searchModal.classList.contains('open')) {
+        searchModal.classList.remove('open');
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && 
+          document.getElementById('search-modal').classList.contains('open')) {
+        document.getElementById('search-modal').classList.remove('open');
+      }
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('projxs-ai-modal');
+            const button = document.getElementById('projxs-ai-button');
+            const closeBtn = modal.querySelector('.projxs-ai-close');
+            const input = modal.querySelector('.projxs-ai-input');
+            const sendBtn = modal.querySelector('.projxs-ai-send');
+            const content = modal.querySelector('.projxs-ai-content');
+            const selectionContainer = document.getElementById('projxs-ai-selection-container');
+            const selectionInput = selectionContainer.querySelector('.projxs-ai-selection-input');
+            const selectionSend = selectionContainer.querySelector('.projxs-ai-selection-send');
+            const errorMessage = document.querySelector('.projxs-ai-error');
+
+            let isModalDragging = false;
+            let isSelectionDragging = false;
+            let modalOffset = { x: 0, y: 0 };
+
+            function makeElementDraggable(element, handle, isDragging, offset) {
+                handle.addEventListener('mousedown', (e) => {
+                    isDragging = true;
+                    offset.x = e.clientX - element.getBoundingClientRect().left;
+                    offset.y = e.clientY - element.getBoundingClientRect().top;
+                    handle.style.cursor = 'grabbing';
+                });
+
+                document.addEventListener('mousemove', (e) => {
+                    if (!isDragging) return;
+                    
+                    const x = e.clientX - offset.x;
+                    const y = e.clientY - offset.y;
+                    
+                    element.style.left = `${x}px`;
+                    element.style.top = `${y}px`;
+                    element.style.transform = 'none';
+                });
+
+                document.addEventListener('mouseup', () => {
+                    isDragging = false;
+                    handle.style.cursor = 'grab';
+                });
+            }
+
+            makeElementDraggable(
+                modal, 
+                modal.querySelector('.projxs-ai-header'),
+                isModalDragging,
+                modalOffset
+            );
+
+            button.addEventListener('click', () => {
+                modal.style.display = 'flex';
+            });
+
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+
+            input.addEventListener('input', () => {
+                sendBtn.disabled = !input.value.trim();
+                input.style.height = 'auto';
+                input.style.height = Math.min(input.scrollHeight, 200) + 'px';
+            });
+
+            function showError() {
+                errorMessage.style.display = 'block';
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                }, 5000);
+            }
+
+          function addMessage(text, isUser = false) {
+        const message = document.createElement('div');
+        message.className = `projxs-ai-message projxs-ai-message-${isUser ? 'user' : 'assistant'}`;
+        
+        if (!isUser) {
+          // Parse markdown-like syntax for assistant messages
+          text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                     .replace(/^# (.*$)/gm, '<h1>$1</h1>')
+                     .replace(/^## (.*$)/gm, '<h2>$1</h2>')
+                     .replace(/^### (.*$)/gm, '<h3>$1</h3>')
+                     .replace(/^\s*[-*+]\s+(.*$)/gm, '<li>$1</li>')
+                     .replace(/^\s*[-*+]\s+(.*$)/gm, '<li>$1</li>')
+                     .replace(/<li>.*?<\/li>/gs, match => `<ul>${match}</ul>`);
+        }
+        
+        message.innerHTML = text;
+        content.appendChild(message);
+        content.scrollTop = content.scrollHeight;
+      }
+
+
+            function showTypingIndicator() {
+                const typing = document.querySelector('.projxs-ai-typing');
+                typing.style.display = 'block';
+                content.scrollTop = content.scrollHeight;
+            }
+
+            function hideTypingIndicator() {
+                const typing = document.querySelector('.projxs-ai-typing');
+                typing.style.display = 'none';
+            }
+
+            async function sendMessage(text) {
+                addMessage(text, true);
+                input.value = '';
+                input.style.height = 'auto';
+                sendBtn.disabled = true;
+                showTypingIndicator();
+
+                try {
+                    const response = await fetch('/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ message: text })
+                    });
+
+                    if (!response.ok) throw new Error('Server error');
+
+                    const data = await response.json();
+                    hideTypingIndicator();
+                    addMessage(data.response);
+                } catch (error) {
+                    console.error('Error:', error);
+                    hideTypingIndicator();
+                    showError();
+                }
+            }
+
+            sendBtn.addEventListener('click', () => {
+                const text = input.value.trim();
+                if (text) sendMessage(text);
+            });
+
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    const text = input.value.trim();
+                    if (text) sendMessage(text);
+                }
+            });
+
+            // Text selection handling
+            document.addEventListener('mouseup', (e) => {
+                const selection = window.getSelection();
+                const text = selection.toString().trim();
+
+                if (text && !selectionContainer.contains(e.target) && !modal.contains(e.target)) {
+                    const range = selection.getRangeAt(0);
+                    const rect = range.getBoundingClientRect();
+
+                    selectionContainer.style.display = 'block';
+                    selectionContainer.style.left = `${rect.left}px`;
+                    selectionContainer.style.top = `${rect.bottom + 8}px`;
+                    selectionInput.value = text;
+                }
+            });
+
+            // Close selection container when clicking outside
+            document.addEventListener('mousedown', (e) => {
+                if (!selectionContainer.contains(e.target)) {
+                    selectionContainer.style.display = 'none';
+                }
+            });
+
+            // Handle selection send button
+            selectionSend.addEventListener('click', () => {
+                const text = selectionInput.value.trim();
+                if (text) {
+                    selectionContainer.style.display = 'none';
+                    modal.style.display = 'flex';
+                    sendMessage(text);
+                }
+            });
+
+            // Handle selection input enter key
+            selectionInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const text = selectionInput.value.trim();
+                    if (text) {
+                        selectionContainer.style.display = 'none';
+                        modal.style.display = 'flex';
+                        sendMessage(text);
+                    }
+                }
+            });
+        });
   </script>
 </body>
 </html>
+
+<!-- real-time calculator (within ProjXs) & ProjXs AI -->
