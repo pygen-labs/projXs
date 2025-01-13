@@ -82,7 +82,7 @@ def logout():
 @app.route('/')
 def index():
     if 'username' not in session:
-        return render_template('login.html', logged_in=False, terms_url=url_for('terms'), doc_url=url_for('documentation'))
+        return render_template('index.html', logged_in=False, terms_url=url_for('terms'), doc_url=url_for('documentation'))
     return redirect(url_for('main_page'))
 
 
