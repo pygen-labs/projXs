@@ -1,7 +1,7 @@
 {
   "name": "ProjXs",
   "short_name": "ProjXs",
-  "start_url": "/index.html",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#6200ea",
