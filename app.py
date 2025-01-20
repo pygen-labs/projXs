@@ -6,7 +6,7 @@ app = Flask(__name__)
 app.secret_key = 'pygen-and-co-8113261-2024-projXs'
 
 # Google Apps Script URL
-GSHEET_URL = "https://script.google.com/macros/s/AKfycbykSer38aeWUFsyOfVkEv4ul7kJrz2DZhk85WX-GpkIuncRs53kaoiF1jpLuBYU2g/exec"
+GSHEET_URL = "https://script.google.com/macros/s/AKfycby5iTkKgkP0FO8T203JhVu-pj0wLrwMhl2zALjZodHBv4jgaLBK-eNu7zzdnZkoMe8/exec"
 
 
 # Function to send POST requests to the Google Apps Script API
