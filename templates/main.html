@@ -3,28 +3,39 @@
 <head>
   <link rel="manifest" href="/static/manifest.json">
   <meta charset="UTF-8">
-  <title>ProjXs</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProjXs Desktop</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
   <style>
+    :root {
+      --primary-color: #000000;
+      --secondary-color: #ffffff;
+      --accent-color: #f0f0f0;
+      --text-color: #333333;
+      --border-radius: 12px;
+      --transition-speed: 0.3s;
+    }
+
     body {
-      font-family: Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
       margin: 0;
       padding: 0;
       display: flex;
       height: 100vh;
-      background-color: #ffffff;
+      background-color: var(--secondary-color);
+      color: var(--text-color);
     }
     
     .sidebar {
       width: 250px;
-      background-color: #ffffff;
-      border-right: 1px solid #e0e0e0;
+      background-color: var(--secondary-color);
+      border-right: 1px solid var(--accent-color);
       padding: 20px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       position: relative;
-      transition: transform 0.3s ease;
+      transition: transform var(--transition-speed) ease;
     }
 
     .sidebar.closed {
@@ -53,25 +64,28 @@
       flex: 1;
       overflow-y: auto;
     }
+
     .sidebar .menu::-webkit-scrollbar {
       display: none;
     }
+
     .sidebar .menu li {
       margin-bottom: 15px;
-      background-color: #ffffff;
+      background-color: var(--secondary-color);
       padding: 10px;
-      border-radius: 5px;
+      border-radius: var(--border-radius);
+      transition: background-color var(--transition-speed);
     }
 
     .sidebar .menu li a {
       text-decoration: none;
-      color: #333;
+      color: var(--text-color);
       font-size: 16px;
       display: block;
     }
 
     .sidebar .menu li:hover {
-      background-color: #e5e5e5;
+      background-color: var(--accent-color);
     }
 
     .sidebar .menu .recent {
@@ -86,30 +100,27 @@
       align-items: center;
       padding: 8px;
       margin-bottom: 8px;
-      border-radius: 5px;
+      border-radius: var(--border-radius);
       cursor: pointer;
-      transition: background-color 0.2s;
+      transition: background-color var(--transition-speed);
     }
 
     .project-item:hover {
-      background-color: #f0f0f0;
+      background-color: var(--accent-color);
     }
 
     .project-item i {
-      color: #000000;
+      color: var(--primary-color);
       margin-right: 12px;
       font-size: 16px;
       font-weight: normal;
-    }
-    .project-item i.far.fa-file {
-      font-weight: 300;
     }
 
     .file-icon {
       display: flex;
       align-items: center;
       font-size: 24px;
-      color: #0c0c0c;
+      color: var(--primary-color);
     }
 
     .sidebar .footer {
@@ -117,14 +128,14 @@
       align-items: center;
       position: sticky;
       bottom: 0;
-      background: #fff;
+      background: var(--secondary-color);
       padding: 10px 0;
-      border-top: 1px solid #e0e0e0;
+      border-top: 1px solid var(--accent-color);
     }
 
     .sidebar .footer .profile-placeholder {
-      background-color: #000;
-      color: #fff;
+      background-color: var(--primary-color);
+      color: var(--secondary-color);
       border-radius: 50%;
       width: 40px;
       height: 40px;
@@ -156,7 +167,7 @@
       display: flex;
       flex-direction: column;
       padding: 20px;
-      transition: margin-left 0.3s ease;
+      transition: margin-left var(--transition-speed) ease;
     }
 
     .main-content.shifted {
@@ -196,10 +207,10 @@
     }
 
     .message {
-      background-color: #e0e0e0;
+      background-color: var(--accent-color);
       padding: 12px 16px;
       margin: 5px 0;
-      border-radius: 8px;
+      border-radius: var(--border-radius);
       max-width: 80%;
       align-self: flex-end;
       word-wrap: break-word;
@@ -212,7 +223,7 @@
       width: 100%;
       max-width: 800px;
       margin: 0 auto;
-      background-color: #f0f0f0;
+      background-color: var(--accent-color);
       border-radius: 20px;
       padding: 10px 20px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -233,8 +244,8 @@
     }
 
     .input-container .send-button {
-      background-color: #000;
-      color: #fff;
+      background-color: var(--primary-color);
+      color: var(--secondary-color);
       border: none;
       border-radius: 50%;
       width: 40px;
@@ -243,7 +254,7 @@
       justify-content: center;
       align-items: center;
       cursor: pointer;
-      transition: transform 0.2s;
+      transition: transform var(--transition-speed);
     }
 
     .input-container .send-button:hover {
@@ -254,8 +265,8 @@
       position: absolute;
       top: 20px;
       right: -40px;
-      background-color: #000;
-      color: #fff;
+      background-color: var(--primary-color);
+      color: var(--secondary-color);
       border: none;
       border-radius: 50%;
       width: 30px;
@@ -284,9 +295,9 @@
     }
 
     .modal-content {
-      background: white;
+      background: var(--secondary-color);
       padding: 48px;
-      border-radius: 12px;
+      border-radius: var(--border-radius);
       width: 90%;
       max-width: 800px;
       min-height: 400px;
@@ -320,10 +331,10 @@
       border: none;
       font-size: 40px;
       font-weight: 600;
-      color: #333;
+      color: var(--text-color);
       outline: none;
       margin-bottom: 16px;
-      font-family: Arial;
+      font-family: inherit;
     }
 
     .form-group input[type="text"]::placeholder {
@@ -336,10 +347,11 @@
       border: none;
       font-size: 16px;
       line-height: 1.6;
-      color: #4d4d4d;
+      color: var(--text-color);
       outline: none;
       resize: none;
       min-height: 200px;
+      font-family: inherit;
     }
 
     .form-group textarea::placeholder {
@@ -349,25 +361,26 @@
     .modal-footer {
       margin-top: auto;
       padding-top: 24px;
-      border-top: 1px solid #eee;
+      border-top: 1px solid var(--accent-color);
     }
 
     .btn {
       padding: 8px 16px;
-      border-radius: 4px;
+      border-radius: var(--border-radius);
       cursor: pointer;
       font-size: 14px;
       border: none;
+      transition: background-color var(--transition-speed);
     }
 
     .btn-primary {
-      background-color: #000;
-      color: white;
+      background-color: var(--primary-color);
+      color: var(--secondary-color);
     }
 
     .btn-secondary {
-      background-color: #e0e0e0;
-      color: #333;
+      background-color: var(--accent-color);
+      color: var(--text-color);
     }
 
     .project-view {
@@ -377,7 +390,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: white;
+      background: var(--secondary-color);
       z-index: 900;
       padding: 40px 60px;
       overflow-y: auto;
@@ -394,7 +407,7 @@
     .project-header h1 {
       font-size: 40px;
       font-weight: 700;
-      color: #333;
+      color: var(--text-color);
       margin: 0;
       padding: 0;
       line-height: 1.2;
@@ -410,60 +423,50 @@
     .project-header .back-button i {
       margin-right: 5px;
     }
-    .project-item i {
-      color: #000000;
-      margin-right: 12px;
-      font-size: 16px;
-      font-weight: normal;
-    }
 
-    .project-item i.far.fa-file {
-      font-weight: 300;
-    }
-
-    .file-icon {
-      display: flex;
-      align-items: center;
-      font-size: 24px;
-      color: #0c0c0c;
-    }
     .project-header .file-icon {
       margin-right: 12px;
       font-size: 24px;
-      color: #333;
+      color: var(--text-color);
     }
+
     #profile-menu {
-      background-color: white;
-      border-radius: 8px;
+      background-color: var(--secondary-color);
+      border-radius: var(--border-radius);
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       width: 250px;
       padding: 15px;
     }
+
     #profile-menu .item {
       display: flex;
       align-items: center;
       padding: 10px 0;
-      border-top: 1px solid #e0e0e0;
+      border-top: 1px solid var(--accent-color);
       cursor: pointer;
     }
+
     #profile-menu .item:first-child {
       border-top: none;
     }
+
     #profile-menu .item i {
       margin-right: 10px;
-      color: #333;
+      color: var(--text-color);
     }
+
     #profile-menu .item span {
       font-size: 14px;
-      color: #333;
+      color: var(--text-color);
     }
 
     .project-description {
       font-size: 16px;
       line-height: 1.6;
-      color: #4d4d4d;
+      color: var(--text-color);
       white-space: pre-wrap;
     }
+
     .app-footer {
       position: fixed;
       bottom: 10px;
@@ -471,26 +474,29 @@
       font-size: 12px;
       color: #888;
     }
+
     .mock-project {
       opacity: 0.7;
       border-left: 2px solid #4CAF50;
     }
+
     .tag-small {
       font-size: 0.7em;
       margin-left: 5px;
       font-weight: normal;
     }
+
     #project-tag {
       width: 100%;
       padding: 8px 12px;
       margin: 8px 0;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      background-color: white;
+      border: 1px solid var(--accent-color);
+      border-radius: var(--border-radius);
+      background-color: var(--secondary-color);
       font-size: 14px;
-      color: #333;
+      color: var(--text-color);
       cursor: pointer;
-      transition: border-color 0.3s, box-shadow 0.3s;
+      transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
     }
 
     #project-tag:hover {
@@ -505,25 +511,27 @@
 
     #project-tag option {
       padding: 8px;
-      background-color: white;
-      color: #333;
+      background-color: var(--secondary-color);
+      color: var(--text-color);
     }
 
     #project-tag option:hover {
-      background-color: #f5f5f5;
+      background-color: var(--accent-color);
     }
 
     #project-tag::-ms-expand {
       display: none;
     }
+
     .send-button .logo-icon {
       width: 40px;
       height: 40px;
       border-radius: 50%;
       object-fit: cover;
-      border: 2px solid black;
+      border: 2px solid var(--primary-color);
       outline: none;
     }
+
     .user-achievement {
       position: fixed;
       top: 20px;
@@ -535,13 +543,13 @@
     }
 
     .achievement-box {
-      background-color: #f0f0f0;
-      border-radius: 10px;
+      background-color: var(--accent-color);
+      border-radius: var(--border-radius);
       padding: 10px 15px;
       margin-bottom: 10px;
       text-align: right;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      transition: transform 0.3s ease, opacity 0.3s ease;
+      transition: transform var(--transition-speed) ease, opacity var(--transition-speed) ease;
     }
 
     .achievement-box.closing {
@@ -566,30 +574,30 @@
       left: -10px;
       width: 24px;
       height: 24px;
-      background-color: #ffffff;
-      border: 2px solid #f0f0f0;
+      background-color: var(--secondary-color);
+      border: 2px solid var(--accent-color);
       border-radius: 50%;
       display: flex;
       justify-content: center;
       align-items: center;
       cursor: pointer;
       font-size: 12px;
-      color: #333;
-      transition: background-color 0.2s;
+      color: var(--text-color);
+      transition: background-color var(--transition-speed);
     }
 
     .achievement-box .close-achievement:hover {
-      background-color: #f0f0f0;
+      background-color: var(--accent-color);
     }
 
     .specific-achievement {
-      background-color: #f0f0f0;
-      border-radius: 10px;
+      background-color: var(--accent-color);
+      border-radius: var(--border-radius);
       padding: 10px 15px;
       margin-top: 10px;
       text-align: right;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      transition: transform 0.3s ease, opacity 0.3s ease;
+      transition: transform var(--transition-speed) ease, opacity var(--transition-speed) ease;
       position: relative;
     }
 
@@ -613,8 +621,8 @@
       position: fixed;
       bottom: 20px;
       right: 20px;
-      background-color: #000;
-      color: #fff;
+      background-color: var(--primary-color);
+      color: var(--secondary-color);
       border-radius: 50%;
       width: 40px;
       height: 40px;
@@ -634,7 +642,7 @@
       top: -5px;
       right: -5px;
       background-color: #ff4081;
-      color: #fff;
+      color: var(--secondary-color);
       border-radius: 50%;
       width: 20px;
       height: 20px;
@@ -670,13 +678,13 @@
     }
 
     .notification-modal-content {
-      background-color: #fefefe;
+      background-color: var(--secondary-color);
       margin: 15% auto;
       padding: 20px;
       border: 1px solid #888;
       width: 80%;
       max-width: 500px;
-      border-radius: 10px;
+      border-radius: var(--border-radius);
     }
 
     .notification-close {
@@ -688,7 +696,7 @@
 
     .notification-close:hover,
     .notification-close:focus {
-      color: black;
+      color: var(--text-color);
       text-decoration: none;
       cursor: pointer;
     }
@@ -743,7 +751,7 @@
       bottom: 0;
       margin: auto;
       border: 4px solid transparent;
-      border-top-color: #ffffff;
+      border-top-color: var(--secondary-color);
       border-radius: 50%;
       animation: button-loading-spinner 1s ease infinite;
     }
@@ -765,11 +773,11 @@
       cursor: pointer;
       padding: 8px;
       border-radius: 50%;
-      transition: background-color 0.2s;
+      transition: background-color var(--transition-speed);
     }
 
     .search-icon:hover {
-      background-color: #f0f0f0;
+      background-color: var(--accent-color);
     }
 
     .search-modal-content {
@@ -781,17 +789,17 @@
 
     .search-header {
       padding: 16px;
-      border-bottom: 1px solid #e0e0e0;
+      border-bottom: 1px solid var(--accent-color);
     }
 
     .search-header input {
-      width: calc(100% - 40px); /* Subtract space for the close button */
-      padding: 10px; /* Reduced padding */
-      font-size: 14px; /* Slightly smaller font size */
+      width: calc(100% - 40px);
+      padding: 10px;
+      font-size: 14px;
       border: none;
-      border-radius: 8px;
-      background-color: #f5f5f5;
-      margin-right: 8px; /* Add some space for the close button */
+      border-radius: var(--border-radius);
+      background-color: var(--accent-color);
+      margin-right: 8px;
     }
 
     .search-header input:focus {
@@ -799,7 +807,6 @@
       background-color: #eeeeee;
     }
 
-    /* Add styles for the close button if it's not already styled */
     .search-header button {
       padding: 10px;
       background: none;
@@ -817,13 +824,13 @@
       display: flex;
       align-items: center;
       padding: 12px;
-      border-radius: 8px;
+      border-radius: var(--border-radius);
       cursor: pointer;
-      transition: background-color 0.2s;
+      transition: background-color var(--transition-speed);
     }
 
     .search-result-item:hover {
-      background-color: #f5f5f5;
+      background-color: var(--accent-color);
     }
 
     .search-result-item i {
@@ -843,7 +850,7 @@
       height: 16px;
       border-radius: 50%;
       margin-right: 12px;
-      background-color: #e0e0e0;
+      background-color: var(--accent-color);
       animation: skeleton-loading 1s infinite alternate;
     }
 
@@ -851,18 +858,19 @@
       height: 16px;
       width: 200px;
       border-radius: 4px;
-      background-color: #e0e0e0;
+      background-color: var(--accent-color);
       animation: skeleton-loading 1s infinite alternate;
     }
+
     .calculation-result {
       display: none;
       margin-top: 10px;
       padding: 5px 10px;
-      background-color: #f0f0f0;
-      border-radius: 4px;
+      background-color: var(--accent-color);
+      border-radius: var(--border-radius);
       font-size: 14px;
-      color: #333;
-      transition: opacity 0.3s ease;
+      color: var(--text-color);
+      transition: opacity var(--transition-speed) ease;
     }
 
     .calculation-result.loading {
@@ -901,17 +909,54 @@
       margin-top: 10px;
     }
 
-    @keyframes skeleton-loading {
-      0% {
-        background-color: hsl(200, 20%, 80%);
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        left: -250px;
+        top: 0;
+        bottom: 0;
+        z-index: 1000;
       }
-      100% {
-        background-color: hsl(200, 20%, 95%);
-      }
-    }
 
-    .skeleton {
-      animation: skeleton-loading 1s linear infinite alternate;
+      .sidebar.closed {
+        left: 0;
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .main-content.shifted {
+        margin-left: 250px;
+      }
+
+      .toggle-sidebar {
+        display: block;
+      }
+
+      .modal-content {
+        width: 95%;
+        padding: 20px;
+      }
+
+      .form-group input[type="text"],
+      .form-group textarea {
+        font-size: 16px;
+      }
+
+      .project-view {
+        padding: 20px;
+      }
+
+      .project-header h1 {
+        font-size: 24px;
+      }
+
+      .user-achievement {
+        width: 90%;
+        right: 5%;
+        left: 5%;
+      }
     }
   </style>
 </head>
@@ -983,7 +1028,7 @@
         </button>
       </div>
     </div>
-    <div class="user-achievement">
+    <!-- <div class="user-achievement">
       <div class="achievement-box" id="general-achievement">
         <button class="close-achievement" onclick="closeAchievement('general-achievement')">×</button>
         <strong>Productivity Champion 🏆— Ameer Hamza Khan</strong>
@@ -994,7 +1039,7 @@
         <button class="close-achievement" onclick="closeAchievement('specific-achievement')">×</button>
         <strong>Congratulations, hamzakhan7 🏆</strong>
         <p>You are the Most Active User of ProjXs. Keep up the amazing work!</p>
-      </div>
+      </div> -->
     </div>
   </div>
   <div class="modal" id="new-project-modal">
@@ -1025,7 +1070,6 @@
             <option value="Todo">To-do</option>
             <option value="Urgent">Urgent</option>
             <option value="RandomThought">Random Thought</option>
-            <option value="AhaMoment">Aha Moment</option>
           </select>
         </div>
         <div class="modal-footer">
@@ -1297,7 +1341,6 @@ function updateCalculationResult() {
                 'Todo': '#f44336',
                 'Urgent': '#E91E63',
                 'RandomThought': '#9C27B0',
-                'AhaMoment': '#FFC107'
               }[tag] || '#2196F3';
 
               const projectItem = document.createElement('li');
@@ -1515,4 +1558,4 @@ function updateCalculationResult() {
 </body>
 </html>
 
-<!-- real-time calculator (within ProjXs) -->
+<!-- Smooth & Polsihed UI with imrpovemrnts -->
