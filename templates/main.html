@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ProjXs Desktop</title>
-    <link rel="icon" href="static\fav-icon.png" type="image/png"/>
+  <link rel="icon" href="static\fav-icon.png" type="image/png"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
   <style>
     :root {
@@ -195,18 +195,6 @@
       max-width: 600px;
     }
 
-/*     .chat-container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      max-width: 800px;
-      width: 100%;
-      margin: 0 auto;
-      padding-bottom: 20px;
-      overflow-y: auto;
-    } */
-
     .message {
       background-color: var(--accent-color);
       padding: 12px 16px;
@@ -218,64 +206,35 @@
       white-space: pre-wrap;
     }
 
-/*     .input-container {
-      display: flex;
-      align-items: center;
-      width: 100%;
-      max-width: 800px;
-      margin: 0 auto;
-      background-color: var(--accent-color);
-      border-radius: 20px;
-      padding: 10px 20px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      position: relative;
-    }
-
-    .input-container input {
-      flex: 1;
-      border: none;
-      background: none;
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 20px;
-    }
-
-    .input-container input:focus {
-      outline: none;
-    } */
-
-/*     .input-container .send-button {
-      background-color: var(--primary-color);
-      color: var(--secondary-color);
-      border: none;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      transition: transform var(--transition-speed);
-    }
-
-    .input-container .send-button:hover {
-      transform: scale(1.05);
-    } */
-
     .toggle-sidebar {
       position: absolute;
       top: 20px;
       right: -40px;
-      background-color: var(--primary-color);
-      color: var(--secondary-color);
-      border: none;
-      border-radius: 50%;
-      width: 30px;
-      height: 30px;
+      background-color: var(--secondary-color);
+      color: var(--text-color);
+      border: 1px solid var(--accent-color);
+      border-radius: 8px;
+      width: 32px;
+      height: 32px;
       display: flex;
       justify-content: center;
       align-items: center;
       cursor: pointer;
+      transition: all var(--transition-speed) ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .toggle-sidebar:hover {
+      background-color: var(--accent-color);
+    }
+
+    .toggle-sidebar i {
+      font-size: 14px;
+      transition: transform var(--transition-speed) ease;
+    }
+
+    .sidebar.closed .toggle-sidebar i {
+      transform: rotate(180deg);
     }
 
     .modal {
@@ -485,6 +444,9 @@
       font-size: 0.7em;
       margin-left: 5px;
       font-weight: normal;
+      padding: 2px 6px;
+      border-radius: 12px;
+      color: white;
     }
 
     #project-tag {
@@ -910,30 +872,71 @@
       margin-top: 10px;
     }
 
-    @media (max-width: 768px) {
-      .sidebar {
-        position: fixed;
-        left: -250px;
-        top: 0;
-        bottom: 0;
-        z-index: 1000;
-      }
+    /* New styles for collapsible sections */
+    .section-header {
+    padding: 8px 0;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+    padding-left: 20px; /* Add padding to move the chevron and section tags to the right */
+  }
 
-      .sidebar.closed {
-        left: 0;
-      }
+  .section-header:hover {
+    opacity: 1;
+  }
 
-      .main-content {
-        margin-left: 0;
-      }
+  .section-header i {
+    margin-right: 8px;
+    font-size: 12px;
+    transition: transform 0.2s;
+    transform-origin: center;
+    transform: rotate(90deg); /* Initially show as v */
+  }
 
-      .main-content.shifted {
-        margin-left: 250px;
-      }
+  .section-header.collapsed i {
+    transform: rotate(0deg); /* Show as > when collapsed */
+  }
 
-      .toggle-sidebar {
-        display: block;
-      }
+  .section-header.expanded i {
+    transform: rotate(90deg); /* Show as v when expanded */
+  }
+
+  .section-content {
+    margin-left: 20px;
+    overflow: hidden;
+    max-height: 1000px;
+    transition: max-height 0.3s ease-out;
+  }
+
+  .section-content.collapsed {
+    max-height: 0;
+  }
+
+  @media (max-width: 768px) {
+    .sidebar {
+      position: fixed;
+      left: -250px;
+      top: 0;
+      bottom: 0;
+      z-index: 1000;
+    }
+
+    .sidebar.closed {
+      left: 0;
+    }
+
+    .main-content {
+      margin-left: 0;
+    }
+
+    .main-content.shifted {
+      margin-left: 250px;
+    }
+
+    .toggle-sidebar {
+      display: block;
+    }
+  
 
       .modal-content {
         width: 95%;
@@ -959,6 +962,22 @@
         left: 5%;
       }
     }
+
+    /* Add new styles for custom tag input */
+    #custom-tag-input {
+      display: none;
+      width: calc(100% - 16px);
+      margin-top: 8px;
+      padding: 8px;
+      border: 1px solid var(--accent-color);
+      border-radius: var(--border-radius);
+      font-size: 14px;
+    }
+
+    #custom-tag-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
   </style>
 </head>
 <body>
@@ -977,7 +996,7 @@
    </button>
   <div class="sidebar" id="sidebar">
     <button class="toggle-sidebar" onclick="toggleSidebar()">
-      <i class="fas fa-bars"></i>
+      <i class="fas fa-chevron-left"></i>
     </button>
     <div class="search-icon" onclick="openSearchModal()">
       <i class="fas fa-search"></i>
@@ -1021,26 +1040,6 @@
         <h1 id="project-view-title"></h1>
       </div>
       <div class="project-description" id="project-view-description"></div>
-<!--       <div class="chat-container" id="project-chat-container"></div>
-      <div class="input-container">
-        <input type="text" placeholder="✨ Click the ChatGPT icon ➡️ to chat with your notes. Powered by ChatGPT." id="project-input" disabled/>
-        <button class="send-button" onclick="openChatGPT()">
-          <img src="static/logo_gpt.png" alt="ChatGPT Logo" class="logo-icon"/>
-        </button>
-      </div>
-    </div> -->
-    <!-- <div class="user-achievement">
-      <div class="achievement-box" id="general-achievement">
-        <button class="close-achievement" onclick="closeAchievement('general-achievement')">×</button>
-        <strong>Productivity Champion 🏆— Ameer Hamza Khan</strong>
-        <p>Our Most Active User Since ProjXs Launched</p>
-        <p>Keep using ProjXs to claim the title of Productivity Champion and climb the leaderboard this month!</p>
-      </div>
-      <div class="specific-achievement" id="specific-achievement">
-        <button class="close-achievement" onclick="closeAchievement('specific-achievement')">×</button>
-        <strong>Congratulations, hamzakhan7 🏆</strong>
-        <p>You are the Most Active User of ProjXs. Keep up the amazing work!</p>
-      </div> -->
     </div>
   </div>
   <div class="modal" id="new-project-modal">
@@ -1063,16 +1062,17 @@
             placeholder="Ready to create? Just hit 'Go' and let the ideas flow! You can also enter calculations like 3 + 5 * 6 - 9 / 5 + 6 ="
           ></textarea>
           <div id="calculation-result" class="calculation-result"></div>
-          <select id="project-tag" class="form-control">
-            <option value="">Tag it!</option>
+          <select id="project-tag" class="form-control" onchange="handleTagSelection()">
+            <option value="">Select a Tag or Create a Workspace +</option>
             <option value="Work">Work</option>
             <option value="Personal">Personal</option>
             <option value="Idea">Idea</option>
-            <option value="Todo">To-do</option>
+            <option value="Todo">To-do</option>            
             <option value="Urgent">Urgent</option>
             <option value="RandomThought">Random Thought</option>
-            <option value="AhaMoment">Aha Moment</option>
+            <option value="custom">Create Custom Workspace +</option>
           </select>
+          <input type="text" id="custom-tag-input" placeholder="Enter custom tag or workspace name here..." style="display: none;">
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" onclick="closeNewProjectModal()">Cancel</button>
@@ -1125,10 +1125,8 @@
       updateUserAchievement();
       document.getElementById('notification-badge').style.display = 'flex';
       
-      // Add event listener for mathematical expression detection
       document.getElementById('project-description').addEventListener('input', updateCalculationResult);
     };
-   
 
     function toggleProfileMenu() {
       const profileMenu = document.getElementById('profile-menu');
@@ -1187,7 +1185,6 @@
       document.getElementById('new-project-modal').classList.add('open');
       addMockProject();
       setupRealtimeTitle();
-        // Add loading animation for calculation result
       const calculationResult = document.getElementById('calculation-result');
       calculationResult.classList.add('skeleton');
       calculationResult.style.display = 'block';
@@ -1197,8 +1194,6 @@
       }, 1000);
     }
 
-
-    // Add event listener for real-time calculation updates
     document.getElementById('project-description').addEventListener('input', () => {
       clearTimeout(window.calculationTimeout);
       window.calculationTimeout = setTimeout(updateCalculationResult, 500);
@@ -1211,49 +1206,26 @@
         mockProjectElement = null;
       }
       resetNewProjectForm();
-      // Reset calculation result
       document.getElementById('calculation-result').style.display = 'none';
     }
-    function detectAndCalculate(input) {
-  const mathRegex = /(\d+(?:\.\d+)?[\s+\-*/()]*)+(?:=|$)/g;
-  const matches = input.match(mathRegex);
-  
-  if (!matches) return [];
-  
-  return matches.map(match => {
-    const expression = match.trim().replace(/=$/, '');
-    try {
-      // Use Function constructor to safely evaluate the expression
-      const result = new Function('return ' + expression)();
-      return { expression, result: Number(result.toFixed(4)) };
-    } catch (error) {
-      return { expression, result: 'Error' };
-    }
-  }).filter(item => item.expression !== '' && !isNaN(item.result));
-}
 
-function updateCalculationResult() {
-  const input = document.getElementById('project-description').value;
-  const resultElement = document.getElementById('calculation-result');
-  const results = detectAndCalculate(input);
-  
-  if (results.length > 0) {
-    let resultHTML = '';
-    results.forEach(({ expression, result }) => {
-      resultHTML += `
-        <div>
-          <span class="expression">${expression} =</span>
-          <span class="result">${result}</span>
-        </div>
-      `;
-    });
-    
-    resultElement.innerHTML = resultHTML;
-    resultElement.style.display = 'block';
-  } else {
-    resultElement.style.display = 'none';
-  }
-}
+    function detectAndCalculate(input) {
+      const mathRegex = /(\d+(?:\.\d+)?[\s+\-*/()]*)+(?:=|$)/g;
+      const matches = input.match(mathRegex);
+      
+      if (!matches) return [];
+      
+      return matches.map(match => {
+        const expression = match.trim().replace(/=$/, '');
+        try {
+          const result = new Function('return ' + expression)();
+          return { expression, result: Number(result.toFixed(4)) };
+        } catch (error) {
+          return { expression, result: 'Error' };
+        }
+      }).filter(item => item.expression !== '' && !isNaN(item.result));
+    }
+
     function updateCalculationResult() {
       const input = document.getElementById('project-description').value;
       const resultElement = document.getElementById('calculation-result');
@@ -1276,6 +1248,7 @@ function updateCalculationResult() {
         resultElement.style.display = 'none';
       }
     }
+
     function addMockProject() {
       const projectsList = document.getElementById('projects-list');
       mockProjectElement = document.createElement('li');
@@ -1301,6 +1274,8 @@ function updateCalculationResult() {
       document.getElementById('project-name').value = '';
       document.getElementById('project-description').value = '';
       document.getElementById('project-tag').value = '';
+      document.getElementById('custom-tag-input').style.display = 'none';
+      document.getElementById('custom-tag-input').value = '';
     }
 
     function fetchProjects() {
@@ -1323,35 +1298,33 @@ function updateCalculationResult() {
           projectsList.innerHTML = ''; 
           
           const userProjects = data.data.filter(project => project.Username === currentUser);
-
+          
+          // Organize projects by tags
+          const organizedProjects = {
+            untagged: []
+          };
+          
           userProjects.forEach(project => {
             if (project.Title) {
-              let tag = '';
               const noteContent = project.Note;
               const tagMatch = noteContent.match(/\nTag: (.+)$/);
-              if (tagMatch) {
-                tag = tagMatch[1];
+              const tag = tagMatch ? tagMatch[1] : 'untagged';
+              
+              if (!organizedProjects[tag]) {
+                organizedProjects[tag] = [];
               }
-
-              const tagColor = {
-                'Work': '#2196F3',
-                'Personal': '#4CAF50',
-                'Idea': '#FF9800',
-                'Todo': '#f44336',
-                'Urgent': '#E91E63',
-                'RandomThought': '#9C27B0',
-                'AhaMoment': '#FFC107'
-              }[tag] || '#2196F3';
-
-              const projectItem = document.createElement('li');
-              projectItem.classList.add('project-item');
-              projectItem.innerHTML = `
-                <i class="far fa-file"></i>
-                ${project.Title}
-                ${tag ? `<span class="tag-small" style="color: ${tagColor}">(${tag})</span>` : ''}
-              `;
-              projectItem.onclick = () => openProjectView(project);
-              projectsList.appendChild(projectItem);
+              organizedProjects[tag].push(project);
+            }
+          });
+          
+          // Render untagged projects first
+          renderProjects('Projects', organizedProjects.untagged);
+          delete organizedProjects.untagged;
+          
+          // Render tagged projects
+          Object.entries(organizedProjects).forEach(([tag, projects]) => {
+            if (projects.length > 0) {
+              renderProjects(tag, projects);
             }
           });
 
@@ -1362,7 +1335,51 @@ function updateCalculationResult() {
           }
         });
     }
+    function toggleSection(header) {
+    const content = header.nextElementSibling;
+    header.classList.toggle('collapsed');
+    header.classList.toggle('expanded');
+    content.classList.toggle('collapsed');
+  }
 
+  function renderProjects(sectionName, projects) {
+    const projectsList = document.getElementById('projects-list');
+
+    if (projects.length === 0) return;
+
+    const sectionDiv = document.createElement('div');
+    sectionDiv.className = 'project-section';
+
+    if (sectionName !== 'Projects') {
+      const sectionHeader = document.createElement('div');
+      sectionHeader.className = 'section-header expanded';  // Initially expanded
+      sectionHeader.innerHTML = `
+        <i class="fas fa-chevron-right"></i>
+        <span class="section-label">${sectionName}</span>
+      `;
+
+      sectionHeader.onclick = () => toggleSection(sectionHeader);
+
+      sectionDiv.appendChild(sectionHeader);
+    }
+
+    const sectionContent = document.createElement('div');
+    sectionContent.className = sectionName === 'Projects' ? 'section-content' : 'section-content';  // Initially not collapsed
+
+    projects.forEach(project => {
+      const projectItem = document.createElement('li');
+      projectItem.className = 'project-item';
+      projectItem.innerHTML = `
+        <i class="far fa-file"></i>
+        ${project.Title}
+      `;
+      projectItem.onclick = () => openProjectView(project);
+      sectionContent.appendChild(projectItem);
+    });
+
+    sectionDiv.appendChild(sectionContent);
+    projectsList.appendChild(sectionDiv);
+  }
     function goBack() {
       document.getElementById('project-view').classList.remove('open');
       document.getElementById('back-button').classList.remove('visible');
@@ -1400,7 +1417,22 @@ function updateCalculationResult() {
 
       const title = document.getElementById('project-name').value || 'Untitled';
       const note = document.getElementById('project-description').value;
-      const tag = document.getElementById('project-tag').value;
+      const tagSelect = document.getElementById('project-tag');
+      const customTagInput = document.getElementById('custom-tag-input');
+
+      let tag = tagSelect.value;
+      if (tag === 'custom') {
+        tag = customTagInput.value.trim();
+        if (tag) {
+          // Add the custom tag to the select options if it doesn't exist
+          if (!Array.from(tagSelect.options).some(option => option.value === tag)) {
+            const newOption = new Option(tag, tag);
+            tagSelect.add(newOption, 1); // Add after the first option
+          }
+        } else {
+          tag = ''; // If custom tag is empty, treat it as untagged
+        }
+      }
 
       const noteWithTag = tag ? `${note}\nTag: ${tag}` : note;
 
@@ -1433,6 +1465,19 @@ function updateCalculationResult() {
         isLoading = false;
       });
     }
+
+    function handleTagSelection() {
+      const tagSelect = document.getElementById('project-tag');
+      const customTagInput = document.getElementById('custom-tag-input');
+
+      if (tagSelect.value === 'custom') {
+        customTagInput.style.display = 'block';
+        customTagInput.focus();
+      } else {
+        customTagInput.style.display = 'none';
+      }
+    }
+
 
     function updateUserAchievement() {
       const userEmail = currentUser;
@@ -1557,5 +1602,3 @@ function updateCalculationResult() {
   </script>
 </body>
 </html>
-
-<!-- Smooth & Polsihed UI with imrpovemrnts -->
