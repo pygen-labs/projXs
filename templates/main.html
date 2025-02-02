@@ -1062,17 +1062,13 @@
             placeholder="Ready to create? Just hit 'Go' and let the ideas flow! You can also enter calculations like 3 + 5 * 6 - 9 / 5 + 6 ="
           ></textarea>
           <div id="calculation-result" class="calculation-result"></div>
-          <select id="project-tag" class="form-control" onchange="handleTagSelection()">
-            <option value="">Select a Tag or Create a Workspace +</option>
+         <select id="project-tag" class="form-control" onchange="handleTagSelection()">
+            <option value="">Choose a Tag or Create a Workspace +</option>
             <option value="Work">Work</option>
             <option value="Personal">Personal</option>
-            <option value="Idea">Idea</option>
-            <option value="Todo">To-do</option>            
-            <option value="Urgent">Urgent</option>
-            <option value="RandomThought">Random Thought</option>
-            <option value="custom">Create Custom Workspace +</option>
+            <option value="custom">Create Your Own Workspace +</option>
           </select>
-          <input type="text" id="custom-tag-input" placeholder="Enter custom tag or workspace name here..." style="display: none;">
+          <input type="text" id="custom-tag-input" placeholder="Type Custom Tag or Workspace Name Here.." style="display: none;">
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" onclick="closeNewProjectModal()">Cancel</button>
