@@ -20,19 +20,8 @@ def send_post_request(action, params):
 @app.route('/')
 def index():
     if 'username' not in session:
-        return render_template('index.html', logged_in=False, terms_url=url_for('terms'), doc_url=url_for('documentation'))
+        return render_template('index.html', logged_in=False)
     return redirect(url_for('main_page'))
-
-
-@app.route('/terms')
-def terms():
-    return render_template('terms.html')  # Ensure 'terms.html' exists
-
-
-@app.route('/documentation')
-def documentation():
-    return render_template('doc-projxs.html')  # Ensure 'doc-projxs.html' exists
-
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -95,9 +84,7 @@ def main_page():
         username=username,
         projects=projects,
         user_status=user_status,
-        motivational_message=motivational_message,
-        terms_url=url_for('terms'),
-        doc_url=url_for('documentation')
+        motivational_message=motivational_message
     )
 
 
