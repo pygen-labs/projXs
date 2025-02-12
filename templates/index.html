@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="manifest" href="/static/manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProjXs Login/Signup</title>
+    <link rel="icon" href="static\fav-icon.png" type="image/png"/>
+    <style>
+        body {
+            font-family: OpenAI Sans, SF Pro, -apple-system, BlinkMacSystemFont, Helvetica, sans-serif;
+            background-color: #ffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background-color: #f4f6f7; /* Light premium blue */
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 1000;
+        }
+        h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #3b82f6; /* Blue */
+        }
+        p {
+            font-size: 1rem;
+            color: #333;
+            max-width: 90%;
+            margin: 1rem auto;
+            line-height: 1.6;
+        }
+        a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .install-btn {
+            background: black;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 1.5rem;
+            transition: 0.3s;
+            border: none;
+        }
+        .install-btn:hover {
+            background: #333;
+        }
+        @media (max-width: 500px) {
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            .install-btn { width: 80%; }
+        }
+        .container {
+            background-color: none;
+            
+            border-radius: 12px;
+           
+            width: 320px;
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 1.25rem;
+            font-size: 1.5rem;
+        }
+        h3 {
+            color: #dc3545;
+            margin-bottom: 1.25rem;
+            font-weight: normal;
+            font-size: 0.85rem;
+            line-height: 1.4;
+          text-align: left;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        .input-group {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+        input {
+            width: 100%;
+            padding: 0.75rem 2rem 0.75rem 1rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.2s ease;
+        }
+        input:focus {
+            outline: none;
+            border-color: #000;
+        }
+        button {
+            background-color: #000;
+            color: white;
+            border: none;
+            padding: 0.6rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+        button:hover {
+            background-color: #333;
+        }
+        button:active {
+            transform: translateY(1px);
+        }
+        button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        .toggle-form {
+            margin-top: 1rem;
+            color: #495057;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+        #signupForm {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .form-container {
+            transition: opacity 0.3s ease;
+        }
+        footer {
+            margin-top: 1.25rem;
+            color: #6c757d;
+            font-size: 0.75rem;
+        }
+        footer a {
+            color: #000;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        footer a:hover {
+            color: #333;
+            text-decoration: underline;
+        }
+        .password-toggle {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            user-select: none;
+        }
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.8s linear infinite;
+            margin-left: 8px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        @media (min-width: 768px) {
+            .container {
+                width: 320px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="modal" id="installModal">
+        <h1>Welcome to ProjXs</h1>
+        <p>
+            Thank you for using ProjXs. We hope you'll like it!  
+            If you have any questions, visit  
+            <a href="https://help-projxs.onrender.com">help-projxs.onrender.com</a>  
+            or mail us at <a href="mailto:pygen.co@gmail.com">help.projxs@pygen.co</a>.
+        </p>
+        <button class="install-btn" id="installButton">Click to Install</button>
+    </div>
+    <div class="container">
+        <div id="loginForm" class="form-container">
+            <h2>Welcome back</h2>
+            <form id="loginFormElement" method="POST" action="/login">
+                <div class="input-group">
+                    <input type="email" name="email" placeholder="Email" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" name="password" placeholder="Password" required>
+                    <span class="password-toggle" onclick="togglePasswordVisibility(this)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </span>
+                </div>
+                <button type="submit">Login <span class="spinner" style="display: none;"></span></button>
+            </form>
+            <p class="toggle-form" onclick="toggleForm()">Don't have an account? Sign up</p>
+        </div>
+
+        <div id="signupForm" class="form-container">
+            <h2>Create an account</h2>
+            
+            <form id="signupFormElement" method="POST" action="/signup">
+                <div class="input-group">
+                    <input type="text" name="username" placeholder="Username" required>
+                </div>
+                <div class="input-group">
+                    <input type="email" name="email" placeholder="Email" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" name="password" placeholder="Password" required>
+                    <span class="password-toggle" onclick="togglePasswordVisibility(this)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </span>
+                </div>
+                <button type="submit">Signup <span class="spinner" style="display: none;"></span></button>
+            </form>
+            <p class="toggle-form" onclick="toggleForm()">Already have an account? Log in</p>
+            <hr> <!-- Separator before warning -->
+
+<h3>Get started with ProjXs! For your security, we recommend creating a unique and strong password. A weak or commonly used password may prevent you from being able to log in.</h3>
+
+<hr> <!-- Separator after warning -->
+       </div>
+
+<footer>
+    <a href="https://help-projxs.onrender.com/terms" target="_blank">Terms of Use</a> |
+    <a href="https://help-projxs.onrender.com/privacy-policy" target="_blank">Privacy Policy</a>
+</footer>
+</div>
+
+    <script>
+         if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/static/service-worker.js')
+      .then(registration => {
+        console.log('Service Worker registered with scope:', registration.scope);
+      })
+      .catch(error => {
+        console.error('Service Worker registration failed:', error);
+      });
+  }
+        let deferredPrompt;
+
+// Check if the app is already installed
+function isPWAInstalled() {
+    return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+}
+
+// Hide modal if PWA is installed
+document.addEventListener('DOMContentLoaded', () => {
+    if (isPWAInstalled()) {
+        document.getElementById('installModal').style.display = 'none';
+    }
+});
+
+// Listen for the beforeinstallprompt event
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+
+    // Show the install modal only if the app is not installed
+    if (!isPWAInstalled()) {
+        document.getElementById('installModal').style.display = 'flex';
+    }
+});
+
+// Handle install button click
+document.getElementById('installButton').addEventListener('click', () => {
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted the install prompt');
+            } else {
+                console.log('User dismissed the install prompt');
+            }
+            deferredPrompt = null;
+        });
+
+        // Hide modal after interaction
+        document.getElementById('installModal').style.display = 'none';
+    }
+});
+
+        function toggleForm() {
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
+            
+            if (loginForm.style.display === 'none') {
+                signupForm.style.opacity = '0';
+                setTimeout(() => {
+                    signupForm.style.display = 'none';
+                    loginForm.style.display = 'block';
+                    setTimeout(() => {
+                        loginForm.style.opacity = '1';
+                    }, 50);
+                }, 300);
+            } else {
+                loginForm.style.opacity = '0';
+                setTimeout(() => {
+                    loginForm.style.display = 'none';
+                    signupForm.style.display = 'block';
+                    setTimeout(() => {
+                        signupForm.style.opacity = '1';
+                    }, 50);
+                }, 300);
+            }
+        }
+
+        function togglePasswordVisibility(element) {
+            const passwordInput = element.previousElementSibling;
+            const svgPath = element.querySelector('path');
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                svgPath.setAttribute('d', 'M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24');
+            } else {
+                passwordInput.type = "password";
+                svgPath.setAttribute('d', 'M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z');
+            }
+        }
+
+        function showLoading(form) {
+            const button = form.querySelector('button[type="submit"]');
+            const spinner = button.querySelector('.spinner');
+            button.disabled = true;
+            spinner.style.display = 'inline-block';
+        }
+
+        function hideLoading(form) {
+            const button = form.querySelector('button[type="submit"]');
+            const spinner = button.querySelector('.spinner');
+            button.disabled = false;
+            spinner.style.display = 'none';
+        }
+
+        document.getElementById('loginFormElement').addEventListener('submit', function(e) {
+            showLoading(this);
+        });
+
+        document.getElementById('signupFormElement').addEventListener('submit', function(e) {
+            showLoading(this);
+        });
+    </script>
+</body>
+</html>
