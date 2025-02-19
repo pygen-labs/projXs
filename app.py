@@ -6,8 +6,7 @@ app = Flask(__name__)
 app.secret_key = 'pygen-and-co-8113261-2024-projXs'
 
 # Google Apps Script URL
-GSHEET_URL = "https://script.google.com/macros/s/AKfycbykSer38aeWUFsyOfVkEv4ul7kJrz2DZhk85WX-GpkIuncRs53kaoiF1jpLuBYU2g/exec"
-
+GSHEET_URL = "https://script.google.com/macros/s/AKfycbyvtHc34HgLZ7IKCUT-57cuXrAlp53RhDM4pOCAyjm8Z17iJ6Rrgw1lvBVRxlnqTbs/exec"
 
 # Helper function for sending POST requests
 def send_post_request(action, params):
@@ -15,8 +14,6 @@ def send_post_request(action, params):
     response = requests.post(GSHEET_URL, json=data)
     return response.json()
 
-
-# Other existing routes remain unchanged
 @app.route('/')
 def index():
     if 'username' not in session:
@@ -36,7 +33,6 @@ def login():
 
     return jsonify(result)
 
-
 @app.route('/signup', methods=['POST'])
 def signup():
     username = request.form['username']
@@ -51,7 +47,6 @@ def signup():
 
     return jsonify(result)
 
-
 @app.route('/main', methods=['GET', 'POST'])
 def main_page():
     if 'username' not in session:
@@ -62,11 +57,28 @@ def main_page():
     projects = send_post_request('get_projects', params).get('projects', [])
 
     if request.method == 'POST':
-        title = request.form['title']
-        note = request.form['note']
-        params = {'username': username, 'title': title, 'note': note}
-        result = send_post_request('addProject', params)
-        return jsonify({"success": True})
+        action = request.form.get('action', 'addProject')
+        
+        if action == 'addProject':
+            title = request.form['title']
+            note = request.form['note']
+            params = {'username': username, 'title': title, 'note': note}
+            result = send_post_request('addProject', params)
+            return jsonify({"success": True})
+        
+        elif action == 'deleteProject':
+            title = request.form['title']
+            params = {'username': username, 'title': title}
+            result = send_post_request('deleteProject', params)
+            return jsonify({"success": True, "result": result})
+        
+        elif action == 'editProject':
+            old_title = request.form['oldTitle']
+            new_title = request.form['newTitle']
+            new_note = request.form['newNote']
+            params = {'username': username, 'oldTitle': old_title, 'newTitle': new_title, 'newNote': new_note}
+            result = send_post_request('editProject', params)
+            return jsonify({"success": True, "result": result})
 
     user_activity = get_user_activity()
     user_data = user_activity[user_activity["Username"] == username]
@@ -87,12 +99,12 @@ def main_page():
         motivational_message=motivational_message
     )
 
-
 def get_user_activity():
     response = requests.get(GSHEET_URL)
     data = response.json()["data"]
     df = pd.DataFrame(data)
-    df = df[df["Title"] != ""]
+    # Only count non-deleted projects
+    df = df[(df["Title"] != "") & (df["Status"] != "Deleted")]
     user_activity = df.groupby("Username").size().reset_index(name="TotalNotes")
 
     def activity_label(note_count):
@@ -106,7 +118,6 @@ def get_user_activity():
     user_activity["ActivityLevel"] = user_activity["TotalNotes"].apply(activity_label)
     return user_activity
 
-
 def get_motivational_message(user_status, total_notes):
     messages = {
         "Most Active": f"Fantastic job! You're a leader on the Productivity Champion leaderboard with {total_notes} notes! 🏆",
@@ -115,13 +126,11 @@ def get_motivational_message(user_status, total_notes):
     }
     return messages.get(user_status, "Keep going!")
 
-
-# Route: Logout
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('index'))
 
-
 if __name__ == "__main__":
+    # app.run(debug=False, port=5000, host='0.0.0.0')
     app.run()
