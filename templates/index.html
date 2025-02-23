@@ -38,16 +38,36 @@
             height: 100%;
             background: white;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            text-align: center;
             z-index: 1000;
+        }
+        .content-wrapper {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            padding: 2rem;
+        }
+        .logo-section {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .logo {
+            max-width: 100%;
+            height: auto;
+        }
+        .text-section {
+            flex: 1;
+            text-align: center;
+            padding: 0 2rem;
         }
         h1 {
             font-size: 3rem;
             font-weight: bold;
-            color: #3b82f6; /* Blue */
+            color: #000000;
+            margin-bottom: 1.5rem;
         }
         p {
             font-size: 1rem;
@@ -60,6 +80,10 @@
             color: #2563eb;
             text-decoration: none;
             font-weight: bold;
+            transition: color 0.3s ease;
+        }
+        a:hover {
+            color: #1d4ed8;
         }
         .install-btn {
             background: black;
@@ -70,16 +94,28 @@
             border-radius: 50px;
             cursor: pointer;
             margin-top: 1.5rem;
-            transition: 0.3s;
+            transition: all 0.3s ease;
             border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         .install-btn:hover {
             background: #333;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
         }
-        @media (max-width: 500px) {
-            h1 { font-size: 2.5rem; }
-            h2 { font-size: 2rem; }
-            .install-btn { width: 80%; }
+        @media (max-width: 768px) {
+            .content-wrapper {
+                flex-direction: column;
+            }
+            .logo-section, .text-section {
+                width: 100%;
+            }
+            h1 {
+                font-size: 2.5rem;
+            }
+            .install-btn {
+                width: 80%;
+            }
         }
         .container {
             background-color: none;
@@ -199,14 +235,21 @@
     </style>
 </head>
 <body>
-    <div class="modal" id="installModal">
-        <h1>Welcome to ProjXs</h1>
-        <p>  
-    For support, visit the <a href="https://help.pygen.in">PyGen Labs Help Center</a>  
-    or email us at <a href="mailto:pygen.co@gmail.com">help@pygen.in</a>.  
-    Access ProjXs on mobile at <a href="https://m.projxs.pygen.in">ProjXs Mobile</a>.  
-</p>
-        <button class="install-btn" id="installButton">Click to Install</button>
+   <div class="modal" id="installModal">
+        <div class="content-wrapper">
+            <div class="logo-section">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Untitled_design-removebg-XzLNxrBnY5PFSlfU93pelpKrhUPrvo.png" alt="ProjXs Logo" class="logo">
+            </div>
+            <div class="text-section">
+                <h1>Welcome to ProjXs</h1>
+                <p>
+                For support, visit the <a href="https://help.pygen.in">PyGen Labs Help Center</a>  
+                or email us at <a href="mailto:pygen.co@gmail.com">help@pygen.in</a>.  
+                Access ProjXs on mobile at <a href="https://m.projxs.pygen.in">ProjXs Mobile</a>. 
+                </p>
+                <button class="install-btn" id="installButton">Click to Install</button>
+            </div>
+        </div>
     </div>
     <div class="container">
         <div id="loginForm" class="form-container">
