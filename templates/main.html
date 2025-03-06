@@ -176,36 +176,35 @@
       margin-left: -250px;
     }
 
-    .welcome-message {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      text-align: center;
-    }
+    /* Welcome message styling with old positioning */
+.welcome-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+}
 
-    .welcome-message h1 {
-      font-size: 2.5em;
-      margin-bottom: 20px;
-    }
+.welcome-container h2 {
+    font-size: 1.8em;
+    margin-bottom: 10px;
+    color: #333;
+}
 
-    .welcome-message p {
-      font-size: 1.2em;
-      color: #666;
-      max-width: 600px;
-    }
+.welcome-container p {
+    font-size: 1em;
+    color: #666;
+    max-width: 500px;
+    line-height: 1.4;
+    margin-bottom: 5px;
+}
 
-    .message {
-      background-color: var(--accent-color);
-      padding: 12px 16px;
-      margin: 5px 0;
-      border-radius: var(--border-radius);
-      max-width: 80%;
-      align-self: flex-end;
-      word-wrap: break-word;
-      white-space: pre-wrap;
-    }
+.welcome-username {
+    font-weight: 600;
+    color: #000;
+    margin-top: 5px;
+}
 
     .toggle-sidebar {
       position: absolute;
@@ -1109,9 +1108,9 @@
       <i class="fas fa-bell"></i>
       <div class="notification-badge" id="notification-badge" style="display: none;">1</div>
     </div>
-    <div class="welcome-message" id="welcome-message">
-      <h1>Welcome to ProjXs</h1>
-      <p>ProjXs securely organizes and stores chats, ideas, thoughts, and emotions all in one safe place.</p>
+   <div id="welcome-message" class="welcome-container">
+      <h2>Welcome, <span class="welcome-username">{{ username }}</span>!</h2>
+      <p>Create and manage your projects with ease. Click the button below to get started.</p>
       <button class="btn btn-primary" onclick="openNewProjectModal()">Create New Project</button>
     </div>
     <div class="project-view" id="project-view">
@@ -1144,7 +1143,7 @@
           <textarea 
             id="project-description" 
             name="note" 
-            placeholder="Type '/' for commands..."
+            placeholder="Write something..."
           ></textarea>
           <select id="project-tag" class="form-control" onchange="handleTagSelection()">
             <option value="">Choose or Create new space</option>
