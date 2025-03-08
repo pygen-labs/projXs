@@ -1,0 +1,2219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProjXs Desktop</title>
+  <link rel="icon" href="static/fav-icon.png" type="image/png"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary-color: #000000;
+      --secondary-color: #ffffff;
+      --accent-color: #f0f0f0;
+      --text-color: #000000; /* Changed to pure black */
+      --text-color-light: #6b6b6b;
+      --border-radius: 4px;
+      --transition-speed: 0.3s;
+      --sidebar-width: 250px;
+      --content-max-width: 900px;
+      --content-padding: 96px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      height: 100vh;
+      background-color: var(--secondary-color);
+      color: var(--text-color);
+      overflow: hidden;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    .sidebar {
+      width: var(--sidebar-width);
+      background-color: #f8f9fa;
+      border-right: 1px solid var(--accent-color);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: transform var(--transition-speed) ease;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 10;
+      flex-shrink: 0;
+    }
+
+    .sidebar.closed {
+      transform: translateX(-100%);
+    }
+
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      background: none;
+      border: none;
+      font-size: 14px;
+      cursor: pointer;
+      color: #666;
+      padding: 5px;
+      margin-bottom: 15px;
+      align-self: flex-start;
+      margin-left: -5px; /* Moved more to the left */
+    }
+
+    .back-button i {
+      margin-right: 5px;
+    }
+
+    .sidebar .menu {
+      list-style: none;
+      padding: 0;
+      flex: 1;
+      overflow-y: auto;
+      margin-bottom: 60px; /* Space for footer */
+      max-height: calc(100vh - 150px); /* Fixed: Allow full scrolling */
+    }
+
+    .sidebar .menu::-webkit-scrollbar {
+      display: none;
+    }
+
+    .sidebar .menu li {
+      margin-bottom: 15px;
+      background-color: var(--secondary-color);
+      padding: 10px;
+      border-radius: var(--border-radius);
+      transition: background-color var(--transition-speed);
+    }
+
+    .sidebar .menu li a {
+      text-decoration: none;
+      color: var(--text-color);
+      font-size: 16px;
+      display: block;
+    }
+
+    .sidebar .menu li:hover {
+      background-color: var(--accent-color);
+    }
+
+    .sidebar .menu .recent {
+      font-weight: bold;
+      margin-bottom: 10px;
+      background-color: transparent;
+      padding: 0;
+    }
+
+    .project-item {
+      display: flex;
+      align-items: center;
+      padding: 8px;
+      margin-bottom: 8px;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: background-color var(--transition-speed);
+      background-color: #f8f9fa !important;
+    }
+
+    .project-item:hover {
+      background-color: var(--accent-color) !important;
+    }
+
+    .project-item i {
+      color: var(--primary-color);
+      margin-right: 12px;
+      font-size: 16px;
+      font-weight: normal;
+    }
+
+    .file-icon {
+      display: flex;
+      align-items: center;
+      font-size: 24px;
+      color: var(--primary-color);
+    }
+
+    .sidebar .footer {
+      display: flex;
+      align-items: center;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: var(--sidebar-width);
+      background: #f8f9fa;
+      padding: 15px 20px;
+      border-top: 1px solid var(--accent-color);
+      z-index: 11;
+    }
+
+    .sidebar .footer .profile-placeholder {
+      background-color: var(--primary-color);
+      color: var(--secondary-color);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 20px;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+    .sidebar .footer .user-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar .footer .user-info .name {
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .sidebar .footer .user-info .status {
+      font-size: 12px;
+      color: #888;
+    }
+
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      transition: margin-left var(--transition-speed) ease;
+      position: relative;
+      overflow-y: auto;
+      height: 100vh;
+    }
+
+    .main-content.shifted {
+      margin-left: -250px;
+    }
+
+    .toggle-sidebar {
+      position: absolute;
+      top: 20px;
+      right: -40px;
+      background-color: var(--secondary-color);
+      color: var(--text-color);
+      border: 1px solid var(--accent-color);
+      border-radius: 8px;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: all var(--transition-speed) ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .toggle-sidebar:hover {
+      background-color: var(--accent-color);
+    }
+
+    .toggle-sidebar i {
+      font-size: 14px;
+      transition: transform var(--transition-speed) ease;
+    }
+
+    .sidebar.closed .toggle-sidebar i {
+      transform: rotate(180deg);
+    }
+
+    /* Modified modal styles to display as pages */
+    .modal {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--secondary-color);
+      z-index: 5;
+      height: 100%;
+      width: 100%;
+      overflow-y: auto;
+    }
+
+    .modal.open {
+      display: block;
+    }
+
+    /* Update the modal-header styling to match project-header */
+    .modal-header {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: var(--content-max-width);
+      text-align: left; /* Left align text */
+    }
+
+    .modal-content {
+      background: var(--secondary-color);
+      padding: 40px var(--content-padding);
+      width: 100%;
+      height: 100%;
+      max-width: none;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start; /* Left align content */
+    }
+
+    .modal-header h2, .modal-header p {
+      display: none;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+      width: 100%;
+      max-width: var(--content-max-width);
+      text-align: left; /* Left align text */
+    }
+
+    .form-group label {
+      display: none;
+    }
+
+    .form-content-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 10px;
+      margin-bottom: 20px;
+      width: 100%;
+      max-width: var(--content-max-width);
+    }
+
+    /* Update the form-group input styling to match project-header h1 */
+    .form-group input[type="text"] {
+      font-size: 40px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--text-color); /* Make text black instead of grey */
+      outline: none; /* Remove outline */
+      border: none; /* Remove border */
+      width: 100%;
+      padding: 8px 0;
+      font-family: inherit;
+    }
+
+    /* Make sure placeholder text is properly styled */
+    .form-group input[type="text"]::placeholder {
+      color: var(--text-color); /* Make placeholder text black instead of grey */
+      opacity: 0.7; /* Slightly transparent to indicate it's a placeholder */
+    }
+
+    .form-group textarea {
+      line-height: 1.6;
+      resize: none;
+      min-height: 200px;
+      color: var(--text-color);
+    }
+
+    .modal-footer {
+      padding-top: 24px;
+      border-top: 1px solid var(--accent-color);
+      margin-top: auto;
+      width: 100%;
+      max-width: var(--content-max-width);
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-size: 14px;
+      border: none;
+      transition: background-color var(--transition-speed) ease;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: var(--secondary-color);
+    }
+
+    .btn-secondary {
+      background-color: var(--accent-color);
+      color: var(--text-color);
+    }
+
+    /* Modified project view to display as a page */
+    .project-view {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--secondary-color);
+      z-index: 5;
+      padding: 40px var(--content-padding);
+      overflow-y: auto;
+      height: 100%;
+    }
+
+    /* Make sure the project-view and modal have consistent styling */
+    .project-view.open {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start; /* Left align content to match modal */
+    }
+
+    .project-header {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: var(--content-max-width);
+      text-align: left; /* Left align text */
+    }
+
+    .project-header h1 {
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--text-color);
+      margin: 0;
+      padding: 0;
+      line-height: 1.2;
+    }
+
+    /* Ensure the back button in the modal has the same positioning as in project view */
+    .project-header .back-button,
+    .modal-header .back-button {
+      align-self: flex-start;
+      margin-bottom: 15px;
+      margin-left: -5px; /* Moved more to the left */
+    }
+
+    .project-description {
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--text-color); /* Changed to black */
+      white-space: pre-wrap;
+      min-height: 200px;
+      outline: none;
+      width: 100%;
+      max-width: var(--content-max-width);
+      text-align: left; /* Left align text */
+      font-weight: 400;
+    }
+
+    .project-description a {
+      color: #0066cc;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .project-description a:hover {
+      text-decoration: none;
+    }
+
+    #profile-menu {
+      background-color: var(--secondary-color);
+      border-radius: var(--border-radius);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      width: 250px;
+      padding: 15px;
+    }
+
+    #profile-menu .item {
+      display: flex;
+      align-items: center;
+      padding: 10px 0;
+      border-top: 1px solid var(--accent-color);
+      cursor: pointer;
+    }
+
+    #profile-menu .item:first-child {
+      border-top: none;
+    }
+
+    #profile-menu .item i {
+      margin-right: 10px;
+      color: var(--text-color);
+    }
+
+    #profile-menu .item span {
+      font-size: 14px;
+      color: var(--text-color);
+    }
+
+    .app-footer {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      font-size: 12px;
+      color: #888;
+    }
+
+    .mock-project {
+      opacity: 0.7;
+      border-left: 2px solid #4CAF50;
+    }
+
+    .tag-small {
+      font-size: 0.7em;
+      margin-left: 5px;
+      font-weight: normal;
+      padding: 2px 6px;
+      border-radius: 12px;
+      color: white;
+    }
+
+    #project-tag {
+      width: 100%; /* Make tag selection box full width */
+      min-width: 300px; /* Increased minimum width */
+      max-width: 100%;
+      padding: 8px 12px;
+      margin: 8px 0;
+      border: 1px solid var(--accent-color);
+      border-radius: var(--border-radius);
+      background-color: var(--secondary-color);
+      font-size: 14px;
+      color: var(--text-color);
+      cursor: pointer;
+      transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+    }
+
+    #project-tag:hover {
+      border-color: #999;
+    }
+
+    #project-tag:focus {
+      outline: none;
+      border-color: #4CAF50;
+      box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
+    }
+
+    #project-tag option {
+      padding: 8px;
+      background-color: var(--secondary-color);
+      color: var(--text-color);
+    }
+
+    #project-tag option:hover {
+      background-color: var(--accent-color);
+    }
+
+    #project-tag::-ms-expand {
+      display: none;
+    }
+
+    .notification-icon {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: var(--primary-color);
+      color: var(--secondary-color);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    .notification-icon .fa-bell {
+      font-size: 20px;
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: #ff4081;
+      color: var(--secondary-color);
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      font-size: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .user-status {
+      display: flex;
+      align-items: center;
+      margin-top: 5px;
+    }
+
+    .status-indicator {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+
+    .notification-modal {
+      display: none;
+      position: fixed;
+      z-index: 1001;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.4);
+    }
+
+    .notification-modal-content {
+      background-color: var(--secondary-color);
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 500px;
+      border-radius: 12px; /* Fixed: Added rounded corners to notification modal */
+    }
+
+    .notification-close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .notification-close:hover,
+    .notification-close:focus {
+      color: var(--text-color);
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .status-most-active { background-color: #4CAF50; }
+    .status-moderately-active { background-color: #FFC107; }
+    .status-getting-started { background-color: #F44336; }
+
+    .skeleton {
+      animation: skeleton-loading 1s linear infinite alternate;
+    }
+
+    @keyframes skeleton-loading {
+      0% {
+        background-color: hsl(200, 20%, 80%);
+      }
+      100% {
+        background-color: hsl(200, 20%, 95%);
+      }
+    }
+
+    .skeleton-text {
+      width: 100%;
+      height: 0.7rem;
+      margin-bottom: 0.5rem;
+      border-radius: 0.25rem;
+    }
+
+    .skeleton-text:last-child {
+      width: 80%;
+    }
+
+    .btn-primary:disabled {
+      background-color: #cccccc;
+      color: #666666;
+      cursor: not-allowed;
+    }
+
+    .btn-loading {
+      position: relative;
+      color: transparent !important;
+    }
+
+    .btn-loading::after {
+      content: "";
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin: auto;
+      border: 4px solid transparent;
+      border-top-color: var(--secondary-color);
+      border-radius: 50%;
+      animation: button-loading-spinner 1s ease infinite;
+    }
+
+    @keyframes button-loading-spinner {
+      from {
+        transform: rotate(0turn);
+      }
+      to {
+        transform: rotate(1turn);
+      }
+    }
+
+    .search-icon {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 50%;
+      transition: background-color var(--transition-speed);
+    }
+
+    .search-icon:hover {
+      background-color: var(--accent-color);
+    }
+
+    .search-modal-content {
+      padding: 0 !important;
+      max-height: 80vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .search-header {
+      padding: 16px;
+      border-bottom: 1px solid var(--accent-color);
+    }
+
+    .search-header input {
+      width: calc(100% - 40px);
+      padding: 10px;
+      font-size: 14px;
+      border: none;
+      border-radius: var(--border-radius);
+      background-color: var(--accent-color);
+      margin-right: 8px;
+    }
+
+    .search-header input:focus {
+      outline: none;
+      background-color: #eeeeee;
+    }
+
+    .search-header button {
+      padding: 10px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .search-results {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+    }
+
+    .search-result-item {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: background-color var(--transition-speed);
+    }
+
+    .search-result-item:hover {
+      background-color: var(--accent-color);
+    }
+
+    .search-result-item i {
+      margin-right: 12px;
+      color: #666;
+    }
+
+    .search-skeleton {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      margin-bottom: 8px;
+    }
+
+    .search-skeleton-icon {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      margin-right: 12px;
+      background-color: var(--accent-color);
+      animation: skeleton-loading 1s infinite alternate;
+    }
+
+    .search-skeleton-text {
+      height: 16px;
+      width: 200px;
+      border-radius: 4px;
+      background-color: var(--accent-color);
+      animation: skeleton-loading 1s infinite alternate;
+    }
+
+    .section-header {
+      padding: 8px 0 8px 20px;
+      cursor: pointer;
+      opacity: 0.6;
+      transition: opacity 0.2s;
+    }
+
+    .section-header:hover {
+      opacity: 1;
+    }
+
+    .section-header i {
+      margin-right: 8px;
+      font-size: 12px;
+      transition: transform 0.2s;
+      transform-origin: center;
+      transform: rotate(90deg);
+    }
+
+    .section-header.collapsed i {
+      transform: rotate(0deg);
+    }
+
+    .section-header.expanded i {
+      transform: rotate(90deg);
+    }
+
+    .section-content {
+      margin-left: 20px;
+      overflow: hidden;
+      max-height: 1000px;
+      transition: max-height 0.3s ease-out;
+    }
+
+    .section-content.collapsed {
+      max-height: 0;
+    }
+
+    .project-actions {
+      display: none;
+      margin-left: auto;
+    }
+
+    .project-item:hover .project-actions {
+      display: flex;
+    }
+
+    .project-action-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 5px;
+      color: #666;
+      transition: color 0.3s, background-color 0.3s;
+      border-radius: 4px;
+    }
+
+    .project-action-btn:hover {
+      color: #f00e0e;
+    }
+
+    .project-action-btn.edit-btn:hover {
+      background-color: rgba(76, 175, 80, 0.1);
+    }
+
+    .project-action-btn.delete-btn:hover {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+    }
+
+    .delete-confirm-modal {
+      display: none;
+      position: fixed;
+      z-index: 1001;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .delete-confirm-content {
+      background-color: var(--secondary-color);
+      padding: 24px;
+      border-radius: 16px;
+      width: 440px;
+      max-width: 90%;
+      text-align: left;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .delete-confirm-content h2 {
+      font-size: 20px;
+      margin: 0;
+      color: var(--text-color);
+      font-weight: 600;
+    }
+
+    .separator {
+      width: 100%;
+      height: 1px;
+      background-color: #ccc;
+      margin: 12px 0;
+    }
+
+    .delete-confirm-content p {
+      color: var(--text-color);
+      margin: 8px 0;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .settings-note {
+      color: #666;
+      font-size: 13px;
+      margin-top: 8px;
+    }
+
+    .settings-link {
+      color: #666;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .delete-confirm-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border-radius: 24px;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+      transition: 0.2s ease-in-out;
+    }
+
+    .btn.cancel-delete {
+      background: var(--accent-color);
+      color: var(--text-color);
+    }
+
+    .btn.confirm-delete {
+      background: #f83545;
+      color: white;
+    }
+
+    .project-action-btn.delete-btn {
+      color: #ff1c2f;
+      opacity: 0.8;
+    }
+
+    .project-action-btn.delete-btn:hover {
+      opacity: 1;
+    }
+
+    .project-action-btn.edit-btn {
+      color: #000000;
+      opacity: 0.8;
+    }
+
+    .project-action-btn.edit-btn:hover {
+      opacity: 1;
+    }
+
+    .edit-actions {
+      display: none;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+      width: 100%;
+      max-width: var(--content-max-width);
+    }
+
+    #project-view-title[contenteditable="true"],
+    #project-view-description[contenteditable="true"] {
+      border: none;
+      padding: 5px;
+      border-radius: var(--border-radius);
+      outline: none; /* Remove outline */
+    }
+
+    #project-view-title[contenteditable="true"]:focus,
+    #project-view-description[contenteditable="true"]:focus {
+      outline: none;
+      border: none;
+    }
+
+    .auto-save-indicator {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: var(--accent-color);
+      padding: 8px 16px;
+      border-radius: var(--border-radius);
+      font-size: 14px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .auto-save-indicator.visible {
+      opacity: 1;
+    }
+
+    .toast-message {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 14px;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .toast-message.visible {
+      opacity: 1;
+    }
+
+    .toast-message.success {
+      background-color: rgba(65, 188, 69, 0.9);
+    }
+
+    .toast-message.error {
+      background-color: rgba(247, 43, 60, 0.9);
+    }
+
+    /* Rich text formatting toolbar - Improved and more compact */
+    .formatting-toolbar {
+      position: absolute;
+      display: none;
+      background-color: #fff;
+      border-radius: 24px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 4px 8px; /* More compact */
+      z-index: 1000;
+      transition: opacity 0.2s ease;
+      white-space: nowrap;
+    }
+
+    /* Modified: Make new project formatting toolbar always visible and static */
+    #new-project-formatting-toolbar {
+      position: static;
+      display: flex;
+      margin-bottom: 10px;
+      border-radius: 24px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 4px 8px; /* More compact */
+      width: fit-content;
+      align-self: flex-start; /* Left align toolbar */
+    }
+
+    .formatting-toolbar.visible {
+      display: flex;
+      align-items: center;
+    }
+
+    .formatting-toolbar button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px; /* More compact */
+      margin: 0 1px; /* More compact */
+      border-radius: 4px;
+      color: #555;
+      font-size: 14px;
+      transition: background-color 0.2s;
+    }
+
+    .formatting-toolbar button:hover {
+      background-color: #f0f0f0;
+      color: #000;
+    }
+
+    .formatting-toolbar button.active {
+      background-color: #e6e6e6;
+      color: #000;
+    }
+
+    .formatting-toolbar .separator {
+      width: 1px;
+      height: 20px;
+      background-color: #ddd;
+      margin: 0 4px; /* More compact */
+    }
+
+    .formatting-toolbar-group {
+      display: flex;
+      align-items: center;
+    }
+
+    /* Rich text editor */
+    .rich-text-editor {
+      min-height: 200px;
+      border: none;
+      padding: 8px 0;
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--text-color); /* Changed to black */
+      outline: none;
+      font-family: inherit;
+      width: 100%;
+      max-width: var(--content-max-width);
+      font-weight: 400;
+      text-align: left; /* Left align text */
+    }
+
+    .rich-text-editor:focus {
+      outline: none;
+    }
+
+    .rich-text-editor a {
+      color: #0066cc;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .rich-text-editor a:hover {
+      text-decoration: none;
+    }
+
+    /* Welcome message styling - Improved and centered */
+    .welcome-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      text-align: center;
+      padding: 20px;
+      width: 100%;
+      max-width: var(--content-max-width);
+      margin: 0 auto;
+    }
+
+    .welcome-container h2 {
+      font-size: 1.8em;
+      margin-bottom: 10px;
+      color: var(--text-color);
+      font-weight: 600;
+    }
+
+    .welcome-container p {
+      font-size: 1em;
+      color: var(--text-color);
+      max-width: 500px;
+      line-height: 1.4;
+      margin-bottom: 15px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .welcome-username {
+      font-weight: 600;
+      color: #000;
+      margin-top: 5px;
+    }
+
+    /* Notion-style layout */
+    .app-container {
+      display: flex;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .content-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Project chat container */
+    #project-chat-container {
+      padding: 20px;
+      width: 100%;
+      max-width: var(--content-max-width);
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left; /* Left align text */
+    }
+
+    /* Custom tag input styling */
+    #custom-tag-input {
+      display: none;
+      width: 100%; /* Match the width of the tag selection box */
+      min-width: 300px; /* Match the min-width of tag selection */
+      max-width: 100%;
+      margin-top: 8px;
+      padding: 8px 12px;
+      border: 1px solid var(--accent-color);
+      border-radius: var(--border-radius);
+      font-size: 14px;
+      outline: none; /* Remove outline */
+    }
+
+    #custom-tag-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+
+    .sidebar-loader {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 24px;
+      height: 24px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #060809;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      z-index: 1000;
+    }
+
+    @keyframes spin {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    .project-action-btn.edit-btn:hover {
+      background-color: transparent !important;
+    }
+    
+    /* Responsive styles */
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        left: -250px;
+        top: 0;
+        bottom: 0;
+        z-index: 1000;
+      }
+
+      .sidebar.closed {
+        left: 0;
+      }
+
+      .sidebar .footer {
+        width: calc(var(--sidebar-width) - 1px);
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .main-content.shifted {
+        margin-left: 250px;
+      }
+
+      .toggle-sidebar {
+        display: block;
+      }
+
+      .modal-content {
+        width: 100%;
+        padding: 20px;
+      }
+
+      .form-group input[type="text"],
+      .form-group textarea {
+        font-size: 16px;
+      }
+
+      .project-view {
+        padding: 20px;
+      }
+
+      .project-header h1 {
+        font-size: 24px;
+      }
+
+      .formatting-toolbar {
+        padding: 4px 6px;
+      }
+
+      .formatting-toolbar button {
+        padding: 3px;
+        font-size: 12px;
+      }
+      
+      /* Adjust content padding for mobile */
+      :root {
+        --content-padding: 20px;
+      }
+    }
+    /* Centered & Rounded Search Modal */
+.search-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Open State */
+.search-modal.open {
+  display: flex;
+}
+
+/* Medium-Wide Rounded Modal */
+.search-modal-content {
+  background: var(--secondary-color);
+  padding: 28px;
+  border-radius: 28px; /* Rounded */
+  width: 85%;
+  max-width: 550px; /* Medium-wide */
+  min-height: 250px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Search Header (Centered Input) */
+.search-header {
+  display: flex;
+  align-items: center;
+  padding: 14px;
+  border-radius: 20px; /* Rounded */
+  background: var(--accent-color);
+  width: 90%; /* Keep input inside modal */
+  max-width: 500px; /* Ensure it doesn’t go outside */
+  margin: 0 auto; /* Center inside modal */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Fully Rounded Input */
+.search-header input {
+  flex: 1;
+  padding: 12px 16px;
+  font-size: 16px;
+  border: none;
+  border-radius: 50px; /* Fully rounded */
+  background-color: var(--secondary-color);
+  transition: background-color var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+/* Input Focus */
+.search-header input:focus {
+  outline: none;
+  background-color: #f8f8f8;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Close Button */
+.search-header button {
+  padding: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background-color var(--transition-speed);
+}
+
+.search-header button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Search Results */
+.search-results {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  text-align: center;
+}
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <div id="profile-menu" class="menu" style="display: none; position: absolute; bottom: 80px; left: 20px; z-index: 1000;">
+      <div class="item">
+        <i class="fas fa-info-circle"></i>
+        <span>Current Version: 3.2025.007</span>
+      </div>
+      <div class="item">
+        <i class="fas fa-history"></i>
+        <span>Total Updates: 7 </span>
+      </div>
+    </div>
+    <div class="sidebar" id="sidebar">
+      <button class="toggle-sidebar" onclick="toggleSidebar()">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <div class="search-icon" onclick="openSearchModal()">
+        <i class="fas fa-search"></i>
+      </div>
+      <ul class="menu">
+        <li class="recent">Projects</li>
+        <div id="sidebar-loader" class="sidebar-loader"></div>
+        <div id="projects-list">
+          <!-- Projects will be dynamically inserted here -->
+        </div>
+      </ul>
+      <div class="footer" onclick="toggleProfileMenu()">
+        <div class="profile-placeholder" id="profile-initial"></div>
+        <div class="user-info">
+          <div class="name" id="user-name">{{ username }}</div>
+          <div class="user-status">
+            <div class="status-indicator status-{{ user_status.lower().replace(' ', '-') }}"></div>
+            <div class="status">{{ user_status }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="content-area">
+      <div id="notificationModal" class="notification-modal">
+        <div class="notification-modal-content">
+          <span class="notification-close">&times;</span>
+          <h2>Notifications</h2>
+          <p id="notificationMessage"></p>
+        </div>
+      </div>
+      <div class="main-content" id="main-content">
+        <div class="notification-icon" onclick="showAINotification()">
+          <i class="fas fa-bell"></i>
+          <div class="notification-badge" id="notification-badge" style="display: none;">1</div>
+        </div>
+        <div id="welcome-message" class="welcome-container">
+          <h2>Welcome, <span class="welcome-username">{{ username }}</span>!</h2>
+          <p>Create and manage your projects with ease. Click the button below to get started.</p>
+          <button class="btn btn-primary" onclick="openNewProjectModal()">Create New Project</button>
+        </div>
+        <div class="project-view" id="project-view">
+          <div class="project-header">
+            <button class="back-button" onclick="goBack()">
+              <i class="fas fa-arrow-left"></i>
+            </button>
+            <h1 id="project-view-title" contenteditable="true" spellcheck="false"></h1>
+          </div>
+          <div id="formatting-toolbar" class="formatting-toolbar">
+            <div class="formatting-toolbar-group">
+              <button data-format="bold" title="Bold"><i class="fas fa-bold"></i></button>
+              <button data-format="italic" title="Italic"><i class="fas fa-italic"></i></button>
+              <button data-format="underline" title="Underline"><i class="fas fa-underline"></i></button>
+            </div>
+            <div class="separator"></div>
+            <div class="formatting-toolbar-group">
+              <button data-format="h1" title="Heading 1">H1</button>
+              <button data-format="h2" title="Heading 2">H2</button>
+              <button data-format="h3" title="Heading 3">H3</button>
+            </div>
+            <div class="separator"></div>
+            <div class="formatting-toolbar-group">
+              <button data-format="insertUnorderedList" title="Bullet List"><i class="fas fa-list-ul"></i></button>
+              <button data-format="insertOrderedList" title="Numbered List"><i class="fas fa-list-ol"></i></button>
+              <button data-format="createLink" title="Insert Link"><i class="fas fa-link"></i></button>
+            </div>
+          </div>
+          <div class="project-description" id="project-view-description" contenteditable="true" spellcheck="false"></div>
+          <div class="edit-actions">
+            <button class="btn btn-secondary" onclick="cancelEdit()">Cancel</button>
+          </div>
+          <div id="project-chat-container"></div>
+        </div>
+        <div class="auto-save-indicator" id="auto-save-indicator">Changes saved</div>
+      </div>
+      <div class="modal" id="new-project-modal">
+        <div class="modal-content">
+          <div class="project-header">
+            <button class="back-button" onclick="closeNewProjectModal()">
+              <i class="fas fa-arrow-left"></i>
+            </button>
+          </div>
+          <form id="new-project-form">
+            <div class="form-group">
+              <input 
+                type="text" 
+                id="project-name" 
+                name="title" 
+                placeholder="Untitled" 
+                required
+                autocomplete="off">
+            </div>
+            <div id="new-project-formatting-toolbar" class="formatting-toolbar">
+              <div class="formatting-toolbar-group">
+                <button type="button" data-format="bold" title="Bold"><i class="fas fa-bold"></i></button>
+                <button type="button" data-format="italic" title="Italic"><i class="fas fa-italic"></i></button>
+                <button type="button" data-format="underline" title="Underline"><i class="fas fa-underline"></i></button>
+              </div>
+              <div class="separator"></div>
+              <div class="formatting-toolbar-group">
+                <button type="button" data-format="h1" title="Heading 1">H1</button>
+                <button type="button" data-format="h2" title="Heading 2">H2</button>
+                <button type="button" data-format="h3" title="Heading 3">H3</button>
+              </div>
+              <div class="separator"></div>
+              <div class="formatting-toolbar-group">
+                <button type="button" data-format="insertUnorderedList" title="Bullet List"><i class="fas fa-list-ul"></i></button>
+                <button type="button" data-format="insertOrderedList" title="Numbered List"><i class="fas fa-list-ol"></i></button>
+                <button type="button" data-format="createLink" title="Insert Link"><i class="fas fa-link"></i></button>
+              </div>
+            </div>
+            <div class="form-group">
+              <div id="project-description-editor" class="rich-text-editor" contenteditable="true" spellcheck="false" placeholder="Write something..."></div>
+            </div>
+            <div class="form-group">
+              <select id="project-tag" class="form-control" onchange="handleTagSelection()">
+                <option value="">Choose or Create new space</option>
+                <option value="Work">Work</option>
+                <option value="Personal">Personal</option>
+                <option value="custom">Create New Space +</option>
+              </select>
+              <input type="text" id="custom-tag-input" placeholder="Enter a new space name or reuse an existing one.">
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="search-modal" id="search-modal">
+        <div class="modal-content search-modal-content">
+          <div class="search-header">
+            <input 
+              type="text" 
+              id="search-input" 
+              placeholder="Search notes..." 
+              autocomplete="off"
+              oninput="handleSearch()"
+            >
+            <button onclick="closeSearchModal()">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <div class="search-results" id="search-results">
+            <!-- Search results will be populated here -->
+          </div>
+        </div>
+      </div>
+      <div id="delete-confirm-modal" class="delete-confirm-modal">
+        <div class="delete-confirm-content">
+          <h2>Delete project?</h2>
+          <div class="separator"></div>
+          <p>This action will permanently remove the selected project from your workspace.</p>
+          <p>If you're unsure about this action or want to learn more about how we handle your data, visit our <a href="https://help.pygen.in/privacy-policy" class="settings-link">Privacy Policy</a>.</p>
+          <div class="delete-confirm-buttons">
+            <button class="btn cancel-delete" onclick="cancelDelete()">Cancel</button>
+            <button class="btn confirm-delete" onclick="confirmDelete()">Delete</button>
+          </div>
+        </div>
+      </div>
+      <div id="toast-message" class="toast-message"></div>
+    </div>
+  </div>
+
+  <script>
+    let mockProjectElement = null;
+    let currentProject = null;
+    let currentUser = "{{ username }}";
+    let isLoading = false;
+    let searchTimeout = null;
+    let originalProject = null;
+    let autoSaveTimeout = null;
+    let formattingToolbarTimeout = null;
+
+    window.onload = function() {
+      fetchProjects();
+      document.getElementById('new-project-form').addEventListener('submit', handleNewProjectSubmit);
+
+      if (currentUser) {
+        const initial = currentUser.charAt(0).toUpperCase();
+        document.getElementById('profile-initial').textContent = initial;
+      }
+
+      // Initialize rich text editing
+      initRichTextEditing();
+      
+      // Make links clickable
+      makeLinksClickable();
+    };
+
+    function initRichTextEditing() {
+      const projectDescription = document.getElementById('project-view-description');
+      const newProjectDescription = document.getElementById('project-description-editor');
+      const formattingToolbar = document.getElementById('formatting-toolbar');
+      const newProjectFormattingToolbar = document.getElementById('new-project-formatting-toolbar');
+
+      // Setup event listeners for the project view
+      projectDescription.addEventListener('mouseup', function() {
+        // Don't show toolbar in project view as per requirements
+        // showFormattingToolbar(this, formattingToolbar);
+      });
+
+      projectDescription.addEventListener('keyup', function() {
+        // Don't show toolbar in project view as per requirements
+        // showFormattingToolbar(this, formattingToolbar);
+      });
+
+      document.addEventListener('mousedown', function(e) {
+        if (!formattingToolbar.contains(e.target) && e.target !== projectDescription) {
+          formattingToolbar.classList.remove('visible');
+        }
+      });
+
+      // Setup formatting buttons for project view
+      setupFormattingButtons(formattingToolbar, projectDescription);
+
+      // Setup formatting buttons for new project
+      setupFormattingButtons(newProjectFormattingToolbar, newProjectDescription);
+
+      // New project toolbar is always visible, no need for mouseup/keyup events
+      // But we'll keep the event handlers for consistency
+      newProjectDescription.addEventListener('mouseup', function() {
+        // No need to show/hide as it's always visible now
+      });
+
+      newProjectDescription.addEventListener('keyup', function() {
+        // No need to show/hide as it's always visible now
+      });
+
+      document.addEventListener('mousedown', function(e) {
+        // No need to hide the new project toolbar as it's always visible
+      });
+      
+      // Set placeholder for rich text editor
+      newProjectDescription.addEventListener('focus', function() {
+        if (this.textContent.trim() === '' || this.innerHTML.includes('style="color: #999;"')) {
+          this.innerHTML = '';
+        }
+      });
+      
+      newProjectDescription.addEventListener('blur', function() {
+        if (this.textContent.trim() === '') {
+          this.innerHTML = '<span style="color: #999;">Write something...</span>';
+        }
+      });
+      
+      // Initialize with placeholder
+      newProjectDescription.innerHTML = '<span style="color: #999;">Write something...</span>';
+    }
+
+    function makeLinksClickable() {
+      // Make links in project description clickable
+      document.addEventListener('click', function(e) {
+        if (e.target.tagName === 'A' && e.target.closest('.project-description, .rich-text-editor')) {
+          const href = e.target.getAttribute('href');
+          if (href && !e.target.closest('[contenteditable="true"]')) {
+            window.open(href, '_blank');
+          }
+        }
+      });
+    }
+
+    function showFormattingToolbar(element, toolbar) {
+      // This function is now only used for the project view toolbar
+      // which should not be shown as per requirements
+      if (toolbar.id === 'formatting-toolbar') {
+        return; // Don't show toolbar in project view
+      }
+      
+      const selection = window.getSelection();
+      
+      if (selection.rangeCount > 0 && selection.toString().trim() !== '') {
+        const range = selection.getRangeAt(0);
+        const rect = range.getBoundingClientRect();
+        
+        if (rect.width > 0) {
+          toolbar.style.top = `${rect.top - toolbar.offsetHeight - 10 + window.scrollY}px`;
+          toolbar.style.left = `${rect.left + (rect.width / 2) - (toolbar.offsetWidth / 2)}px`;
+          toolbar.classList.add('visible');
+          return;
+        }
+      }
+      
+      // If we're here, there's no valid selection
+      if (!element.contains(document.activeElement)) {
+        toolbar.classList.remove('visible');
+      }
+    }
+
+    function setupFormattingButtons(toolbar, targetElement) {
+      const buttons = toolbar.querySelectorAll('button');
+      
+      buttons.forEach(button => {
+        button.addEventListener('click', function(e) {
+          e.preventDefault();
+          const format = this.getAttribute('data-format');
+          
+          if (format === 'createLink') {
+            const selection = window.getSelection();
+            if (selection.toString().trim() !== '') {
+              const url = prompt('Enter the URL:', 'https://');
+              if (url) {
+                document.execCommand('createLink', false, url);
+              }
+            }
+          } else if (format === 'h1' || format === 'h2' || format === 'h3') {
+            applyHeadingFormat(format);
+          } else {
+            document.execCommand(format, false, null);
+          }
+          
+          // Refocus the element after applying format
+          targetElement.focus();
+        });
+      });
+    }
+
+    function applyHeadingFormat(headingType) {
+      const selection = window.getSelection();
+      if (selection.rangeCount === 0) return;
+      
+      const range = selection.getRangeAt(0);
+      const selectedText = range.toString();
+      
+      if (selectedText.trim() === '') return;
+      
+      // Create the heading element
+      const heading = document.createElement(headingType);
+      heading.textContent = selectedText;
+      
+      // Delete the selected text
+      range.deleteContents();
+      
+      // Insert the heading
+      range.insertNode(heading);
+      
+      // Move the cursor to the end of the heading
+      selection.removeAllRanges();
+      const newRange = document.createRange();
+      newRange.setStartAfter(heading);
+      newRange.collapse(true);
+      selection.addRange(newRange);
+    }
+
+    function toggleProfileMenu() {
+      const profileMenu = document.getElementById('profile-menu');
+      profileMenu.style.display = profileMenu.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.getElementById('main-content');
+      sidebar.classList.toggle('closed');
+      mainContent.classList.toggle('shifted');
+    }
+
+    function showAINotification() {
+      const message = "{{ motivational_message }}";
+      const decodedMessage = decodeHTML(message);
+      document.getElementById('notificationMessage').textContent = decodedMessage;
+      document.getElementById('notificationModal').style.display = 'block';
+      document.getElementById('notification-badge').style.display = 'none';
+    }
+
+    function decodeHTML(html) {
+      const textArea = document.createElement('textarea');
+      textArea.innerHTML = html;
+      return textArea.value;
+    }
+
+    document.querySelector('.notification-close').onclick = function() {
+      document.getElementById('notificationModal').style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+      const modal = document.getElementById('notificationModal');
+      if (event.target == modal) {
+        modal.style.display = 'none';
+      }
+    }
+
+    function openNewProjectModal() {
+      document.getElementById('new-project-modal').classList.add('open');
+      addMockProject();
+      setupRealtimeTitle();
+      
+      // Make sure the new project formatting toolbar is visible
+      document.getElementById('new-project-formatting-toolbar').style.display = 'flex';
+    }
+
+    function closeNewProjectModal() {
+      document.getElementById('new-project-modal').classList.remove('open');
+      if (mockProjectElement) {
+        mockProjectElement.remove();
+        mockProjectElement = null;
+      }
+      resetNewProjectForm();
+    }
+
+    function closeSearchModal() {
+      document.getElementById('search-modal').classList.remove('open');
+    }
+
+    function addMockProject() {
+      const projectsList = document.getElementById('projects-list');
+      mockProjectElement = document.createElement('li');
+      mockProjectElement.classList.add('project-item', 'mock-project');
+      mockProjectElement.innerHTML = `
+        <i class="far fa-file"></i>
+        <span class="mock-title">Untitled</span>
+      `;
+      projectsList.insertBefore(mockProjectElement, projectsList.firstChild);
+    }
+
+    function setupRealtimeTitle() {
+      const titleInput = document.getElementById('project-name');
+      titleInput.addEventListener('input', (e) => {
+        if (mockProjectElement) {
+          const titleSpan = mockProjectElement.querySelector('.mock-title');
+          titleSpan.textContent = e.target.value || 'Untitled';
+        }
+      });
+    }
+
+    function resetNewProjectForm() {
+      document.getElementById('project-name').value = '';
+      document.getElementById('project-description-editor').innerHTML = '<span style="color: #999;">Write something...</span>';
+      document.getElementById('project-tag').value = '';
+      document.getElementById('custom-tag-input').style.display = 'none';
+      document.getElementById('custom-tag-input').value = '';
+    }
+
+    function fetchProjects() {
+      const projectsList = document.getElementById('projects-list');
+      const loader = document.getElementById('sidebar-loader');
+      
+      projectsList.innerHTML = '';
+      loader.style.display = 'block'; // Show loader
+      
+      fetch('https://script.google.com/macros/s/AKfycbyvtHc34HgLZ7IKCUT-57cuXrAlp53RhDM4pOCAyjm8Z17iJ6Rrgw1lvBVRxlnqTbs/exec')
+        .then(response => response.json())
+        .then(data => {
+          loader.style.display = 'none'; // Hide loader
+          
+          const userProjects = data.data.filter(project => project.Username === currentUser && project.Status !== 'Deleted');
+          
+          const organizedProjects = {
+            untagged: []
+          };
+          
+          userProjects.forEach(project => {
+            if (project.Title) {
+              const noteContent = project.Note;
+              const tagMatch = noteContent.match(/\nTag: (.+)$/);
+              const tag = tagMatch ? tagMatch[1] : 'untagged';
+              
+              if (!organizedProjects[tag]) {
+                organizedProjects[tag] = [];
+              }
+              organizedProjects[tag].push(project);
+            }
+          });
+          
+          renderProjects('Projects', organizedProjects.untagged);
+          delete organizedProjects.untagged;
+          
+          Object.entries(organizedProjects).forEach(([tag, projects]) => {
+            if (projects.length > 0) {
+              renderProjects(tag, projects);
+            }
+          });
+
+          if (userProjects.length === 0) {
+            const noProjectsMessage = document.createElement('li');
+            noProjectsMessage.textContent = "No projects found.";
+            projectsList.appendChild(noProjectsMessage);
+          }
+        })
+        .catch(error => {
+          loader.style.display = 'none'; // Hide loader on error
+          console.error('Error:', error);
+        });
+    }
+
+    function toggleSection(header) {
+      const content = header.nextElementSibling;
+      header.classList.toggle('collapsed');
+      header.classList.toggle('expanded');
+      content.classList.toggle('collapsed');
+    }
+
+    function renderProjects(sectionName, projects) {
+      const projectsList = document.getElementById('projects-list');
+      
+      if (projects.length === 0) return;
+      
+      const sectionDiv = document.createElement('div');
+      sectionDiv.className = 'project-section';
+
+      if (sectionName !== 'Projects') {
+        const sectionHeader = document.createElement('div');
+        sectionHeader.className = 'section-header expanded';
+        sectionHeader.innerHTML = `
+          <i class="fas fa-chevron-right"></i>
+          <span class="section-label">${sectionName}</span>
+        `;
+        
+        sectionHeader.onclick = () => toggleSection(sectionHeader);
+        sectionDiv.appendChild(sectionHeader);
+      }
+
+      const sectionContent = document.createElement('div');
+      sectionContent.className = 'section-content';
+
+      projects.forEach(project => {
+        if (project.Status !== 'Deleted') {
+          const projectItem = document.createElement('li');
+          projectItem.className = 'project-item';
+          projectItem.innerHTML = `
+            <i class="far fa-file"></i>
+            <span>${project.Title}</span>
+            <div class="project-actions">
+              <button class="project-action-btn edit-btn" onclick='openProjectView(${JSON.stringify(project)})' style="background: transparent;">
+               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: black;">
+                  <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                </svg>
+              </button>
+              <button class="project-action-btn delete-btn" onclick="deleteProject('${project.Title}')" style="background: transparent; border: none;">
+              <i class="fas fa-trash-alt" style="color: black;"></i>
+              </button>
+            </div>
+          `;
+          
+          projectItem.onclick = (e) => {
+            if (!e.target.closest('.project-actions')) {
+              openProjectView(project);
+            }
+          };
+          
+          sectionContent.appendChild(projectItem);
+        }
+      });
+
+      sectionDiv.appendChild(sectionContent);
+      projectsList.appendChild(sectionDiv);
+    }
+
+    function goBack() {
+      document.getElementById('project-view').classList.remove('open');
+      document.getElementById('welcome-message').style.display = 'flex';
+      document.getElementById('project-chat-container').innerHTML = '';
+      currentProject = null;
+    }
+
+    function openProjectView(project) {
+      currentProject = project;
+      originalProject = {...project};
+      const projectView = document.getElementById('project-view');
+      const title = document.getElementById('project-view-title');
+      const description = document.getElementById('project-view-description');
+      title.textContent = project.Title;
+      description.innerHTML = project.Note;
+      projectView.classList.add('open');
+      document.getElementById('welcome-message').style.display = 'none';
+      
+      title.addEventListener('input', handleProjectChange);
+      description.addEventListener('input', handleProjectChange);
+    }
+
+    function handleProjectChange() {
+      clearTimeout(autoSaveTimeout);
+      autoSaveTimeout = setTimeout(saveEdit, 2000);
+      document.querySelector('.edit-actions').style.display = 'flex';
+    }
+
+    function saveEdit() {
+      const title = document.getElementById('project-view-title').textContent;
+      const note = document.getElementById('project-view-description').innerHTML;
+      
+      const formData = new FormData();
+      formData.append('action', 'editProject');
+      formData.append('username', currentUser);
+      formData.append('oldTitle', originalProject.Title);
+      formData.append('newTitle', title);
+      formData.append('newNote', note);
+
+      showToast('Saving changes...', 'loading');
+
+      fetch('/main', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          showAutoSaveIndicator();
+          fetchProjects();
+          originalProject = {Title: title, Note: note};
+          showToast('Changes saved successfully', 'success');
+          document.querySelector('.edit-actions').style.display = 'none';
+        } else {
+          showToast('Failed to save changes', 'error');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        showToast('Failed to save changes', 'error');
+      });
+    }
+
+    function cancelEdit() {
+      if (confirm('Are you sure you want to cancel? All unsaved changes will be lost.')) {
+        document.getElementById('project-view-title').textContent = originalProject.Title;
+        document.getElementById('project-view-description').innerHTML = originalProject.Note;
+        document.querySelector('.edit-actions').style.display = 'none';
+      }
+    }
+
+    function showAutoSaveIndicator() {
+      const indicator = document.getElementById('auto-save-indicator');
+      indicator.classList.add('visible');
+      setTimeout(() => {
+        indicator.classList.remove('visible');
+      }, 2000);
+    }
+
+    function showToast(message, type) {
+      const toast = document.getElementById('toast-message');
+      toast.textContent = message;
+      toast.className = `toast-message ${type}`;
+      toast.classList.add('visible');
+      setTimeout(() => {
+        toast.classList.remove('visible');
+      }, 3000);
+    }
+
+    function handleNewProjectSubmit(event) {
+      event.preventDefault();
+      if (isLoading) return;
+
+      const submitButton = event.target.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+      submitButton.classList.add('btn-loading');
+      isLoading = true;
+
+      const title = document.getElementById('project-name').value || 'Untitled';
+      const editorContent = document.getElementById('project-description-editor');
+      
+      // Remove placeholder if it exists
+      if (editorContent.querySelector('span') && editorContent.querySelector('span').style.color === '#999') {
+        editorContent.innerHTML = '';
+      }
+      
+      const note = editorContent.innerHTML;
+      const tagSelect = document.getElementById('project-tag');
+      const customTagInput = document.getElementById('custom-tag-input');
+
+      let tag = tagSelect.value;
+      if (tag === 'custom') {
+        tag = customTagInput.value.trim();
+        if (tag) {
+          if (!Array.from(tagSelect.options).some(option => option.value === tag)) {
+            const newOption = new Option(tag, tag);
+            tagSelect.add(newOption, 1);
+          }
+        } else {
+          tag = '';
+        }
+      }
+
+      const noteWithTag = tag ? `${note}\nTag: ${tag}` : note;
+
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('note', noteWithTag);
+
+      showToast('Creating project...', 'loading');
+
+      fetch('/main', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          if (mockProjectElement) {
+            mockProjectElement.remove();
+            mockProjectElement = null;
+          }
+          closeNewProjectModal();
+          fetchProjects();
+          showToast('Project created successfully', 'success');
+        } else {
+          showToast('Failed to create project', 'error');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        showToast('Failed to create project', 'error');
+      })
+      .finally(() => {
+        submitButton.disabled = false;
+        submitButton.classList.remove('btn-loading');
+        isLoading = false;
+      });
+    }
+
+    function handleTagSelection() {
+      const tagSelect = document.getElementById('project-tag');
+      const customTagInput = document.getElementById('custom-tag-input');
+
+      if (tagSelect.value === 'custom') {
+        customTagInput.style.display = 'block';
+        customTagInput.focus();
+      } else {
+        customTagInput.style.display = 'none';
+      }
+    }
+
+    function openSearchModal() {
+      document.getElementById('search-modal').classList.add('open');
+      document.getElementById('search-input').focus();
+      showSearchSkeletons();
+    }
+
+    function showSearchSkeletons() {
+      const searchResults = document.getElementById('search-results');
+      searchResults.innerHTML = '';
+      
+      for (let i = 0; i < 5; i++) {
+        searchResults.innerHTML += `
+          <div class="search-skeleton">
+            <div class="search-skeleton-icon"></div>
+            <div class="search-skeleton-text"></div>
+          </div>
+        `;
+      }
+    }
+
+    function handleSearch() {
+      const searchInput = document.getElementById('search-input');
+      const searchTerm = searchInput.value.toLowerCase();
+      
+      if (searchTimeout) {
+        clearTimeout(searchTimeout);
+      }
+      
+      showSearchSkeletons();
+      
+      searchTimeout = setTimeout(() => {
+        fetch('https://script.google.com/macros/s/AKfycbyvtHc34HgLZ7IKCUT-57cuXrAlp53RhDM4pOCAyjm8Z17iJ6Rrgw1lvBVRxlnqTbs/exec')
+          .then(response => response.json())
+          .then(data => {
+            const searchResults = document.getElementById('search-results');
+            searchResults.innerHTML = '';
+            
+            const userProjects = data.data.filter(project => project.Username === currentUser);
+            const filteredProjects = userProjects.filter(project => 
+              project.Title.toLowerCase().includes(searchTerm) || 
+              project.Note.toLowerCase().includes(searchTerm)
+            );
+            
+            if (filteredProjects.length === 0) {
+              searchResults.innerHTML = `
+                <div class="search-result-item">
+                  <i class="fas fa-info-circle"></i>
+                  No results found
+                </div>
+              `;
+              return;
+            }
+            
+            filteredProjects.forEach(project => {
+              const resultItem = document.createElement('div');
+              resultItem.className = 'search-result-item';
+              resultItem.innerHTML = `
+                <i class="far fa-file"></i>
+                <span>${project.Title}</span>
+              `;
+              resultItem.onclick = () => {
+                document.getElementById('search-modal').classList.remove('open');
+                openProjectView(project);
+              };
+              searchResults.appendChild(resultItem);
+            });
+          })
+          .catch(error => {
+            console.error('Error fetching projects:', error);
+            const searchResults = document.getElementById('search-results');
+            searchResults.innerHTML = `
+              <div class="search-result-item">
+                <i class="fas fa-exclamation-triangle"></i>
+                Error fetching projects
+              </div>
+            `;
+          });
+      }, 300);
+    }
+
+    document.addEventListener('click', (event) => {
+      const searchModal = document.getElementById('search-modal');
+      const searchIcon = document.querySelector('.search-icon');
+      
+      if (!event.target.closest('.search-modal-content') && 
+          !event.target.closest('.search-icon') && 
+          searchModal.classList.contains('open')) {
+        searchModal.classList.remove('open');
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && 
+          document.getElementById('search-modal').classList.contains('open')) {
+        document.getElementById('search-modal').classList.remove('open');
+      }
+    });
+
+    let projectToDelete = null;
+
+    function deleteProject(title) {
+      projectToDelete = title;
+      document.getElementById('delete-confirm-modal').style.display = 'flex';
+    }
+
+    function confirmDelete() {
+      if (projectToDelete) {
+        const formData = new FormData();
+        formData.append('action', 'deleteProject');
+        formData.append('username', currentUser);
+        formData.append('title', projectToDelete);
+
+        showToast('Deleting project...', 'loading');
+
+        fetch('/main', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            fetchProjects();
+            showToast('Project deleted successfully', 'success');
+            
+            // If the deleted project is currently open, go back to welcome screen
+            if (currentProject && currentProject.Title === projectToDelete) {
+              goBack();
+            }
+          } else {
+            showToast('Failed to delete project', 'error');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          showToast('Failed to delete project', 'error');
+        });
+
+        cancelDelete();
+      }
+    }
+
+    function cancelDelete() {
+      projectToDelete = null;
+      document.getElementById('delete-confirm-modal').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
