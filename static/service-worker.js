@@ -2,7 +2,8 @@ const CACHE_NAME = "projxs-cache-v1";
 const urlsToCache = [
   "/",
   "/main",
-  "/terms.html",
+  "/main.html",
+  "/main2.html",
   "/static/icons/icon-512x512.png",
   "/static/manifest.json"
 ];
