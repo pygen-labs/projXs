@@ -149,7 +149,7 @@ app.secret_key = 'pygen-and-co-8113261-2024-projXs'
 GSHEET_URL = "https://script.google.com/macros/s/AKfycbyvtHc34HgLZ7IKCUT-57cuXrAlp53RhDM4pOCAyjm8Z17iJ6Rrgw1lvBVRxlnqTbs/exec"
 
 # Early Access Email
-EARLY_ACCESS_EMAILS = ["yawark498@gmail.com", "ameerhamza.khan@pygen.co"]
+EARLY_ACCESS_EMAILS = ["yawark498@gmail.com", "ameerhamza.khan@pygen.co", "tubabshr@gmail.com"]
 
 # Helper function for sending POST requests
 def send_post_request(action, params):
