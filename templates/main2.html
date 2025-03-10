@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <link rel="manifest" href="/static/manifest.json">
+  <link rel="manifest" href="/static/manifest.json">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ProjXs Desktop</title>
@@ -78,11 +78,21 @@
       flex: 1;
       overflow-y: auto;
       margin-bottom: 60px; /* Space for footer */
-      max-height: calc(100vh - 150px); /* Fixed: Allow full scrolling */
+      max-height: calc(100vh - 150px); /* Allow full scrolling */
+      scrollbar-width: thin; /* For Firefox */
     }
 
     .sidebar .menu::-webkit-scrollbar {
-      display: none;
+      width: 6px;
+    }
+
+    .sidebar .menu::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.2);
+      border-radius: 3px;
+    }
+
+    .sidebar .menu::-webkit-scrollbar-track {
+      background-color: transparent;
     }
 
     .sidebar .menu li {
@@ -111,6 +121,7 @@
       padding: 0;
     }
 
+    /* FIXED: Improved project item display */
     .project-item {
       display: flex;
       align-items: center;
@@ -120,6 +131,10 @@
       cursor: pointer;
       transition: background-color var(--transition-speed);
       background-color: #f8f9fa !important;
+      position: relative;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
 
     .project-item:hover {
@@ -131,6 +146,14 @@
       margin-right: 12px;
       font-size: 16px;
       font-weight: normal;
+    }
+    /* FIXED: Ensure project title is properly truncated */
+    .project-item span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 150px; /* Limit width to ensure buttons are visible */
+      display: inline-block;
     }
 
     .file-icon {
@@ -789,9 +812,17 @@
       max-height: 0;
     }
 
+    /* FIXED: Improved project actions display */
     .project-actions {
       display: none;
       margin-left: auto;
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(248, 249, 250, 0.8);
+      border-radius: 4px;
+      padding: 2px;
     }
 
     .project-item:hover .project-actions {
@@ -1188,68 +1219,6 @@
       background-color: transparent !important;
     }
     
-    /* Responsive styles */
-    @media (max-width: 768px) {
-      .sidebar {
-        position: fixed;
-        left: -250px;
-        top: 0;
-        bottom: 0;
-        z-index: 1000;
-      }
-
-      .sidebar.closed {
-        left: 0;
-      }
-
-      .sidebar .footer {
-        width: calc(var(--sidebar-width) - 1px);
-      }
-
-      .main-content {
-        margin-left: 0;
-      }
-
-      .main-content.shifted {
-        margin-left: 250px;
-      }
-
-      .toggle-sidebar {
-        display: block;
-      }
-
-      .modal-content {
-        width: 100%;
-        padding: 20px;
-      }
-
-      .form-group input[type="text"],
-      .form-group textarea {
-        font-size: 16px;
-      }
-
-      .project-view {
-        padding: 20px;
-      }
-
-      .project-header h1 {
-        font-size: 24px;
-      }
-
-      .formatting-toolbar {
-        padding: 4px 6px;
-      }
-
-      .formatting-toolbar button {
-        padding: 3px;
-        font-size: 12px;
-      }
-      
-      /* Adjust content padding for mobile */
-      :root {
-        --content-padding: 20px;
-      }
-    }
     /* Centered & Rounded Search Modal */
 .search-modal {
   display: none;
@@ -1516,7 +1485,7 @@
   </div>
 
   <script>
-     if ('serviceWorker' in navigator) {
+    if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/static/service-worker.js')
       .then(registration => {
         console.log('Service Worker registered with scope:', registration.scope);
@@ -1793,56 +1762,70 @@
     }
 
     function fetchProjects() {
-      const projectsList = document.getElementById('projects-list');
-      const loader = document.getElementById('sidebar-loader');
+  const projectsList = document.getElementById('projects-list');
+  const loader = document.getElementById('sidebar-loader');
+  
+  projectsList.innerHTML = '';
+  loader.style.display = 'block'; // Show loader
+  
+  fetch('https://script.google.com/macros/s/AKfycbyvtHc34HgLZ7IKCUT-57cuXrAlp53RhDM4pOCAyjm8Z17iJ6Rrgw1lvBVRxlnqTbs/exec')
+    .then(response => response.json())
+    .then(data => {
+      loader.style.display = 'none'; // Hide loader
       
-      projectsList.innerHTML = '';
-      loader.style.display = 'block'; // Show loader
+      const userProjects = data.data.filter(project => project.Username === currentUser && project.Status !== 'Deleted');
       
-      fetch('https://script.google.com/macros/s/AKfycbyvtHc34HgLZ7IKCUT-57cuXrAlp53RhDM4pOCAyjm8Z17iJ6Rrgw1lvBVRxlnqTbs/exec')
-        .then(response => response.json())
-        .then(data => {
-          loader.style.display = 'none'; // Hide loader
+      // Sort projects by most recent first (assuming there's a timestamp field)
+      // If there's no timestamp, you can remove this line
+      userProjects.sort((a, b) => new Date(b.Timestamp || 0) - new Date(a.Timestamp || 0));
+      
+      const organizedProjects = {
+        untagged: []
+      };
+      
+      // Process all projects without limiting
+      userProjects.forEach(project => {
+        if (project.Title) {
+          const noteContent = project.Note || '';
+          const tagMatch = noteContent.match(/\nTag: (.+)$/);
+          const tag = tagMatch ? tagMatch[1] : 'untagged';
           
-          const userProjects = data.data.filter(project => project.Username === currentUser && project.Status !== 'Deleted');
-          
-          const organizedProjects = {
-            untagged: []
-          };
-          
-          userProjects.forEach(project => {
-            if (project.Title) {
-              const noteContent = project.Note;
-              const tagMatch = noteContent.match(/\nTag: (.+)$/);
-              const tag = tagMatch ? tagMatch[1] : 'untagged';
-              
-              if (!organizedProjects[tag]) {
-                organizedProjects[tag] = [];
-              }
-              organizedProjects[tag].push(project);
-            }
-          });
-          
-          renderProjects('Projects', organizedProjects.untagged);
-          delete organizedProjects.untagged;
-          
-          Object.entries(organizedProjects).forEach(([tag, projects]) => {
-            if (projects.length > 0) {
-              renderProjects(tag, projects);
-            }
-          });
-
-          if (userProjects.length === 0) {
-            const noProjectsMessage = document.createElement('li');
-            noProjectsMessage.textContent = "No projects found.";
-            projectsList.appendChild(noProjectsMessage);
+          if (!organizedProjects[tag]) {
+            organizedProjects[tag] = [];
           }
-        })
-        .catch(error => {
-          loader.style.display = 'none'; // Hide loader on error
-          console.error('Error:', error);
-        });
-    }
+          organizedProjects[tag].push(project);
+        }
+      });
+      
+      // Render untagged projects first
+      renderProjects('Projects', organizedProjects.untagged);
+      delete organizedProjects.untagged;
+      
+      // Then render all tagged sections
+      Object.entries(organizedProjects).forEach(([tag, projects]) => {
+        if (projects.length > 0) {
+          renderProjects(tag, projects);
+        }
+      });
+
+      if (userProjects.length === 0) {
+        const noProjectsMessage = document.createElement('li');
+        noProjectsMessage.textContent = "No projects found.";
+        projectsList.appendChild(noProjectsMessage);
+      }
+    })
+    .catch(error => {
+      loader.style.display = 'none'; // Hide loader on error
+      console.error('Error:', error);
+      
+      // Show error message in sidebar
+      projectsList.innerHTML = `
+        <li style="color: red; padding: 10px;">
+          Error loading projects. Please try again.
+        </li>
+      `;
+    });
+}
 
     function toggleSection(header) {
       const content = header.nextElementSibling;
@@ -1852,60 +1835,80 @@
     }
 
     function renderProjects(sectionName, projects) {
-      const projectsList = document.getElementById('projects-list');
+  const projectsList = document.getElementById('projects-list');
+  
+  if (!projects || projects.length === 0) return;
+  
+  const sectionDiv = document.createElement('div');
+  sectionDiv.className = 'project-section';
+
+  if (sectionName !== 'Projects') {
+    const sectionHeader = document.createElement('div');
+    sectionHeader.className = 'section-header expanded';
+    sectionHeader.innerHTML = `
+      <i class="fas fa-chevron-right"></i>
+      <span class="section-label">${sectionName}</span>
+    `;
+    
+    sectionHeader.onclick = () => toggleSection(sectionHeader);
+    sectionDiv.appendChild(sectionHeader);
+  }
+
+  const sectionContent = document.createElement('div');
+  sectionContent.className = 'section-content';
+
+  // Make sure we process ALL projects in the array
+  projects.forEach(project => {
+    if (project && project.Status !== 'Deleted') {
+      // Sanitize project title to prevent HTML content from showing
+      const sanitizedTitle = document.createElement('div');
+      sanitizedTitle.textContent = project.Title || 'Untitled';
+      const cleanTitle = sanitizedTitle.textContent;
       
-      if (projects.length === 0) return;
+      const projectItem = document.createElement('li');
+      projectItem.className = 'project-item';
+      projectItem.innerHTML = `
+        <i class="far fa-file"></i>
+        <span title="${cleanTitle}">${cleanTitle}</span>
+        <div class="project-actions">
+          <button class="project-action-btn edit-btn" title="Edit Project">
+           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: black;">
+              <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+            </svg>
+          </button>
+          <button class="project-action-btn delete-btn" title="Delete Project">
+          <i class="fas fa-trash-alt" style="color: black;"></i>
+          </button>
+        </div>
+      `;
       
-      const sectionDiv = document.createElement('div');
-      sectionDiv.className = 'project-section';
-
-      if (sectionName !== 'Projects') {
-        const sectionHeader = document.createElement('div');
-        sectionHeader.className = 'section-header expanded';
-        sectionHeader.innerHTML = `
-          <i class="fas fa-chevron-right"></i>
-          <span class="section-label">${sectionName}</span>
-        `;
-        
-        sectionHeader.onclick = () => toggleSection(sectionHeader);
-        sectionDiv.appendChild(sectionHeader);
-      }
-
-      const sectionContent = document.createElement('div');
-      sectionContent.className = 'section-content';
-
-      projects.forEach(project => {
-        if (project.Status !== 'Deleted') {
-          const projectItem = document.createElement('li');
-          projectItem.className = 'project-item';
-          projectItem.innerHTML = `
-            <i class="far fa-file"></i>
-            <span>${project.Title}</span>
-            <div class="project-actions">
-              <button class="project-action-btn edit-btn" onclick='openProjectView(${JSON.stringify(project)})' style="background: transparent;">
-               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: black;">
-                  <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
-                </svg>
-              </button>
-              <button class="project-action-btn delete-btn" onclick="deleteProject('${project.Title}')" style="background: transparent; border: none;">
-              <i class="fas fa-trash-alt" style="color: black;"></i>
-              </button>
-            </div>
-          `;
-          
-          projectItem.onclick = (e) => {
-            if (!e.target.closest('.project-actions')) {
-              openProjectView(project);
-            }
-          };
-          
-          sectionContent.appendChild(projectItem);
+      // Improved event handling for project items
+      projectItem.addEventListener('click', function(e) {
+        if (!e.target.closest('.project-actions')) {
+          openProjectView(project);
         }
       });
-
-      sectionDiv.appendChild(sectionContent);
-      projectsList.appendChild(sectionDiv);
+      
+      // Separate event handlers for edit and delete buttons
+      const editBtn = projectItem.querySelector('.edit-btn');
+      editBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        openProjectView(project);
+      });
+      
+      const deleteBtn = projectItem.querySelector('.delete-btn');
+      deleteBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        deleteProject(project.Title);
+      });
+      
+      sectionContent.appendChild(projectItem);
     }
+  });
+
+  sectionDiv.appendChild(sectionContent);
+  projectsList.appendChild(sectionDiv);
+}
 
     function goBack() {
       document.getElementById('project-view').classList.remove('open');
