@@ -130,7 +130,9 @@
 # def logout():
 #     session.clear()
 #     return redirect(url_for('index'))
-
+# @app.route('/pricing')
+# def pricing():
+#     return render_template('pricing.html')
 # if __name__ == "__main__":
 #     # app.run(debug=False, port=5000, host='0.0.0.0')
 #     app.run()
@@ -283,6 +285,10 @@ def get_motivational_message(user_status, total_notes):
 def logout():
     session.clear()
     return redirect(url_for('index'))
+
+@app.route('/pricing')
+def pricing():
+    return render_template('pricing.html')
 
 if __name__ == "__main__":
     app.run()

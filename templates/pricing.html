@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="manifest" href="/static/manifest.json">
+    <link rel="icon" href="static/fav-icon.png" type="image/png"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProjXs Access Plans</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            color: #333;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        p {
+            font-size: 16px;
+            margin-bottom: 30px;
+            text-align: center;
+            color: #666;
+        }
+
+        /* Toggle styles */
+        .toggle-container {
+            display: flex;
+            background-color: #f0f0f0;
+            border-radius: 30px;
+            padding: 4px;
+            margin-bottom: 40px;
+            width: 220px;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            padding: 8px 16px;
+            text-align: center;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 14px;
+        }
+
+        .toggle-btn.active {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Plans container */
+        .plans-container {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Plan card styles */
+        .plan-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 30px;
+            width: 100%;
+            max-width: 350px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .plan-card.highlighted {
+            background-color: #f0faf7;
+            border-color: #10b981;
+        }
+
+        .plan-name {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .popular-tag {
+            background-color: #10b981;
+            color: white;
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        .price-container {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: baseline;
+        }
+
+        .currency {
+            font-size: 20px;
+            font-weight: 500;
+            margin-right: 2px;
+        }
+
+        .price {
+            font-size: 48px;
+            font-weight: 600;
+            line-height: 1;
+        }
+
+        .price-period {
+            font-size: 14px;
+            color: #666;
+            margin-left: 5px;
+        }
+
+        .plan-description {
+            margin-bottom: 25px;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #555;
+        }
+
+        /* Button styles */
+        .btn {
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            text-align: center;
+            border: none;
+            margin: 15px 0;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background-color: #10b981;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0d9668;
+        }
+
+        .btn-secondary {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e0e0e0;
+        }
+
+        .btn-dark {
+            background-color: #111;
+            color: white;
+        }
+
+        .btn-dark:hover {
+            background-color: #333;
+        }
+
+        /* Feature list styles */
+        .features-list {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .feature-item {
+            display: flex;
+            margin-bottom: 15px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .feature-item:before {
+            content: "✓";
+            margin-right: 10px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        /* Footer styles */
+        .footer-text {
+            font-size: 14px;
+            color: #666;
+            margin-top: 15px;
+        }
+
+        .footer-link {
+            color: #333;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .enterprise-section {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            width: 100%;
+        }
+
+        .enterprise-text {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .limits-text {
+            font-size: 14px;
+            color: #666;
+            margin-top: 15px;
+        }
+
+        /* View toggle */
+        .view-container {
+            display: none;
+        }
+
+        .view-container.active {
+            display: block;
+            width: 100%;
+        }
+
+        /* Team plan specific */
+        .team-plan-container {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .team-plan-card {
+            max-width: 450px;
+        }
+        .help-link {
+        color: black;
+        text-decoration: underline;
+        font-weight: 500; /* Optional: Slightly bold for better visibility */
+    }
+
+    .help-link:hover {
+        text-decoration: none; /* Optional: Remove underline on hover */
+    }
+    </style>
+</head>
+<body>
+    <h1>ProjXs Access Plans</h1>
+    <p>ProjXs is free for everyone. Upgrade for early access to exclusive features.</p>
+
+    <div class="toggle-container">
+        <div class="toggle-btn active" id="personal-toggle">Personal</div>
+        <div class="toggle-btn" id="business-toggle">Business</div>
+    </div>
+
+    <!-- Personal Plans View -->
+    <div class="view-container active" id="personal-view">
+        <div class="plans-container">
+            <!-- Free Plan -->
+            <div class="plan-card">
+                <div class="plan-name">Free</div>
+                <div class="price-container">
+                    <span class="currency">$</span>
+                    <span class="price">0</span>
+                    <span class="price-period">USD/month</span>
+                </div>
+                <div class="plan-description">ProjXs is always free. Active users get early access to new features.</div>
+                <button class="btn btn-secondary">You're on this plan</button>
+                <ul class="features-list">
+                    <li class="feature-item">Create, Edit & Delete Projects</li>
+                    <li class="feature-item">Limited Custom Workspaces</li>
+                    <li class="feature-item">Organize and Manage Projects</li>
+                </ul>
+                <div class="footer-text">Need help? 
+                    <a href="https://help.pygen.in" class="footer-link" target="_blank">Visit Support</a>
+                </div>
+            </div>
+
+            <!-- Plus Plan -->
+            <div class="plan-card highlighted">
+                <div class="plan-name">Plus <span class="popular-tag">Beta Available</span></div>
+                <div class="price-container">
+                    <span class="currency">$</span>
+                    <span class="price">0</span>
+                    <span class="price-period">USD/month</span>
+                </div>
+                <div class="plan-description">Refined interface with improved formatting.</div>
+                <button class="btn btn-primary" id="get-beta-btn">
+                    Get Beta
+                </button>                
+                <ul class="features-list">
+                    <li class="feature-item">Everything in Free</li>
+                    <li class="feature-item">Enhanced UI for a smoother experience</li>
+                    <li class="feature-item">Advanced formatting for better organization</li>
+                    <li class="feature-item">Exclusive access to new features before public release</li>
+                </ul>
+                <div class="footer-text">Beta users help shape the future of ProjXs.</div>
+            </div>
+
+            <!-- Pro Plan -->
+            <div class="plan-card">
+                <div class="plan-name">Pro</div>
+                <div class="price-container">
+                    <span class="currency">$</span>
+                    <span class="price">-</span>
+                    <span class="price-period">USD/month</span>
+                </div>
+                <div class="plan-description">In research—built for advanced productivity and customization.</div>
+                <button class="btn btn-dark" disabled>Coming Soon</button>
+                <ul class="features-list">
+                    <li class="feature-item">Everything in Plus</li>
+                    <li class="feature-item">Advanced features under development</li>
+                    <li class="feature-item">Tailored for power users</li>
+                </ul>
+                <div class="footer-text">Interested? Stay updated on ProjXs Pro.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Business Plans View (Team) -->
+    <div class="view-container" id="business-view">
+        <div class="team-plan-container">
+            <div class="plan-card team-plan-card">
+                <div class="plan-name">Team</div>
+                <div class="price-container">
+                    <span class="currency">$</span>
+                    <span class="price">-</span>
+                    <span class="price-period">USD/month</span>
+                </div>
+                <div class="plan-description">A collaborative workspace for teams—currently in research.</div>
+                <button class="btn btn-dark"disabled>Coming Soon</button>
+                <ul class="features-list">
+                    <li class="feature-item">Everything in Plus</li>
+                    <li class="feature-item">Team collaboration features (in development)</li>
+                    <li class="feature-item">Advanced workspace tools (coming soon)</li>
+                </ul>
+                <div class="footer-text">Interested? Stay updated on ProjXs Team.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="enterprise-section">
+        <div class="enterprise-text">Need help or have questions?</div>
+        <div class="enterprise-text">Visit our <span class="help-link+"><a href="https://help.pygen.in" target="_blank">Help Center</a></span></div>
+    </div>   
+    <script>
+        document.getElementById("get-beta-btn").addEventListener("click", function() {
+            window.location.href = "https://early.pygen.in";
+        });
+    </script>
+    <script>
+        // Toggle between Personal and Business views
+        const personalToggle = document.getElementById('personal-toggle');
+        const businessToggle = document.getElementById('business-toggle');
+        const personalView = document.getElementById('personal-view');
+        const businessView = document.getElementById('business-view');
+
+        personalToggle.addEventListener('click', function() {
+            personalToggle.classList.add('active');
+            businessToggle.classList.remove('active');
+            personalView.classList.add('active');
+            businessView.classList.remove('active');
+        });
+
+        businessToggle.addEventListener('click', function() {
+            businessToggle.classList.add('active');
+            personalToggle.classList.remove('active');
+            businessView.classList.add('active');
+            personalView.classList.remove('active');
+        });
+    </script>
+</body>
+</html>

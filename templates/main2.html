@@ -4,7 +4,7 @@
   <link rel="manifest" href="/static/manifest.json">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ProjXs Plus (Beta) Desktop</title>
+  <title>ProjXs Desktop</title>
   <link rel="icon" href="static/fav-icon.png" type="image/png"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
   <style>
@@ -678,121 +678,6 @@
       }
     }
 
-    .search-icon {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      cursor: pointer;
-      padding: 8px;
-      border-radius: 50%;
-      transition: background-color var(--transition-speed);
-    }
-
-    .search-icon:hover {
-      background-color: var(--accent-color);
-    }
-
-    .search-modal-content {
-      padding: 0 !important;
-      max-height: 80vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .search-header {
-      padding: 16px;
-      border-bottom: 1px solid var(--accent-color);
-    }
-
-    .search-header input {
-      width: calc(100% - 40px);
-      padding: 10px;
-      font-size: 14px;
-      border: none;
-      border-radius: var(--border-radius);
-      background-color: var(--accent-color);
-      margin-right: 8px;
-    }
-
-    .search-header input:focus {
-      outline: none;
-      background-color: #eeeeee;
-    }
-
-    .search-header button {
-      padding: 10px;
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
-
-    .search-results {
-      flex: 1;
-      overflow-y: auto;
-      padding: 16px;
-    }
-
-    .search-result-item {
-      display: flex;
-      align-items: center;
-      padding: 12px;
-      border-radius: var(--border-radius);
-      cursor: pointer;
-      transition: background-color var(--transition-speed);
-    }
-
-    .search-result-item:hover {
-      background-color: var(--accent-color);
-    }
-
-    .search-result-item i {
-      margin-right: 12px;
-      color: #666;
-    }
-
-    .search-skeleton {
-      display: flex;
-      align-items: center;
-      padding: 12px;
-      margin-bottom: 8px;
-    }
-
-    .search-skeleton-icon {
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      margin-right: 12px;
-      background-color: var(--accent-color);
-      animation: skeleton-loading 1s infinite alternate;
-    }
-
-    .search-skeleton-text {
-      height: 16px;
-      width: 200px;
-      border-radius: 4px;
-      background-color: var(--accent-color);
-      animation: skeleton-loading 1s infinite alternate;
-    }
-
-    .section-header {
-      padding: 8px 0 8px 20px;
-      cursor: pointer;
-      opacity: 0.6;
-      transition: opacity 0.2s;
-    }
-
-    .section-header:hover {
-      opacity: 1;
-    }
-
-    .section-header i {
-      margin-right: 8px;
-      font-size: 12px;
-      transition: transform 0.2s;
-      transform-origin: center;
-      transform: rotate(90deg);
-    }
-
     .section-header.collapsed i {
       transform: rotate(0deg);
     }
@@ -1218,92 +1103,7 @@
     .project-action-btn.edit-btn:hover {
       background-color: transparent !important;
     }
-    
-    /* Centered & Rounded Search Modal */
-.search-modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(4px);
-  z-index: 1000;
-  align-items: center;
-  justify-content: center;
-}
 
-/* Open State */
-.search-modal.open {
-  display: flex;
-}
-
-/* Medium-Wide Rounded Modal */
-.search-modal-content {
-  background: var(--secondary-color);
-  padding: 28px;
-  border-radius: 28px; /* Rounded */
-  width: 85%;
-  max-width: 550px; /* Medium-wide */
-  min-height: 250px;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.15);
-}
-
-/* Search Header (Centered Input) */
-.search-header {
-  display: flex;
-  align-items: center;
-  padding: 14px;
-  border-radius: 20px; /* Rounded */
-  background: var(--accent-color);
-  width: 90%; /* Keep input inside modal */
-  max-width: 500px; /* Ensure it doesn’t go outside */
-  margin: 0 auto; /* Center inside modal */
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);
-}
-
-/* Fully Rounded Input */
-.search-header input {
-  flex: 1;
-  padding: 12px 16px;
-  font-size: 16px;
-  border: none;
-  border-radius: 50px; /* Fully rounded */
-  background-color: var(--secondary-color);
-  transition: background-color var(--transition-speed), box-shadow var(--transition-speed);
-}
-
-/* Input Focus */
-.search-header input:focus {
-  outline: none;
-  background-color: #f8f8f8;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
-}
-
-/* Close Button */
-.search-header button {
-  padding: 10px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  border-radius: 50%;
-  transition: background-color var(--transition-speed);
-}
-
-.search-header button:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-}
-
-/* Search Results */
-.search-results {
-  flex: 1;
-  overflow-y: auto;
-  padding: 16px;
-  text-align: center;
-}
   </style>
 </head>
 <body>
@@ -1322,9 +1122,6 @@
       <button class="toggle-sidebar" onclick="toggleSidebar()">
         <i class="fas fa-chevron-left"></i>
       </button>
-      <div class="search-icon" onclick="openSearchModal()">
-        <i class="fas fa-search"></i>
-      </div>
       <ul class="menu">
         <li class="recent">Projects</li>
         <div id="sidebar-loader" class="sidebar-loader"></div>
@@ -1357,10 +1154,10 @@
           <div class="notification-badge" id="notification-badge" style="display: none;">1</div>
         </div>
         <div id="welcome-message" class="welcome-container">
-          <h2>Welcome to <strong>ProjXs Plus</strong>, <span class="welcome-username">{{ username }}</span>!</h2>
-          <p>You're part of our exclusive beta testing team. Experience the latest features and help shape the future of ProjXs.</p>
+          <h2>Welcome, <span class="welcome-username">{{ username }}</span>!</h2>
+          <p>Create and manage your projects with ease. Click the button below to get started.</p>
           <button class="btn btn-primary" onclick="openNewProjectModal()">Create New Project</button>
-      </div>      
+        </div>
         <div class="project-view" id="project-view">
           <div class="project-header">
             <button class="back-button" onclick="goBack()">
@@ -1447,25 +1244,6 @@
               <button type="submit" class="btn btn-primary">Create</button>
             </div>
           </form>
-        </div>
-      </div>
-      <div class="search-modal" id="search-modal">
-        <div class="modal-content search-modal-content">
-          <div class="search-header">
-            <input 
-              type="text" 
-              id="search-input" 
-              placeholder="Search notes..." 
-              autocomplete="off"
-              oninput="handleSearch()"
-            >
-            <button onclick="closeSearchModal()">
-              <i class="fas fa-times"></i>
-            </button>
-          </div>
-          <div class="search-results" id="search-results">
-            <!-- Search results will be populated here -->
-          </div>
         </div>
       </div>
       <div id="delete-confirm-modal" class="delete-confirm-modal">
@@ -1773,41 +1551,25 @@
     .then(data => {
       loader.style.display = 'none'; // Hide loader
       
-      const userProjects = data.data.filter(project => project.Username === currentUser && project.Status !== 'Deleted');
+      // Filter only active projects for the current user
+      const userProjects = data.data.filter(project => 
+        project.Username === currentUser && 
+        project.Status === 'Active' && 
+        project.Title && 
+        project.Title.trim() !== ''
+      );
       
-      // Sort projects by most recent first (assuming there's a timestamp field)
-      // If there's no timestamp, you can remove this line
-      userProjects.sort((a, b) => new Date(b.Timestamp || 0) - new Date(a.Timestamp || 0));
+      console.log(`Total projects found: ${userProjects.length}`);
       
-      const organizedProjects = {
-        untagged: []
-      };
+      // Create a flat list of all projects first (no categorization)
+      const allProjects = [...userProjects];
       
-      // Process all projects without limiting
-      userProjects.forEach(project => {
-        if (project.Title) {
-          const noteContent = project.Note || '';
-          const tagMatch = noteContent.match(/\nTag: (.+)$/);
-          const tag = tagMatch ? tagMatch[1] : 'untagged';
-          
-          if (!organizedProjects[tag]) {
-            organizedProjects[tag] = [];
-          }
-          organizedProjects[tag].push(project);
-        }
-      });
+      // Sort projects alphabetically by title for consistent display
+      allProjects.sort((a, b) => a.Title.localeCompare(b.Title));
       
-      // Render untagged projects first
-      renderProjects('Projects', organizedProjects.untagged);
-      delete organizedProjects.untagged;
+      // Render all projects in a single list
+      renderAllProjects(allProjects);
       
-      // Then render all tagged sections
-      Object.entries(organizedProjects).forEach(([tag, projects]) => {
-        if (projects.length > 0) {
-          renderProjects(tag, projects);
-        }
-      });
-
       if (userProjects.length === 0) {
         const noProjectsMessage = document.createElement('li');
         noProjectsMessage.textContent = "No projects found.";
@@ -1825,6 +1587,67 @@
         </li>
       `;
     });
+}
+
+function renderAllProjects(projects) {
+  const projectsList = document.getElementById('projects-list');
+  
+  if (!projects || projects.length === 0) return;
+  
+  // Create a container for all projects
+  const allProjectsContainer = document.createElement('div');
+  allProjectsContainer.className = 'all-projects-container';
+  
+  // Add each project to the container
+  projects.forEach(project => {
+    if (project && project.Status === 'Active' && project.Title) {
+      // Sanitize project title to prevent HTML content from showing
+      const sanitizedTitle = document.createElement('div');
+      sanitizedTitle.textContent = project.Title || 'Untitled';
+      const cleanTitle = sanitizedTitle.textContent;
+      
+      const projectItem = document.createElement('li');
+      projectItem.className = 'project-item';
+      projectItem.innerHTML = `
+        <i class="far fa-file"></i>
+        <span title="${cleanTitle}">${cleanTitle}</span>
+        <div class="project-actions">
+          <button class="project-action-btn edit-btn" title="Edit Project">
+           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: black;">
+              <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+            </svg>
+          </button>
+          <button class="project-action-btn delete-btn" title="Delete Project">
+          <i class="fas fa-trash-alt" style="color: black;"></i>
+          </button>
+        </div>
+      `;
+      
+      // Improved event handling for project items
+      projectItem.addEventListener('click', function(e) {
+        if (!e.target.closest('.project-actions')) {
+          openProjectView(project);
+        }
+      });
+      
+      // Separate event handlers for edit and delete buttons
+      const editBtn = projectItem.querySelector('.edit-btn');
+      editBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        openProjectView(project);
+      });
+      
+      const deleteBtn = projectItem.querySelector('.delete-btn');
+      deleteBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        deleteProject(project.Title);
+      });
+      
+      allProjectsContainer.appendChild(projectItem);
+    }
+  });
+  
+  projectsList.appendChild(allProjectsContainer);
 }
 
     function toggleSection(header) {
@@ -2088,98 +1911,6 @@
       showSearchSkeletons();
     }
 
-    function showSearchSkeletons() {
-      const searchResults = document.getElementById('search-results');
-      searchResults.innerHTML = '';
-      
-      for (let i = 0; i < 5; i++) {
-        searchResults.innerHTML += `
-          <div class="search-skeleton">
-            <div class="search-skeleton-icon"></div>
-            <div class="search-skeleton-text"></div>
-          </div>
-        `;
-      }
-    }
-
-    function handleSearch() {
-      const searchInput = document.getElementById('search-input');
-      const searchTerm = searchInput.value.toLowerCase();
-      
-      if (searchTimeout) {
-        clearTimeout(searchTimeout);
-      }
-      
-      showSearchSkeletons();
-      
-      searchTimeout = setTimeout(() => {
-        fetch('https://script.google.com/macros/s/AKfycbyvtHc34HgLZ7IKCUT-57cuXrAlp53RhDM4pOCAyjm8Z17iJ6Rrgw1lvBVRxlnqTbs/exec')
-          .then(response => response.json())
-          .then(data => {
-            const searchResults = document.getElementById('search-results');
-            searchResults.innerHTML = '';
-            
-            const userProjects = data.data.filter(project => project.Username === currentUser);
-            const filteredProjects = userProjects.filter(project => 
-              project.Title.toLowerCase().includes(searchTerm) || 
-              project.Note.toLowerCase().includes(searchTerm)
-            );
-            
-            if (filteredProjects.length === 0) {
-              searchResults.innerHTML = `
-                <div class="search-result-item">
-                  <i class="fas fa-info-circle"></i>
-                  No results found
-                </div>
-              `;
-              return;
-            }
-            
-            filteredProjects.forEach(project => {
-              const resultItem = document.createElement('div');
-              resultItem.className = 'search-result-item';
-              resultItem.innerHTML = `
-                <i class="far fa-file"></i>
-                <span>${project.Title}</span>
-              `;
-              resultItem.onclick = () => {
-                document.getElementById('search-modal').classList.remove('open');
-                openProjectView(project);
-              };
-              searchResults.appendChild(resultItem);
-            });
-          })
-          .catch(error => {
-            console.error('Error fetching projects:', error);
-            const searchResults = document.getElementById('search-results');
-            searchResults.innerHTML = `
-              <div class="search-result-item">
-                <i class="fas fa-exclamation-triangle"></i>
-                Error fetching projects
-              </div>
-            `;
-          });
-      }, 300);
-    }
-
-    document.addEventListener('click', (event) => {
-      const searchModal = document.getElementById('search-modal');
-      const searchIcon = document.querySelector('.search-icon');
-      
-      if (!event.target.closest('.search-modal-content') && 
-          !event.target.closest('.search-icon') && 
-          searchModal.classList.contains('open')) {
-        searchModal.classList.remove('open');
-      }
-    });
-
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && 
-          document.getElementById('search-modal').classList.contains('open')) {
-        document.getElementById('search-modal').classList.remove('open');
-      }
-    });
-
     let projectToDelete = null;
 
     function deleteProject(title) {
@@ -2230,3 +1961,4 @@
   </script>
 </body>
 </html>
+
