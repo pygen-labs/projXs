@@ -150,7 +150,7 @@ app.secret_key = 'pygen-and-co-8113261-2024-projXs'
 GSHEET_URL = "https://script.google.com/macros/s/AKfycbyvtHc34HgLZ7IKCUT-57cuXrAlp53RhDM4pOCAyjm8Z17iJ6Rrgw1lvBVRxlnqTbs/exec"
 
 # Early Access Email
-EARLY_ACCESS_EMAILS = ["yawark498@gmail.com", "ameerhamza.khan@pygen.co", "tubabshr@gmail.com"]
+EARLY_ACCESS_EMAILS = []
 
 # Helper function for sending POST requests
 def send_post_request(action, params):
@@ -247,7 +247,7 @@ def main_page():
         )
     else:
         return render_template(
-            'main.html',  # Normal version
+            'main2.html',  # Normal version
             username=username,
             projects=projects,
             user_status=user_status,
