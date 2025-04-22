@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - Page Not Found | ProjXs Pro</title>
+  <link rel="icon" href="static/fav-icon.png" type="image/png"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary-color: #000000;
+      --secondary-color: #ffffff;
+      --accent-color: #f0f0f0;
+      --text-color: #000000;
+      --text-color-light: #6b6b6b;
+      --text-color-lighter: #8f8f8f;
+      --border-radius: 4px;
+      --transition-speed: 0.3s;
+      --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: var(--secondary-color);
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .error-code {
+      font-size: 8rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      position: relative;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--primary-color) 0%, #333 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-15px);
+      }
+      100% {
+        transform: translateY(0px);
+      }
+    }
+
+    .error-code::after {
+      content: "404";
+      position: absolute;
+      left: 0.1em;
+      top: 0.1em;
+      z-index: -1;
+      -webkit-text-fill-color: rgba(0, 0, 0, 0.1);
+      filter: blur(8px);
+    }
+
+    .error-message {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.8s ease forwards 0.3s;
+    }
+
+    .error-description {
+      font-size: 1.1rem;
+      color: var(--text-color-light);
+      text-align: center;
+      max-width: 600px;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.8s ease forwards 0.5s;
+    }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .btn {
+      padding: 0.8rem 1.8rem;
+      border-radius: 24px;
+      font-size: 1rem;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      outline: none;
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 0.5rem 1rem;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.8s ease forwards 0.7s;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: var(--secondary-color);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-secondary {
+      background-color: var(--accent-color);
+      color: var(--text-color);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+    }
+
+    .btn i {
+      margin-right: 0.5rem;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn:active {
+      transform: translateY(-1px);
+    }
+
+    .btn::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+      background-repeat: no-repeat;
+      background-position: 50%;
+      transform: scale(10, 10);
+      opacity: 0;
+      transition: transform 0.5s, opacity 1s;
+    }
+
+    .btn:active::after {
+      transform: scale(0, 0);
+      opacity: 0.3;
+      transition: 0s;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    /* Background elements */
+    .bg-elements {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .shape {
+      position: absolute;
+      border-radius: 50%;
+      background: linear-gradient(45deg, rgba(0, 0, 0, 0.03) 0%, rgba(0, 0, 0, 0.08) 100%);
+      animation: float-shape 15s ease-in-out infinite;
+    }
+
+    .shape-1 {
+      width: 300px;
+      height: 300px;
+      top: -150px;
+      right: -100px;
+      animation-delay: 0s;
+    }
+
+    .shape-2 {
+      width: 200px;
+      height: 200px;
+      bottom: -100px;
+      left: -50px;
+      animation-delay: 2s;
+    }
+
+    .shape-3 {
+      width: 150px;
+      height: 150px;
+      bottom: 20%;
+      right: 10%;
+      animation-delay: 4s;
+    }
+
+    .shape-4 {
+      width: 80px;
+      height: 80px;
+      top: 30%;
+      left: 10%;
+      animation-delay: 6s;
+    }
+
+    @keyframes float-shape {
+      0% {
+        transform: translateY(0) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-20px) rotate(5deg);
+      }
+      100% {
+        transform: translateY(0) rotate(0deg);
+      }
+    }
+
+    /* Interactive project board */
+    .project-board {
+      width: 100%;
+      max-width: 600px;
+      height: 250px;
+      position: relative;
+      margin: 1rem 0;
+      background-color: rgba(240, 240, 240, 0.5);
+      border-radius: 16px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.8s ease forwards 0.9s;
+    }
+
+    .board-title {
+      position: absolute;
+      top: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-color);
+      text-align: center;
+      width: 100%;
+    }
+
+    .board-instructions {
+      text-align: center;
+      color: var(--text-color-light);
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.8s ease forwards 0.8s;
+    }
+
+    .project-container {
+      position: absolute;
+      top: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      height: 150px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-wrap: wrap;
+      padding: 10px;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    .project-slot {
+      width: 80px;
+      height: 60px;
+      border: 2px dashed #ccc;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 5px;
+      transition: all 0.3s ease;
+    }
+
+    .project-slot.filled {
+      border: 2px solid #4CAF50;
+      background-color: rgba(76, 175, 80, 0.1);
+    }
+
+    .project-component {
+      position: absolute;
+      width: 70px;
+      height: 50px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      cursor: grab;
+      z-index: 3;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .project-component:active {
+      cursor: grabbing;
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .component-icon {
+      font-size: 1.5rem;
+      margin-bottom: 5px;
+    }
+
+    .component-name {
+      font-size: 0.7rem;
+      text-align: center;
+      color: var(--text-color-light);
+      max-width: 90%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .component-1 {
+      bottom: 20px;
+      left: 30px;
+      transform: rotate(-5deg);
+    }
+
+    .component-2 {
+      bottom: 30px;
+      right: 30px;
+      transform: rotate(5deg);
+    }
+
+    .component-3 {
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-3deg);
+    }
+
+    .component-4 {
+      bottom: 130px;
+      right: 80px;
+      transform: rotate(8deg);
+    }
+
+    /* Success message */
+    .success-message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 20px 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      z-index: 10;
+      display: none;
+    }
+
+    .success-message h3 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      color: #4CAF50;
+    }
+
+    .success-message p {
+      font-size: 1rem;
+      color: var(--text-color);
+      margin-bottom: 15px;
+    }
+
+    /* Confetti animation */
+    .confetti-container {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 2;
+      display: none;
+    }
+
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: #f2f2f2;
+      opacity: 0;
+    }
+
+    @keyframes confetti-fall {
+      0% {
+        opacity: 1;
+        top: -10%;
+        transform: translateX(0) rotate(0deg);
+      }
+      100% {
+        opacity: 0;
+        top: 100%;
+        transform: translateX(100px) rotate(360deg);
+      }
+    }
+
+    /* Footer */
+    .footer {
+      margin-top: auto;
+      padding: 1rem;
+      text-align: center;
+      color: var(--text-color-light);
+      font-size: 0.9rem;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards 1.3s;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* Responsive styles */
+    @media (max-width: 768px) {
+      .error-code {
+        font-size: 6rem;
+      }
+
+      .error-message {
+        font-size: 1.5rem;
+      }
+
+      .error-description {
+        font-size: 1rem;
+      }
+
+      .project-board {
+        height: 220px;
+      }
+
+      .project-container {
+        width: 90%;
+      }
+
+      .project-slot {
+        width: 70px;
+        height: 50px;
+      }
+
+      .project-component {
+        width: 60px;
+        height: 45px;
+      }
+
+      .component-icon {
+        font-size: 1.2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .error-code {
+        font-size: 5rem;
+      }
+
+      .error-message {
+        font-size: 1.2rem;
+      }
+
+      .container {
+        padding: 1rem;
+      }
+
+      .actions {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn {
+        margin: 0.5rem;
+        width: 100%;
+        max-width: 250px;
+      }
+
+      .project-board {
+        height: 200px;
+      }
+
+      .project-slot {
+        width: 60px;
+        height: 45px;
+        margin: 3px;
+      }
+
+      .project-component {
+        width: 55px;
+        height: 40px;
+      }
+
+      .component-icon {
+        font-size: 1rem;
+      }
+
+      .component-name {
+        font-size: 0.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-elements">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+    <div class="shape shape-4"></div>
+  </div>
+
+  <div class="container">
+    <h1 class="error-code">404</h1>
+    <h2 class="error-message">Page Not Found</h2>
+    <p class="error-description">Oops! The page you're looking for doesn't exist. Complete the project below to get back on track.</p>
+    
+    <p class="board-instructions">Drag the components to complete the project</p>
+    
+    <div class="project-board" id="project-board">
+      <div class="board-title">Project Dashboard</div>
+      
+      <div class="project-container" id="project-container">
+        <div class="project-slot" id="slot-1" data-component="1"></div>
+        <div class="project-slot" id="slot-2" data-component="2"></div>
+        <div class="project-slot" id="slot-3" data-component="3"></div>
+        <div class="project-slot" id="slot-4" data-component="4"></div>
+      </div>
+      
+      <div class="project-component component-1" draggable="true" id="component-1" data-component="1">
+        <i class="fas fa-chart-line component-icon" style="color: #4285F4;"></i>
+        <div class="component-name">Analytics</div>
+      </div>
+      
+      <div class="project-component component-2" draggable="true" id="component-2" data-component="2">
+        <i class="fas fa-code component-icon" style="color: #EA4335;"></i>
+        <div class="component-name">Code</div>
+      </div>
+      
+      <div class="project-component component-3" draggable="true" id="component-3" data-component="3">
+        <i class="fas fa-tasks component-icon" style="color: #FBBC05;"></i>
+        <div class="component-name">Tasks</div>
+      </div>
+      
+      <div class="project-component component-4" draggable="true" id="component-4" data-component="4">
+        <i class="fas fa-users component-icon" style="color: #34A853;"></i>
+        <div class="component-name">Team</div>
+      </div>
+      
+      <div class="success-message" id="success-message">
+        <h3><i class="fas fa-check-circle"></i> Project Complete!</h3>
+        <p>Your project is ready. Let's go back home.</p>
+        <a href="/" class="btn btn-primary" id="go-home-btn">
+          <i class="fas fa-home"></i>
+          Go to Home
+        </a>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a href="/" class="btn btn-primary">
+        <i class="fas fa-home"></i>
+        Back to Home
+      </a>
+      <button class="btn btn-secondary" id="reset-project-btn">
+        <i class="fas fa-redo-alt"></i>
+        Reset Project
+      </button>
+    </div>
+  </div>
+
+  <div class="confetti-container" id="confetti-container"></div>
+
+  <footer class="footer">
+    <p>&copy; 2025 ProjXs Pro. All rights reserved.</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const components = document.querySelectorAll('.project-component');
+      const slots = document.querySelectorAll('.project-slot');
+      const projectContainer = document.getElementById('project-container');
+      const successMessage = document.getElementById('success-message');
+      const resetProjectBtn = document.getElementById('reset-project-btn');
+      const goHomeBtn = document.getElementById('go-home-btn');
+      const confettiContainer = document.getElementById('confetti-container');
+      
+      let filledSlots = 0;
+      const totalSlots = slots.length;
+      
+      // Initialize drag and drop
+      components.forEach(component => {
+        component.addEventListener('dragstart', dragStart);
+        component.addEventListener('touchstart', touchStart, { passive: false });
+      });
+      
+      slots.forEach(slot => {
+        slot.addEventListener('dragover', dragOver);
+        slot.addEventListener('dragenter', dragEnter);
+        slot.addEventListener('dragleave', dragLeave);
+        slot.addEventListener('drop', drop);
+        slot.addEventListener('touchmove', touchMove, { passive: false });
+        slot.addEventListener('touchend', touchEnd);
+      });
+      
+      // Reset project button
+      resetProjectBtn.addEventListener('click', resetProject);
+      
+      // Drag functions
+      function dragStart(e) {
+        e.dataTransfer.setData('text/plain', e.target.dataset.component);
+        setTimeout(() => {
+          e.target.classList.add('dragging');
+        }, 0);
+      }
+      
+      function dragOver(e) {
+        e.preventDefault();
+        if (!this.classList.contains('filled')) {
+          this.style.backgroundColor = 'rgba(76, 175, 80, 0.1)';
+          this.style.borderColor = '#4CAF50';
+        }
+      }
+      
+      function dragEnter(e) {
+        e.preventDefault();
+        if (!this.classList.contains('filled')) {
+          this.style.backgroundColor = 'rgba(76, 175, 80, 0.1)';
+          this.style.borderColor = '#4CAF50';
+        }
+      }
+      
+      function dragLeave() {
+        if (!this.classList.contains('filled')) {
+          this.style.backgroundColor = '';
+          this.style.borderColor = '#ccc';
+        }
+      }
+      
+      function drop(e) {
+        e.preventDefault();
+        
+        if (this.classList.contains('filled')) return;
+        
+        const componentId = e.dataTransfer.getData('text/plain');
+        const component = document.getElementById(`component-${componentId}`);
+        const slotId = this.dataset.component;
+        
+        // Check if component matches slot
+        if (componentId === slotId) {
+          placeComponent(component, this);
+        } else {
+          this.style.backgroundColor = '';
+          this.style.borderColor = '#ccc';
+          
+          // Shake animation for wrong placement
+          this.style.animation = 'shake 0.5s ease';
+          setTimeout(() => {
+            this.style.animation = '';
+          }, 500);
+        }
+      }
+      
+      // Touch functions for mobile
+      let touchedComponent = null;
+      
+      function touchStart(e) {
+        e.preventDefault();
+        touchedComponent = this;
+        this.classList.add('dragging');
+        
+        // Store the initial touch position
+        const touch = e.touches[0];
+        this.initialX = touch.clientX - this.offsetLeft;
+        this.initialY = touch.clientY - this.offsetTop;
+      }
+      
+      function touchMove(e) {
+        e.preventDefault();
+        if (!touchedComponent) return;
+        
+        const touch = e.touches[0];
+        const x = touch.clientX - touchedComponent.initialX;
+        const y = touch.clientY - touchedComponent.initialY;
+        
+        touchedComponent.style.left = `${x}px`;
+        touchedComponent.style.top = `${y}px`;
+        
+        // Highlight slot if component is over it
+        slots.forEach(slot => {
+          const slotRect = slot.getBoundingClientRect();
+          const componentRect = touchedComponent.getBoundingClientRect();
+          
+          if (
+            componentRect.right > slotRect.left &&
+            componentRect.left < slotRect.right &&
+            componentRect.bottom > slotRect.top &&
+            componentRect.top < slotRect.bottom &&
+            !slot.classList.contains('filled')
+          ) {
+            slot.style.backgroundColor = 'rgba(76, 175, 80, 0.1)';
+            slot.style.borderColor = '#4CAF50';
+          } else if (!slot.classList.contains('filled')) {
+            slot.style.backgroundColor = '';
+            slot.style.borderColor = '#ccc';
+          }
+        });
+      }
+      
+      function touchEnd(e) {
+        if (!touchedComponent) return;
+        
+        let placed = false;
+        
+        // Check if component is over a slot
+        slots.forEach(slot => {
+          if (placed) return;
+          
+          const slotRect = slot.getBoundingClientRect();
+          const componentRect = touchedComponent.getBoundingClientRect();
+          
+          if (
+            componentRect.right > slotRect.left &&
+            componentRect.left < slotRect.right &&
+            componentRect.bottom > slotRect.top &&
+            componentRect.top < slotRect.bottom &&
+            !slot.classList.contains('filled')
+          ) {
+            // Check if component matches slot
+            if (touchedComponent.dataset.component === slot.dataset.component) {
+              placeComponent(touchedComponent, slot);
+              placed = true;
+            } else {
+              slot.style.backgroundColor = '';
+              slot.style.borderColor = '#ccc';
+              
+              // Shake animation for wrong placement
+              slot.style.animation = 'shake 0.5s ease';
+              setTimeout(() => {
+                slot.style.animation = '';
+              }, 500);
+            }
+          }
+        });
+        
+        if (!placed) {
+          // Reset component position
+          touchedComponent.style.transition = 'all 0.3s ease';
+          resetComponentPosition(touchedComponent);
+          setTimeout(() => {
+            touchedComponent.style.transition = '';
+          }, 300);
+        }
+        
+        // Reset slots that weren't filled
+        slots.forEach(slot => {
+          if (!slot.classList.contains('filled')) {
+            slot.style.backgroundColor = '';
+            slot.style.borderColor = '#ccc';
+          }
+        });
+        
+        touchedComponent.classList.remove('dragging');
+        touchedComponent = null;
+      }
+      
+      function placeComponent(component, slot) {
+        // Get slot position
+        const slotRect = slot.getBoundingClientRect();
+        const boardRect = document.getElementById('project-board').getBoundingClientRect();
+        
+        // Calculate position relative to the board
+        const x = slotRect.left - boardRect.left + (slotRect.width - component.offsetWidth) / 2;
+        const y = slotRect.top - boardRect.top + (slotRect.height - component.offsetHeight) / 2;
+        
+        // Place component in slot
+        component.style.transition = 'all 0.3s ease';
+        component.style.transform = 'rotate(0deg)';
+        component.style.left = `${x}px`;
+        component.style.top = `${y}px`;
+        component.style.pointerEvents = 'none';
+        component.style.zIndex = '1';
+        
+        // Mark slot as filled
+        slot.classList.add('filled');
+        
+        // Update filled slots count
+        filledSlots++;
+        
+        // Check if project is complete
+        if (filledSlots === totalSlots) {
+          setTimeout(() => {
+            showSuccessMessage();
+          }, 500);
+        }
+      }
+      
+      function resetComponentPosition(component) {
+        if (component.classList.contains('component-1')) {
+          component.style.bottom = '20px';
+          component.style.left = '30px';
+          component.style.top = 'auto';
+          component.style.transform = 'rotate(-5deg)';
+        } else if (component.classList.contains('component-2')) {
+          component.style.bottom = '30px';
+          component.style.right = '30px';
+          component.style.left = 'auto';
+          component.style.top = 'auto';
+          component.style.transform = 'rotate(5deg)';
+        } else if (component.classList.contains('component-3')) {
+          component.style.bottom = '80px';
+          component.style.left = '50%';
+          component.style.top = 'auto';
+          component.style.transform = 'translateX(-50%) rotate(-3deg)';
+        } else if (component.classList.contains('component-4')) {
+          component.style.bottom = '130px';
+          component.style.right = '80px';
+          component.style.left = 'auto';
+          component.style.top = 'auto';
+          component.style.transform = 'rotate(8deg)';
+        }
+      }
+      
+      function showSuccessMessage() {
+        successMessage.style.display = 'block';
+        showConfetti();
+      }
+      
+      function resetProject() {
+        // Reset components
+        components.forEach(component => {
+          component.style.transition = 'all 0.5s ease';
+          component.style.pointerEvents = 'auto';
+          component.style.zIndex = '3';
+          
+          resetComponentPosition(component);
+          
+          setTimeout(() => {
+            component.style.transition = '';
+          }, 500);
+        });
+        
+        // Reset slots
+        slots.forEach(slot => {
+          slot.classList.remove('filled');
+          slot.style.backgroundColor = '';
+          slot.style.borderColor = '#ccc';
+        });
+        
+        // Reset filled slots count
+        filledSlots = 0;
+        
+        // Hide success message
+        successMessage.style.display = 'none';
+      }
+      
+      // Confetti animation
+      function showConfetti() {
+        confettiContainer.style.display = 'block';
+        
+        // Create confetti pieces
+        for (let i = 0; i < 100; i++) {
+          createConfettiPiece();
+        }
+        
+        // Hide container after animation completes
+        setTimeout(() => {
+          confettiContainer.style.display = 'none';
+          confettiContainer.innerHTML = '';
+        }, 3000);
+      }
+
+      function createConfettiPiece() {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        
+        // Random position, color, and animation duration
+        const left = Math.random() * 100;
+        const width = Math.random() * 10 + 5;
+        const height = Math.random() * 10 + 5;
+        const duration = Math.random() * 3 + 2;
+        const delay = Math.random() * 0.5;
+        
+        // Random color
+        const colors = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', 
+                        '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4CAF50', 
+                        '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722'];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        
+        // Random shape
+        const borderRadius = Math.random() > 0.5 ? '50%' : '0';
+        
+        // Apply styles
+        confetti.style.left = `${left}%`;
+        confetti.style.width = `${width}px`;
+        confetti.style.height = `${height}px`;
+        confetti.style.backgroundColor = color;
+        confetti.style.borderRadius = borderRadius;
+        confetti.style.animation = `confetti-fall ${duration}s ease forwards ${delay}s`;
+        
+        confettiContainer.appendChild(confetti);
+      }
+      
+      // Add shake animation for wrong placements
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes shake {
+          0%, 100% { transform: translateX(0); }
+          10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+          20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+      `;
+      document.head.appendChild(style);
+      
+      // Handle window resize for responsive positioning
+      window.addEventListener('resize', function() {
+        // Only reposition components that haven't been placed in slots
+        components.forEach(component => {
+          if (component.style.pointerEvents !== 'none') {
+            resetComponentPosition(component);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

@@ -4,7 +4,7 @@
   <link rel="manifest" href="/static/manifest.json">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ProjXs Plus [Beta] Desktop</title>
+  <title>ProjXs Plus Desktop</title>
   <link rel="icon" href="static/fav-icon.png" type="image/png"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
   <style>
@@ -1103,7 +1103,121 @@
     .project-action-btn.edit-btn:hover {
       background-color: transparent !important;
     }
+/* ProjXs Dropdown Styles */
+.projxs-dropdown-container {
+  position: absolute;
+  top: 20px;
+  left: 295px; /* Slightly more right than before (was 270px) */
+  z-index: 1000;
+}
 
+.projxs-dropdown-trigger {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+.projxs-dropdown-trigger:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.projxs-dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 8px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  padding: 8px;
+  z-index: 1001;
+}
+
+.projxs-dropdown-container.open .projxs-dropdown-content {
+  display: block;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.projxs-dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  position: relative;
+}
+
+.projxs-dropdown-item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.projxs-dropdown-item.active {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.projxs-dropdown-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background-color: #f0f0f0;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+.projxs-dropdown-text {
+  flex: 1;
+}
+
+.projxs-dropdown-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+}
+
+.projxs-dropdown-subtitle {
+  font-size: 12px;
+  color: #666;
+  margin-top: 2px;
+}
+
+.projxs-join-button {
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid #e0e0e0;
+  background-color: white;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.projxs-join-button:hover {
+  background-color: #f5f5f5;
+}
+
+.projxs-check-icon {
+  color: #000000;
+  margin-left: 8px;
+}
   </style>
 </head>
 <body>
@@ -1140,6 +1254,47 @@
         </div>
       </div>
     </div>
+    <!-- ProjXs Dropdown (after sidebar) -->
+<div class="projxs-dropdown-container">
+  <button class="projxs-dropdown-trigger">
+    ProjXs
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m6 9 6 6 6-6"/>
+    </svg>
+  </button>
+  <div class="projxs-dropdown-content">
+    <div class="projxs-dropdown-item active">
+      <div class="projxs-dropdown-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+        </svg>
+      </div>
+      <div class="projxs-dropdown-text">
+        <div class="projxs-dropdown-title">ProjXs</div>
+        <div class="projxs-dropdown-subtitle">Great for everyday tasks</div>
+      </div>
+      <div class="projxs-check-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 6 9 17l-5-5"/>
+        </svg>
+      </div>
+    </div>
+    <div class="projxs-dropdown-item">
+      <div class="projxs-dropdown-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5"/>
+          <path d="M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      <div class="projxs-dropdown-text">
+        <div class="projxs-dropdown-title">ProjXs Pro (BETA)</div>
+        <div class="projxs-dropdown-subtitle">Get exclusive access to premium features</div>
+      </div>
+      <button class="projxs-join-button" onclick="window.location.href='/pricing'">Join Pro (BETA)</button>
+    </div>
+  </div>
+</div>
     <div class="content-area">
       <div id="notificationModal" class="notification-modal">
         <div class="notification-modal-content">
@@ -1263,6 +1418,36 @@
   </div>
 
   <script>
+    // ProjXs Dropdown JS
+document.addEventListener('DOMContentLoaded', function() {
+  const dropdownTrigger = document.querySelector('.projxs-dropdown-trigger');
+  const dropdownContainer = document.querySelector('.projxs-dropdown-container');
+  
+  if (dropdownTrigger && dropdownContainer) {
+    dropdownTrigger.addEventListener('click', function(e) {
+      e.stopPropagation();
+      dropdownContainer.classList.toggle('open');
+    });
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!dropdownContainer.contains(e.target)) {
+        dropdownContainer.classList.remove('open');
+      }
+    });
+    
+    // Make dropdown items clickable
+    const dropdownItems = document.querySelectorAll('.projxs-dropdown-item');
+    dropdownItems.forEach(item => {
+      item.addEventListener('click', function() {
+        // If this is the "ProjXs Plus" or "Join Beta" item, navigate to pricing
+        if (!this.classList.contains('active')) {
+          window.location.href = '/pricing';
+        }
+      });
+    });
+  }
+});
     if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/static/service-worker.js')
       .then(registration => {
@@ -1546,7 +1731,7 @@
   projectsList.innerHTML = '';
   loader.style.display = 'block'; // Show loader
   
-  fetch('https://script.google.com/macros/s/AKfycbyvtHc34HgLZ7IKCUT-57cuXrAlp53RhDM4pOCAyjm8Z17iJ6Rrgw1lvBVRxlnqTbs/exec')
+  fetch('https://script.google.com/macros/s/AKfycbzD4AEao4XGydzVjcsR95WKpyxjbnGvm27nTJ4NidgnHL6E3lZE3fWaz4Nroe0NE-M/exec')
     .then(response => response.json())
     .then(data => {
       loader.style.display = 'none'; // Hide loader

@@ -139,18 +139,20 @@
 
 # -----------
 
-from flask import Flask, render_template, request, jsonify, session, redirect, url_for
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for, abort
 import requests
 import pandas as pd
+import json
+from slugify import slugify
 
 app = Flask(__name__)
 app.secret_key = 'pygen-and-co-8113261-2024-projXs'
 
 # Google Apps Script URL
-GSHEET_URL = "https://script.google.com/macros/s/AKfycbyvtHc34HgLZ7IKCUT-57cuXrAlp53RhDM4pOCAyjm8Z17iJ6Rrgw1lvBVRxlnqTbs/exec"
+GSHEET_URL = "https://script.google.com/macros/s/AKfycbzD4AEao4XGydzVjcsR95WKpyxjbnGvm27nTJ4NidgnHL6E3lZE3fWaz4Nroe0NE-M/exec"
 
 # Early Access Email
-EARLY_ACCESS_EMAILS = []
+EARLY_ACCESS_EMAILS = ["demo.acc@pygen.co", "pi_contributors@pygen.in", "yawark498@gmail.com"]
 
 # Helper function for sending POST requests
 def send_post_request(action, params):
@@ -197,16 +199,15 @@ def main_page():
         return redirect(url_for('index'))
 
     username = session['username']
-    params = {'username': username}
-    projects = send_post_request('get_projects', params).get('projects', [])
-
+    
     if request.method == 'POST':
         action = request.form.get('action', 'addProject')
         
         if action == 'addProject':
             title = request.form['title']
             note = request.form['note']
-            params = {'username': username, 'title': title, 'note': note}
+            workspace = request.form.get('workspace', 'Default')
+            params = {'username': username, 'title': title, 'note': note, 'workspace': workspace}
             result = send_post_request('addProject', params)
             return jsonify({"success": True})
         
@@ -220,9 +221,48 @@ def main_page():
             old_title = request.form['oldTitle']
             new_title = request.form['newTitle']
             new_note = request.form['newNote']
+            workspace = request.form.get('workspace')
             params = {'username': username, 'oldTitle': old_title, 'newTitle': new_title, 'newNote': new_note}
+            if workspace:
+                params['workspace'] = workspace
             result = send_post_request('editProject', params)
             return jsonify({"success": True, "result": result})
+            
+        elif action == 'createWorkspace':
+            workspace_name = request.form['workspaceName']
+            params = {'username': username, 'workspaceName': workspace_name}
+            result = send_post_request('createWorkspace', params)
+            return jsonify({"success": True, "result": result})
+            
+        elif action == 'deleteWorkspace':
+            workspace_name = request.form['workspaceName']
+            params = {'username': username, 'workspaceName': workspace_name}
+            result = send_post_request('deleteWorkspace', params)
+            return jsonify({"success": True, "result": result})
+            
+        elif action == 'moveProjectToWorkspace':
+            title = request.form['title']
+            target_workspace = request.form['targetWorkspace']
+            params = {'username': username, 'title': title, 'targetWorkspace': target_workspace}
+            result = send_post_request('moveProjectToWorkspace', params)
+            return jsonify({"success": True, "result": result})
+            
+        elif action == 'getWorkspaces':
+            params = {'username': username}
+            result = send_post_request('getWorkspaces', params)
+            return jsonify({"success": True, "workspaces": result.get('result', [])})
+
+    # Get projects
+    params = {'username': username}
+    projects_result = send_post_request('getProjects', params)
+    projects = projects_result.get('result', [])
+    
+    # Get workspaces
+    workspaces_result = send_post_request('getWorkspaces', params)
+    workspaces = workspaces_result.get('result', [])
+    
+    # Convert workspaces to JSON for JavaScript
+    workspaces_json = json.dumps(workspaces)
 
     user_activity = get_user_activity()
     user_data = user_activity[user_activity["Username"] == username]
@@ -239,9 +279,10 @@ def main_page():
     # Check if user has early access
     if username in EARLY_ACCESS_EMAILS:
         return render_template(
-            'main2.html',  # Early access page
+            'main3.html',  # Early access page
             username=username,
             projects=projects,
+            workspaces=workspaces_json,
             user_status=user_status,
             motivational_message=motivational_message
         )
@@ -289,5 +330,35 @@ def logout():
 def pricing():
     return render_template('pricing.html')
 
+@app.route('/test-404')
+def test_404():
+    # This route deliberately returns a 404 error to test your 404 page
+    return render_template('404.html'), 404
+
+# Register a custom error handler for 404 errors
+@app.errorhandler(404)
+def page_not_found(e):
+    # This function will handle all 404 errors in your application
+    return render_template('404.html'), 404
+
+@app.route('/main/p/<slug>')
+def shared_project(slug):
+    # Fetch all projects for all users (or optimize as needed)
+    response = requests.get(GSHEET_URL)
+    data = response.json().get("data", [])
+    # Find project by slugified title
+    for project in data:
+        if slugify(project.get("Title", "")) == slug:
+            # Only show if not deleted
+            if project.get("Status") != "Deleted":
+                return render_template(
+                    'shared_project.html',
+                    title=project.get("Title", ""),
+                    note=project.get("Note", ""),
+                    workspace=project.get("Workspace", "Private"),
+                    username=project.get("Username", "Unknown")
+                )
+    return abort(404)
+
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=False)
