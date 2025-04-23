@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }} - View Project | ProjXs</title>
+    <link rel="icon" href="/static/fav-icon.png" type="image/png"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <style>
+        :root {
+            --primary-color: #000000;
+            --secondary-color: #ffffff;
+            --accent-color: #f0f0f0;
+            --text-color: #000000;
+            --text-color-light: #6b6b6b;
+            --text-color-lighter: #8f8f8f;
+            --border-radius: 4px;
+            --transition-speed: 0.3s;
+            --content-max-width: 900px;
+            --content-padding: 96px;
+            --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #ffffff;
+            --secondary-color: #1a1a1a;
+            --accent-color: #2d2d2d;
+            --text-color: #ffffff;
+            --text-color-light: #b0b0b0;
+            --text-color-lighter: #8f8f8f;
+        }
+
+        body {
+            font-family: var(--font-family);
+            margin: 0;
+            padding: 0;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: var(--content-max-width);
+            margin: 0 auto;
+            padding: 40px var(--content-padding);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            background: none;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+            color: #666;
+            padding: 5px;
+            margin-bottom: 15px;
+            align-self: flex-start;
+            margin-left: -5px;
+            text-decoration: none;
+        }
+
+        .back-button i {
+            margin-right: 5px;
+        }
+
+        .project-header {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: var(--content-max-width);
+            text-align: left;
+            position: relative;
+        }
+
+        .project-header h1 {
+            font-size: 40px;
+            font-weight: 700;
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.2;
+        }
+
+        .project-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 8px 0 20px 0;
+            width: 100%;
+        }
+
+        .project-info {
+            font-size: 14px;
+            color: var(--text-color-light);
+        }
+
+        .project-info strong {
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .project-share {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 1rem;
+            color: #2563eb;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .project-share svg {
+            margin-right: 4px;
+        }
+
+        .project-description {
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--text-color);
+            white-space: pre-wrap;
+            min-height: 200px;
+            width: 100%;
+            max-width: var(--content-max-width);
+            text-align: left;
+            font-weight: 400;
+        }
+
+        .project-description a {
+            color: #0066cc;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .project-description a:hover {
+            text-decoration: none;
+        }
+
+        .toast-message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .toast-message.visible {
+            opacity: 1;
+        }
+
+        .toast-message.success {
+            background-color: rgba(65, 188, 69, 0.9);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 20px;
+            }
+
+            .project-header h1 {
+                font-size: 28px;
+            }
+
+            .project-description {
+                font-size: 15px;
+            }
+        }
+
+        /* Dark mode toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .theme-toggle i {
+            font-size: 18px;
+            color: var(--text-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/main" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            Back to ProjXs
+        </a>
+        <div class="project-header">
+            <h1>{{ title }}</h1>
+            <div class="project-meta">
+                <div class="project-info">
+                    <strong>Workspace:</strong> {{ workspace }} &nbsp;|&nbsp; 
+                    <strong>Shared by:</strong> {{ username }}
+                </div>
+                <div class="project-share" onclick="copyShareUrl()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="5" r="3"/>
+                        <circle cx="6" cy="19" r="3"/>
+                        <circle cx="18" cy="19" r="3"/>
+                        <line x1="8.59" y1="17.51" x2="15.42" y2="6.49"/>
+                    </svg>
+                    <span>Share</span>
+                    <span id="share-copied-msg" style="color:#4caf50; font-size:0.95em; margin-left:8px; display:none;">Link Copied!</span>
+                </div>
+            </div>
+        </div>
+        <div class="project-description">{{ note|safe }}</div>
+    </div>
+    <div id="toast-message" class="toast-message"></div>
+
+    <script>
+        // Copy share URL functionality
+        function copyShareUrl() {
+            // Build the share URL from current location
+            const url = window.location.href;
+            
+            // Use clipboard API if available
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(url);
+            } else {
+                // Fallback for older browsers
+                const tempInput = document.createElement('input');
+                tempInput.value = url;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+            }
+            
+            // Show copied message
+            const msg = document.getElementById('share-copied-msg');
+            msg.style.display = 'inline';
+            setTimeout(() => { 
+                msg.style.display = 'none'; 
+            }, 1200);
+            
+            // Also show toast
+            showToast('Link copied to clipboard!', 'success');
+        }
+        
+        // Toast message functionality
+        function showToast(message, type) {
+            const toast = document.getElementById('toast-message');
+            toast.textContent = message;
+            toast.className = `toast-message ${type}`;
+            toast.classList.add('visible');
+            setTimeout(() => {
+                toast.classList.remove('visible');
+            }, 3000);
+        }
+        
+    </script>
+</body>
+</html>
