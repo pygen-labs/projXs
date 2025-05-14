@@ -152,7 +152,7 @@ app.secret_key = 'pygen-and-co-8113261-2024-projXs'
 GSHEET_URL = "https://script.google.com/macros/s/AKfycbzD4AEao4XGydzVjcsR95WKpyxjbnGvm27nTJ4NidgnHL6E3lZE3fWaz4Nroe0NE-M/exec"
 
 # Early Access Email
-EARLY_ACCESS_EMAILS = ["demo.acc@pygen.co", "pi_contributors@pygen.in", "yawark498@gmail.com"]
+EARLY_ACCESS_EMAILS = []
 
 # Helper function for sending POST requests
 def send_post_request(action, params):
@@ -288,7 +288,7 @@ def main_page():
         )
     else:
         return render_template(
-            'main2.html',  # Normal version
+            'main3.html',  # Normal version
             username=username,
             projects=projects,
             user_status=user_status,
@@ -360,5 +360,41 @@ def shared_project(slug):
                 )
     return abort(404)
 
-if __name__ == "__main__":
+from model import ask_chatnote
+
+@app.route('/chatnote', methods=['POST'])
+def chatnote():
+    if 'username' not in session:
+        return jsonify({"error": "Unauthorized"}), 403
+
+    data = request.get_json()
+    project_title = data.get('project')
+    question = data.get('message')
+
+    if not project_title or not question:
+        return jsonify({"error": "Missing project title or message"}), 400
+
+    username = session['username']
+    projects_result = send_post_request('getProjects', {'username': username})
+    projects = projects_result.get('result', [])
+
+    if not projects:
+        return jsonify({"error": "No projects found"}), 404
+
+    # Find the project note for the given project title
+    project_note = ""
+    for p in projects:
+        if isinstance(p, dict):
+            db_title = p.get('Title', p.get('title', ''))
+            if db_title and db_title.lower() == project_title.lower():
+                project_note = p.get('Note', p.get('note', ''))
+                break
+
+    if not project_note:
+        return jsonify({"error": "Project not found or empty"}), 404
+
+    answer = ask_chatnote(question, project_note)
+    return jsonify({"answer": answer})
+
+if __name__ == '__main__':
     app.run(debug=False)
