@@ -277,6 +277,25 @@
             text-align: left;
             display: none;
         }
+        .continue-web-btn {
+    background: white;
+    color: black;
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: all 0.3s ease;
+    border: 2px solid black;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.continue-web-btn:hover {
+    background: #f5f5f5;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
     </style>
 </head>
 <body>
@@ -293,6 +312,7 @@
                 Access ProjXs on mobile at <a href="https://m.projxs.pygen.in">ProjXs Mobile</a>. 
                 </p>
                 <button class="install-btn" id="installButton">Click to Install</button>
+                <button class="continue-web-btn" id="continueWebButton">Continue on Web</button>
             </div>
         </div>
     </div>
@@ -367,48 +387,113 @@
         console.error('Service Worker registration failed:', error);
       });
   }
-    let deferredPrompt;
+    // Add this at the start of your script section
+let deferredPrompt;
 
-    // Check if the app is already installed
-    function isPWAInstalled() {
-        return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+// IndexedDB setup
+const dbName = 'ProjXsPreferences';
+const storeName = 'userPreferences';
+
+// Initialize IndexedDB
+const initDB = () => {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open(dbName, 1);
+        
+        request.onerror = () => reject(request.error);
+        request.onsuccess = () => resolve(request.result);
+        
+        request.onupgradeneeded = (event) => {
+            const db = event.target.result;
+            if (!db.objectStoreNames.contains(storeName)) {
+                db.createObjectStore(storeName, { keyPath: 'id' });
+            }
+        };
+    });
+};
+
+// Save preference to IndexedDB
+const savePreference = async (preferenceType) => {
+    try {
+        const db = await initDB();
+        const transaction = db.transaction([storeName], 'readwrite');
+        const store = transaction.objectStore(storeName);
+        
+        await store.put({
+            id: 'installPreference',
+            type: preferenceType,
+            timestamp: new Date().getTime()
+        });
+    } catch (error) {
+        console.error('Error saving preference:', error);
     }
+};
 
-    // Hide modal if PWA is installed
-    document.addEventListener('DOMContentLoaded', () => {
-        if (isPWAInstalled()) {
-            document.getElementById('installModal').style.display = 'none';
+// Check saved preference
+const checkPreference = async () => {
+    try {
+        const db = await initDB();
+        const transaction = db.transaction([storeName], 'readonly');
+        const store = transaction.objectStore(storeName);
+        
+        return new Promise((resolve) => {
+            const request = store.get('installPreference');
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => resolve(null);
+        });
+    } catch (error) {
+        console.error('Error checking preference:', error);
+        return null;
+    }
+};
+
+// Check if the app is already installed
+function isPWAInstalled() {
+    return window.matchMedia('(display-mode: standalone)').matches || 
+           window.navigator.standalone === true;
+}
+
+// Initialize modal visibility
+async function initializeModal() {
+    if (isPWAInstalled()) {
+        document.getElementById('installModal').style.display = 'none';
+        return;
+    }
+    
+    const preference = await checkPreference();
+    if (preference && preference.type === 'continueOnWeb') {
+        document.getElementById('installModal').style.display = 'none';
+    }
+}
+
+// Event Listeners
+document.addEventListener('DOMContentLoaded', initializeModal);
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    
+    if (!isPWAInstalled()) {
+        document.getElementById('installModal').style.display = 'flex';
+    }
+});
+
+document.getElementById('installButton')?.addEventListener('click', async () => {
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const result = await deferredPrompt.userChoice;
+        if (result.outcome === 'accepted') {
+            console.log('User accepted the install prompt');
+            await savePreference('installed');
         }
-    });
+        deferredPrompt = null;
+    }
+    document.getElementById('installModal').style.display = 'none';
+});
 
-    // Listen for the beforeinstallprompt event
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-
-        // Show the install modal only if the app is not installed
-        if (!isPWAInstalled()) {
-            document.getElementById('installModal').style.display = 'flex';
-        }
-    });
-
-    // Handle install button click
-    document.getElementById('installButton')?.addEventListener('click', () => {
-        if (deferredPrompt) {
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then((choiceResult) => {
-                if (choiceResult.outcome === 'accepted') {
-                    console.log('User accepted the install prompt');
-                } else {
-                    console.log('User dismissed the install prompt');
-                }
-                deferredPrompt = null;
-            });
-
-            // Hide modal after interaction
-            document.getElementById('installModal').style.display = 'none';
-        }
-    });
+document.getElementById('continueWebButton')?.addEventListener('click', async () => {
+    await savePreference('continueOnWeb');
+    document.getElementById('installModal').style.display = 'none';
+});
 
     function toggleForm() {
         const loginForm = document.getElementById('loginForm');
