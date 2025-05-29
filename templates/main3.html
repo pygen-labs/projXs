@@ -2491,6 +2491,12 @@
               <div class="app-card-description">Access your projects on the go with our mobile-optimized web app. Seamlessly sync with your desktop experience.</div>
               <a href="https://m.projxs.pygen.in" target="_blank" class="app-card-button">Get for mobile</a>
             </div>
+
+            <div class="app-card">
+              <div class="app-card-title">OpenSpaces</div>
+              <div class="app-card-description">The AI-powered workspace that transforms how you organize, collaborate, and create. Experience the future of productivity with intelligent file management and seamless AI integration.</div>
+              <a href="https://openspace.pygen.in" target="_blank" class="app-card-button">Get OpenSpaces [Free]</a>
+            </div>
             
             <div class="app-card">
               <div class="app-card-title">NexDrop</div>
@@ -2918,8 +2924,21 @@ function copyProjectShareUrl() {
 
     // Export user data
     function exportUserData() {
-      const mailtoLink = `mailto:pygen.co@gmail.com?subject=Data Export Request&body=Hey Team ProjXs,%0D%0A%0D%0AI need my personal data please send as soon as possible.%0D%0A%0D%0AUsername: ${currentUser}%0D%0A%0D%0AThank you.`;
-      window.open('https://mail.google.com/mail/?view=cm&fs=1&to=pygen.co@gmail.com&su=Data Export Request&body=Hey Team ProjXs,%0D%0A%0D%0AI need my personal data please send as soon as possible.%0D%0A%0D%0AUsername: ' + currentUser + '%0D%0A%0D%0AThank you.', '_blank');
+      const subject = encodeURIComponent("Data Export Request");
+      const body = encodeURIComponent(
+      `Hello ProjXs Team,
+
+      I am writing to formally request an export of all personal data associated with my ProjXs account, in accordance with your privacy policy.
+
+      Account Username: ${currentUser}
+
+      Please let me know if you require any additional information to process this request. I look forward to your response.
+
+      Thank you,
+      ${currentUser}`
+      );
+      const url = `https://mail.google.com/mail/?view=cm&fs=1&to=pygen.co@gmail.com&su=${subject}&body=${body}`;
+      window.open(url, '_blank');
     }
 
     function setGreeting() {
