@@ -360,41 +360,5 @@ def shared_project(slug):
                 )
     return abort(404)
 
-from model import ask_chatnote
-
-@app.route('/chatnote', methods=['POST'])
-def chatnote():
-    if 'username' not in session:
-        return jsonify({"error": "Unauthorized"}), 403
-
-    data = request.get_json()
-    project_title = data.get('project')
-    question = data.get('message')
-
-    if not project_title or not question:
-        return jsonify({"error": "Missing project title or message"}), 400
-
-    username = session['username']
-    projects_result = send_post_request('getProjects', {'username': username})
-    projects = projects_result.get('result', [])
-
-    if not projects:
-        return jsonify({"error": "No projects found"}), 404
-
-    # Find the project note for the given project title
-    project_note = ""
-    for p in projects:
-        if isinstance(p, dict):
-            db_title = p.get('Title', p.get('title', ''))
-            if db_title and db_title.lower() == project_title.lower():
-                project_note = p.get('Note', p.get('note', ''))
-                break
-
-    if not project_note:
-        return jsonify({"error": "Project not found or empty"}), 404
-
-    answer = ask_chatnote(question, project_note)
-    return jsonify({"answer": answer})
-
 if __name__ == '__main__':
     app.run(debug=False)
